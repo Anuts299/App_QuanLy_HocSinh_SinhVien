@@ -3,6 +3,7 @@
     <style name="Base.Theme.App_QuanLy_HocSinh_SinhVien" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimaryVariant">@color/Cornflower_blue</item>
     </style>
 
     <style name="Theme.App_QuanLy_HocSinh_SinhVien" parent="Base.Theme.App_QuanLy_HocSinh_SinhVien" />
