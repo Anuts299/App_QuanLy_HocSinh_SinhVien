@@ -13,7 +13,17 @@
         android:theme="@style/Theme.App_QuanLy_HocSinh_SinhVien"
         tools:targetApi="31">
         <activity
+            android:name=".LoginActivity"
+
+            android:exported="false" />
+        <activity
+            android:name=".SignUpActivity"
+            android:exported="false">
+
+        </activity>
+        <activity
             android:name=".MainActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
