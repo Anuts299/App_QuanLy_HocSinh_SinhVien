@@ -16,7 +16,7 @@
             android:title="Thông tin người dùng"/>
         <item
             android:id="@+id/nav_gradestype"
-            android:icon="@drawable/baseline_person_24"
+            android:icon="@drawable/baseline_settings_24"
             android:title="Cài đặt loại điểm"/>
         <item
             android:id="@+id/nav_level"
