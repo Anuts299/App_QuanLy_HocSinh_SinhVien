@@ -132,7 +132,7 @@
        </androidx.cardview.widget.CardView>
 
        <androidx.cardview.widget.CardView
-           android:id="@+id/Faculties_card"
+           android:id="@+id/faculties_card"
            android:layout_width="115dp"
            android:layout_height="90dp"
            android:layout_row="1"
