@@ -7,11 +7,16 @@
     android:padding="16dp"
     android:background="@color/Cornflower_blue"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/img_avatar"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:paddingTop="18dp"
+        android:src="@drawable/ic_account_def" />
+
     <TextView
+        android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Lê Anh Tuấn"
@@ -19,6 +24,7 @@
         android:textStyle="bold"
         android:layout_marginTop="10dp"/>
     <TextView
+        android:id="@+id/tv_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="letuananh7022020@gmail.com"
