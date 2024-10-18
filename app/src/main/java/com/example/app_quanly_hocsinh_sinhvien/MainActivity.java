@@ -1,5 +1,6 @@
 package com.example.app_quanly_hocsinh_sinhvien;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -23,6 +24,9 @@ import com.example.app_quanly_hocsinh_sinhvien.ui.InfoFragment;
 import com.example.app_quanly_hocsinh_sinhvien.ui.LevelFragment;
 import com.example.app_quanly_hocsinh_sinhvien.ui.UserFragment;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
@@ -65,10 +69,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new GradestypeFragment()).commit();
         } else if (item.getItemId() == R.id.nav_info) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new InfoFragment()).commit();
-        } else if (item.getItemId() == R.id.nav_signup) {
-            Toast.makeText(this, "Đăng xuất tài khoản", Toast.LENGTH_SHORT).show();
-        }
+        } else if (item.getItemId() == R.id.nav_logout) {
+            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("Đăng xuất tài khoản")
+                    .setContentText("Xác nhận đăng xuất?")
+                    .setConfirmButton("Đồng ý", new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            sDialog.dismissWithAnimation();
 
+                            // Đăng xuất tài khoản
+                            FirebaseAuth.getInstance().signOut();
+
+                            // Chuyển hướng đến màn hình đăng nhập
+                            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // Xóa tất cả các activity trước đó
+                            startActivity(intent);
+                            finish(); // Kết thúc activity hiện tại
+                        }
+                    })
+                    .setCancelButton("Hủy bỏ", new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            sDialog.dismissWithAnimation(); // Đóng dialog khi nhấn Hủy bỏ
+                        }
+                    })
+                    .show();
+        }
 
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
