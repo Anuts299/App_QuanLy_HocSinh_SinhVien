@@ -34,29 +34,7 @@
             android:textAlignment="center"
             android:textStyle="bold"
             android:textColor="@color/Cornflower_blue"/>
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:id="@+id/signup_fullname"
-            android:background="@drawable/custom_edittext"
-            android:layout_marginTop="40dp"
-            android:padding="8dp"
-            android:hint="Họ và tên"
-            android:drawableLeft="@drawable/baseline_person_24"
-            android:drawablePadding="8dp"
-            android:textColor="@color/black"/>
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:id="@+id/signup_username"
-            android:background="@drawable/custom_edittext"
-            android:layout_marginTop="20dp"
-            android:padding="8dp"
-            android:hint="Tên đăng nhập"
-            android:drawableLeft="@drawable/baseline_person_24"
-            android:drawablePadding="8dp"
-            android:textColor="@color/black"/>
 
         <EditText
             android:layout_width="match_parent"
@@ -66,6 +44,9 @@
             android:layout_marginTop="20dp"
             android:padding="8dp"
             android:hint="Email"
+            android:inputType="textEmailAddress"
+            android:maxLength="150"
+            android:imeOptions="actionNext"
             android:drawableLeft="@drawable/baseline_email_24"
             android:drawablePadding="8dp"
             android:textColor="@color/black"/>
@@ -77,6 +58,23 @@
             android:layout_marginTop="20dp"
             android:padding="8dp"
             android:hint="Password"
+            android:inputType="textPassword"
+            android:maxLength="100"
+            android:imeOptions="actionNext"
+            android:drawableLeft="@drawable/baseline_lock_24"
+            android:drawablePadding="8dp"
+            android:textColor="@color/black"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/signup_confirm_password"
+            android:background="@drawable/custom_edittext"
+            android:layout_marginTop="20dp"
+            android:padding="8dp"
+            android:hint="Confirm Password"
+            android:inputType="textPassword"
+            android:maxLength="100"
+            android:imeOptions="actionDone"
             android:drawableLeft="@drawable/baseline_lock_24"
             android:drawablePadding="8dp"
             android:textColor="@color/black"/>
@@ -89,17 +87,27 @@
             android:textSize="18sp"
             android:layout_marginTop="30dp"
             android:backgroundTint="@color/Cornflower_blue" />
-
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/loginRedirectText"
-            android:text="Bạn đã có tài khoản? Đăng nhập"
-            android:layout_gravity="center"
-            android:padding="8dp"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/Cornflower_blue"
-            android:textSize="18sp"/>
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bạn đã có tài khoản? "
+                android:textSize="18sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/loginRedirectText"
+                android:text="Đăng nhập"
+                android:layout_gravity="center"
+                android:textColor="@color/Cornflower_blue"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
     </LinearLayout>
     </androidx.cardview.widget.CardView>
 </LinearLayout>
