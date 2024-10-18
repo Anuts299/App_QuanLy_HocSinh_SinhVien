@@ -50,5 +50,10 @@ dependencies {
     implementation ("com.github.f0ris.sweetalert:library:1.5.6")
     implementation ("com.afollestad.material-dialogs:core:3.3.0")
 
+    //CiclerImageView
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
+
+    //Glide: Load image from URL
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
 
 }

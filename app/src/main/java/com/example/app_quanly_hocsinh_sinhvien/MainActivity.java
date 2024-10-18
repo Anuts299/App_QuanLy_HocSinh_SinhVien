@@ -1,8 +1,12 @@
 package com.example.app_quanly_hocsinh_sinhvien;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 
@@ -18,6 +22,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.bumptech.glide.Glide;
 import com.example.app_quanly_hocsinh_sinhvien.ui.GradestypeFragment;
 import com.example.app_quanly_hocsinh_sinhvien.ui.HomeFragment;
 import com.example.app_quanly_hocsinh_sinhvien.ui.InfoFragment;
@@ -25,11 +30,15 @@ import com.example.app_quanly_hocsinh_sinhvien.ui.LevelFragment;
 import com.example.app_quanly_hocsinh_sinhvien.ui.UserFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawerLayout;
+    private ImageView img_avatar;
+    private TextView tv_name, tv_email;
+    private NavigationView mNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +52,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        initUi();
 
         drawerLayout = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+
+        mNavigationView.setNavigationItemSelectedListener(this);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout,toolbar,R.string.open_nav,R.string.close_nav);
         drawerLayout.addDrawerListener(toggle);
@@ -54,11 +64,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if(savedInstanceState == null){
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-            navigationView.setCheckedItem(R.id.nav_home);
+            mNavigationView.setCheckedItem(R.id.nav_home);
         }
+        showUserInformation();
 
     }
-
+    private void initUi(){
+        mNavigationView = findViewById(R.id.nav_view);
+        img_avatar = mNavigationView.getHeaderView(0).findViewById(R.id.img_avatar);
+        tv_name = mNavigationView.getHeaderView(0).findViewById(R.id.tv_name);
+        tv_email = mNavigationView.getHeaderView(0).findViewById(R.id.tv_email);
+    }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.nav_home) {
@@ -109,5 +125,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else{
             super.onBackPressed();
         }
+    }
+    private void showUserInformation(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user == null){
+            return;
+        }
+        String name = user.getDisplayName();
+        String email = user.getEmail();
+        Uri photoUrl = user.getPhotoUrl();
+        if(name == null){
+            tv_name.setVisibility(View.GONE);
+        }else{
+            tv_name.setVisibility(View.VISIBLE);
+            tv_name.setText(name);
+        }
+        tv_email.setText(email);
+        Glide.with(this).load(photoUrl).error(R.drawable.ic_account_def).into(img_avatar);
     }
 }
