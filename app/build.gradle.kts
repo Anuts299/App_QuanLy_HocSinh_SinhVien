@@ -56,4 +56,8 @@ dependencies {
     //Glide: Load image from URL
     implementation ("com.github.bumptech.glide:glide:4.16.0")
 
+    //CircularProgressIndicator (Material Design Components)
+    implementation ("com.google.android.material:material:1.9.0")
+
+
 }
