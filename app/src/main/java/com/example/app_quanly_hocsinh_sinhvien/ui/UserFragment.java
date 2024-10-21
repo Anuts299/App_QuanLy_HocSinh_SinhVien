@@ -31,6 +31,8 @@ import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -73,6 +75,27 @@ public class UserFragment extends Fragment {
             edt_full_name.setText(user.getDisplayName());
             edt_email.setText(user.getEmail());
             Glide.with(getActivity()).load(user.getPhotoUrl()).error(R.drawable.ic_account_def).into(img_avatar);
+
+            // Lấy vai trò từ Firestore
+            String userId = user.getUid();
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("users").document(userId).get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful() && task.getResult() != null) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    String role = document.getString("role"); // Lấy vai trò
+                                    if (role != null) {
+                                        edt_name_role.setText(role); // Hiển thị vai trò
+                                    } else {
+                                        edt_name_role.setText(""); // Nếu không có vai trò, để trống
+                                    }
+                                }
+                            }
+                        }
+                    });
         }
     }
 

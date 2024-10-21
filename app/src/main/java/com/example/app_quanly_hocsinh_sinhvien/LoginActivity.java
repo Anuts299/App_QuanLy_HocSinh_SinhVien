@@ -15,6 +15,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -57,43 +58,57 @@ public class LoginActivity extends AppCompatActivity {
     private void onClickLogIn() {
         String str_email = login_email.getText().toString().trim();
         String str_password = login_password.getText().toString().trim();
-        if (str_email.isEmpty()) {
-            new SweetAlertDialog(this, SweetAlertDialog.NORMAL_TYPE)
-                    .setTitleText("Thiếu email")
-                    .setContentText("Vui lòng nhập email để đăng ký")
-                    .setConfirmText("OK")
-                    .setConfirmClickListener(sDialog -> {
-                        sDialog.dismissWithAnimation();
-                        login_email.requestFocus(); // Đưa con trỏ đến trường email
-                    })
-                    .show();
-        } else if (str_password.isEmpty()) {
-            new SweetAlertDialog(this, SweetAlertDialog.NORMAL_TYPE)
-                    .setTitleText("Thiếu mật khẩu")
-                    .setContentText("Vui lòng nhập mật khẩu")
-                    .setConfirmText("OK")
-                    .setConfirmClickListener(sDialog -> {
-                        sDialog.dismissWithAnimation();
-                        login_password.requestFocus(); // Đưa con trỏ đến trường mật khẩu
-                    })
-                    .show();
-        }else{
-            FirebaseAuth auth = FirebaseAuth.getInstance();
-            auth.signInWithEmailAndPassword(str_email,str_password)
-                    .addOnCompleteListener(this,task -> {
-                        if(task.isSuccessful()){
-                            // Đăng nhập thành công
-                            new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
-                                    .setTitleText("Đăng nhập thành công")
-                                    .setContentText("Chào mừng trở lại!")
-                                    .setConfirmText("OK")
-                                    .setConfirmClickListener(sDialog -> {
-                                        sDialog.dismissWithAnimation();
-                                        goToMainActivity();
 
+        if (str_email.isEmpty()) {
+            // Hiển thị thông báo thiếu email
+            showAlertDialog("Thiếu email", "Vui lòng nhập email để đăng ký", login_email);
+        } else if (str_password.isEmpty()) {
+            // Hiển thị thông báo thiếu mật khẩu
+            showAlertDialog("Thiếu mật khẩu", "Vui lòng nhập mật khẩu", login_password);
+        } else {
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+            auth.signInWithEmailAndPassword(str_email, str_password)
+                    .addOnCompleteListener(this, task -> {
+                        if (task.isSuccessful()) {
+                            // Đăng nhập thành công, lấy thông tin vai trò từ Firestore
+                            String userId = auth.getCurrentUser().getUid();
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+                            db.collection("users").document(userId).get()
+                                    .addOnSuccessListener(documentSnapshot -> {
+                                        if (documentSnapshot.exists()) {
+                                            // Lấy vai trò người dùng
+                                            String userRole = documentSnapshot.getString("role");
+
+                                            // Lưu vai trò vào SharedPreferences
+                                            getSharedPreferences("USER_PREFS", MODE_PRIVATE)
+                                                    .edit()
+                                                    .putString("userRole", userRole)
+                                                    .apply();
+
+                                            // Hiển thị thông báo thành công và chuyển đến MainActivity
+                                            new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
+                                                    .setTitleText("Đăng nhập thành công")
+                                                    .setContentText("Chào mừng trở lại!")
+                                                    .setConfirmText("OK")
+                                                    .setConfirmClickListener(sDialog -> {
+                                                        sDialog.dismissWithAnimation();
+                                                        goToMainActivity();
+                                                    })
+                                                    .show();
+                                        }
                                     })
-                                    .show();
-                        }else{
+                                    .addOnFailureListener(e -> {
+                                        // Xử lý lỗi khi không lấy được vai trò
+                                        new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                                                .setTitleText("Lỗi")
+                                                .setContentText("Không thể lấy vai trò người dùng")
+                                                .setConfirmText("OK")
+                                                .setConfirmClickListener(SweetAlertDialog::dismissWithAnimation)
+                                                .show();
+                                    });
+                        } else {
+                            // Đăng nhập thất bại
                             new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
                                     .setTitleText("Đăng nhập thất bại")
                                     .setContentText("Email hoặc mật khẩu không chính xác")
@@ -104,6 +119,20 @@ public class LoginActivity extends AppCompatActivity {
                     });
         }
     }
+
+    // Hàm hiển thị hộp thoại cảnh báo
+    private void showAlertDialog(String title, String message, EditText focusField) {
+        new SweetAlertDialog(this, SweetAlertDialog.NORMAL_TYPE)
+                .setTitleText(title)
+                .setContentText(message)
+                .setConfirmText("OK")
+                .setConfirmClickListener(sDialog -> {
+                    sDialog.dismissWithAnimation();
+                    focusField.requestFocus(); // Đưa con trỏ đến trường cần nhập
+                })
+                .show();
+    }
+
 
     private void goToMainActivity() {
         // Chuyển đến trang chính của ứng dụng
