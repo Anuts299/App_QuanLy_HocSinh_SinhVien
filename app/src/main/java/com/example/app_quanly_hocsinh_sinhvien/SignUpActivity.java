@@ -19,7 +19,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -109,37 +116,80 @@ public class SignUpActivity extends AppCompatActivity {
             auth.createUserWithEmailAndPassword(str_email, str_password)
                     .addOnCompleteListener(this, task -> {
                         if (task.isSuccessful()) {
-                            new SweetAlertDialog(SignUpActivity.this, SweetAlertDialog.SUCCESS_TYPE)
-                                    .setTitleText("Đăng kí thành công")
-                                    .setContentText("Studify - Quản lý học sinh sinh viên")
-                                    .setConfirmText("OK")
-                                    .setConfirmClickListener(sDialog -> {
-                                        sDialog.dismissWithAnimation();
-                                        goToLoginActivity(); // Tách việc chuyển activity ra thành hàm riêng
-                                    })
-                                    .show();
-                        }else if(task.getException() instanceof FirebaseAuthUserCollisionException){
-                            // Lỗi email đã tồn tại
-                            new SweetAlertDialog(SignUpActivity.this, SweetAlertDialog.ERROR_TYPE)
-                                    .setTitleText("Email đã tồn tại")
-                                    .setContentText("Email này đã được đăng ký. Vui lòng sử dụng email khác.")
-                                    .setConfirmText("OK")
-                                    .setConfirmClickListener(sDialog -> {
-                                        sDialog.dismissWithAnimation();
-                                        signup_email.requestFocus(); // Đưa con trỏ về trường email
-                                    })
-                                    .show();
+                            // Xử lý khi đăng ký thành công
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                            Map<String, Object> user = new HashMap<>();
+                            user.put("email", str_email);
+                            user.put("role", "Giảng viên");
+
+                            db.collection("users").document(userId)
+                                    .set(user)
+                                    .addOnCompleteListener(task1 -> {
+                                        if(task1.isSuccessful()){
+                                            new SweetAlertDialog(SignUpActivity.this, SweetAlertDialog.SUCCESS_TYPE)
+                                                    .setTitleText("Đăng kí thành công")
+                                                    .setContentText("Tài khoản giảng viên đã được tạo.")
+                                                    .setConfirmText("OK")
+                                                    .setConfirmClickListener(sDialog -> {
+                                                        sDialog.dismissWithAnimation();
+                                                        goToLoginActivity();
+                                                    })
+                                                    .show();
+                                        } else {
+                                            Log.e("FirestoreError", "Không thể lưu thông tin tài khoản: ", task1.getException());
+                                            new SweetAlertDialog(SignUpActivity.this, SweetAlertDialog.ERROR_TYPE)
+                                                    .setTitleText("Lỗi Firestore")
+                                                    .setContentText("Không thể lưu thông tin tài khoản. Vui lòng kiểm tra lại.")
+                                                    .setConfirmText("OK")
+                                                    .setConfirmClickListener(SweetAlertDialog::dismissWithAnimation)
+                                                    .show();
+                                        }
+                                    });
+
                         } else {
-                            new SweetAlertDialog(SignUpActivity.this, SweetAlertDialog.ERROR_TYPE)
-                                    .setTitleText("Đăng kí thất bại")
-                                    .setContentText("Xin vui lòng thử lại sau")
-                                    .setConfirmText("OK")
-                                    .setConfirmClickListener(sDialog -> {
-                                        sDialog.dismissWithAnimation();
-                                    })
-                                    .show();
+                            // Xử lý các ngoại lệ khác nhau
+                            if (task.getException() instanceof FirebaseAuthUserCollisionException) {
+                                // Email đã tồn tại
+                                new SweetAlertDialog(SignUpActivity.this, SweetAlertDialog.ERROR_TYPE)
+                                        .setTitleText("Email đã tồn tại")
+                                        .setContentText("Email này đã được đăng ký. Vui lòng sử dụng email khác.")
+                                        .setConfirmText("OK")
+                                        .setConfirmClickListener(sDialog -> {
+                                            sDialog.dismissWithAnimation();
+                                            signup_email.requestFocus();
+                                        })
+                                        .show();
+                            } else {
+                                // In ra logcat chi tiết lỗi
+                                Log.e("SignUpError", "Đăng ký thất bại: ", task.getException());
+                                // Kiểm tra lỗi cụ thể khác (ví dụ: mật khẩu yếu, định dạng email sai, kết nối mạng)
+                                String errorMessage;
+                                try {
+                                    throw task.getException();
+                                } catch (FirebaseAuthWeakPasswordException e) {
+                                    errorMessage = "Mật khẩu quá yếu. Vui lòng chọn mật khẩu mạnh hơn.";
+                                    signup_password.requestFocus();
+                                } catch (FirebaseAuthInvalidCredentialsException e) {
+                                    errorMessage = "Định dạng email không hợp lệ.";
+                                    signup_email.requestFocus();
+                                } catch (FirebaseAuthInvalidUserException e) {
+                                    errorMessage = "Tài khoản người dùng không hợp lệ.";
+                                } catch (Exception e) {
+                                    errorMessage = "Đăng kí thất bại. Vui lòng thử lại sau.";
+                                }
+
+                                new SweetAlertDialog(SignUpActivity.this, SweetAlertDialog.ERROR_TYPE)
+                                        .setTitleText("Đăng kí thất bại")
+                                        .setContentText(errorMessage)
+                                        .setConfirmText("OK")
+                                        .setConfirmClickListener(SweetAlertDialog::dismissWithAnimation)
+                                        .show();
+                            }
                         }
                     });
+
         }
     }
 
