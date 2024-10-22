@@ -83,6 +83,16 @@ public class SignUpActivity extends AppCompatActivity {
                         signup_email.requestFocus(); // Đưa con trỏ đến trường email
                     })
                     .show();
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(str_email).matches()) {
+            new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                    .setTitleText("Email không hợp lệ")
+                    .setContentText("Vui lòng nhập email hợp lệ")
+                    .setConfirmText("OK")
+                    .setConfirmClickListener(sDialog -> {
+                        sDialog.dismissWithAnimation();
+                        signup_email.requestFocus(); // Đưa con trỏ đến trường email
+                    })
+                    .show();
         } else if (str_password.isEmpty()) {
             new SweetAlertDialog(this, SweetAlertDialog.NORMAL_TYPE)
                     .setTitleText("Thiếu mật khẩu")
@@ -91,6 +101,16 @@ public class SignUpActivity extends AppCompatActivity {
                     .setConfirmClickListener(sDialog -> {
                         sDialog.dismissWithAnimation();
                         signup_password.requestFocus(); // Đưa con trỏ đến trường mật khẩu
+                    })
+                    .show();
+        }else if(str_password.length() < 8){
+            new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                    .setTitleText("Mật khẩu không hợp lệ")
+                    .setConfirmText("Mật khẩu phải lớn hơn 8 kí tự")
+                    .setConfirmText("OK")
+                    .setConfirmClickListener(sDialog -> {
+                        sDialog.dismissWithAnimation();
+                        signup_email.requestFocus(); // Đưa con trỏ đến trường email
                     })
                     .show();
         } else if (str_confirm_password.isEmpty()) {
