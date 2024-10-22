@@ -1,5 +1,8 @@
 package com.example.app_quanly_hocsinh_sinhvien.ui;
 
+import static com.example.app_quanly_hocsinh_sinhvien.MainActivity.role_lecturer;
+import static com.example.app_quanly_hocsinh_sinhvien.MainActivity.role_student;
+
 import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
@@ -81,7 +84,7 @@ public class HomeFragment extends Fragment {
         });
         faculties_card.setOnClickListener(v -> {
             //Kiểm tra vai trò cua nguoi dung
-            if("giảng viên".equals(userRole)){
+            if(role_student.equals(userRole)){
                 new SweetAlertDialog(getActivity(), SweetAlertDialog.ERROR_TYPE)
                         .setTitleText("Không thể truy cập")
                         .setContentText("Bạn không được cấp quyền truy cập.")

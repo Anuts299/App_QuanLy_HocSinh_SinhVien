@@ -1,5 +1,8 @@
 package com.example.app_quanly_hocsinh_sinhvien;
 
+import static com.example.app_quanly_hocsinh_sinhvien.MainActivity.role_lecturer;
+import static com.example.app_quanly_hocsinh_sinhvien.MainActivity.role_student;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +19,10 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -79,13 +86,26 @@ public class LoginActivity extends AppCompatActivity {
                                         if (documentSnapshot.exists()) {
                                             // Lấy vai trò người dùng
                                             String userRole = documentSnapshot.getString("role");
+                                            if(userRole == null){
+                                                Map<String, Object> user = new HashMap<>();
+                                                user.put("email", str_email);
+                                                user.put("role", role_student);
 
-                                            // Lưu vai trò vào SharedPreferences
-                                            getSharedPreferences("USER_PREFS", MODE_PRIVATE)
-                                                    .edit()
-                                                    .putString("userRole", userRole)
-                                                    .apply();
+                                                //Cập nhật vào Firestore
+                                                db.collection("users").document(userId).set(user, SetOptions.merge());
 
+                                                // Lưu vai trò vào SharedPreferences
+                                                getSharedPreferences("USER_PREFS", MODE_PRIVATE)
+                                                        .edit()
+                                                        .putString("userRole", role_student)
+                                                        .apply();
+                                            }else {
+                                                // Lưu vai trò vào SharedPreferences
+                                                getSharedPreferences("USER_PREFS", MODE_PRIVATE)
+                                                        .edit()
+                                                        .putString("userRole", userRole)
+                                                        .apply();
+                                            }
                                             // Hiển thị thông báo thành công và chuyển đến MainActivity
                                             new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
                                                     .setTitleText("Đăng nhập thành công")

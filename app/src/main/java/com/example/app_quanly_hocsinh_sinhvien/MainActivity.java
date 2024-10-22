@@ -55,6 +55,10 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public static final int MY_REQUEST_CODES =10;
+    public static String role_admin = "Quản trị viên hệ thống",
+            role_lecturer = "Giảng viên bộ môn",
+            role_student = "Sinh viên",
+            role_departmentManager = "Quản lý khoa";
     private static final int FRAGMENT_HOME = 0;
     private static final int FRAGMENT_CHART = 1;
     private static final int FRAGMENT_GRADESTYPE = 2;

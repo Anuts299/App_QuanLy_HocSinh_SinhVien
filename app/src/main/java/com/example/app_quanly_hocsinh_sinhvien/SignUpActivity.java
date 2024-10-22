@@ -1,5 +1,7 @@
 package com.example.app_quanly_hocsinh_sinhvien;
 
+import static com.example.app_quanly_hocsinh_sinhvien.MainActivity.role_student;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -122,7 +124,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                             Map<String, Object> user = new HashMap<>();
                             user.put("email", str_email);
-                            user.put("role", "Giảng viên");
+                            user.put("role", role_student);
 
                             db.collection("users").document(userId)
                                     .set(user)
@@ -130,7 +132,7 @@ public class SignUpActivity extends AppCompatActivity {
                                         if(task1.isSuccessful()){
                                             new SweetAlertDialog(SignUpActivity.this, SweetAlertDialog.SUCCESS_TYPE)
                                                     .setTitleText("Đăng kí thành công")
-                                                    .setContentText("Tài khoản giảng viên đã được tạo.")
+                                                    .setContentText("Tài khoản sinh viên đã được tạo.")
                                                     .setConfirmText("OK")
                                                     .setConfirmClickListener(sDialog -> {
                                                         sDialog.dismissWithAnimation();
