@@ -39,6 +39,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
+import com.example.app_quanly_hocsinh_sinhvien.ui.ChangePasswordFragment;
 import com.example.app_quanly_hocsinh_sinhvien.ui.ChartFragment;
 import com.example.app_quanly_hocsinh_sinhvien.ui.GradestypeFragment;
 import com.example.app_quanly_hocsinh_sinhvien.ui.HomeFragment;
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int FRAGMENT_LEVEL = 3;
     private static final int FRAGMENT_USER = 4;
     private static final int FRAGMENT_INFO = 5;
+    private static final int FRAGMENT_CHANGE_PASSWORD = 6;
 
     private int mCurrentFragment = FRAGMENT_HOME;
 
@@ -165,6 +167,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if(mCurrentFragment != FRAGMENT_CHART){
                 replaceFragment(new ChartFragment());
                 mCurrentFragment = FRAGMENT_CHART;
+            }
+        }else if(id == R.id.nav_change_password){
+            if(mCurrentFragment != FRAGMENT_CHANGE_PASSWORD){
+                replaceFragment(new ChangePasswordFragment());
+                mCurrentFragment = FRAGMENT_CHANGE_PASSWORD;
             }
         } else if (id == R.id.nav_logout) {
             new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)

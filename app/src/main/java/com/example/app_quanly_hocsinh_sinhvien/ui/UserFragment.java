@@ -41,9 +41,10 @@ public class UserFragment extends Fragment {
     private View mView;
     private ImageView img_avatar;
     private EditText edt_full_name,edt_email, edt_name_role;
-    private Button btn_update;
+    private Button btn_update, btn_update_email;
     private Uri mUri;
     private MainActivity mMainActivity;
+    private CircularProgressIndicator progressIndicator;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,6 +54,7 @@ public class UserFragment extends Fragment {
 
         initUi();
         setUserInformation();
+        progressIndicator = new CircularProgressIndicator(getActivity());
         mMainActivity = (MainActivity) getActivity();
         initListener();
         return mView;
@@ -66,6 +68,7 @@ public class UserFragment extends Fragment {
         edt_email = mView.findViewById(R.id.edt_email);
         edt_name_role = mView.findViewById(R.id.edt_name_role);
         btn_update = mView.findViewById(R.id.btn_update);
+        btn_update_email = mView.findViewById(R.id.btn_update_email);
     }
     private void setUserInformation() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -110,6 +113,12 @@ public class UserFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 onClickUpdateProfile();
+            }
+        });
+        btn_update_email.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickUpdateEmail();
             }
         });
     }
@@ -171,4 +180,37 @@ public class UserFragment extends Fragment {
                     }
                 });
     }
+
+    private void onClickUpdateEmail() {
+        String str_new_email = edt_email.getText().toString().trim();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        progressIndicator.setVisibility(View.VISIBLE);
+        progressIndicator.setIndeterminate(true);
+
+        // Gửi email xác minh tới email mới
+        user.verifyBeforeUpdateEmail(str_new_email)
+                .addOnCompleteListener(task -> {
+                    progressIndicator.setVisibility(View.GONE); // Ẩn progress khi hoàn thành
+
+                    if (task.isSuccessful()) {
+                        // Nếu email xác minh đã được gửi thành công
+                        new SweetAlertDialog(requireActivity(), SweetAlertDialog.SUCCESS_TYPE)
+                                .setTitleText("Xác minh email")
+                                .setContentText("Một email xác minh đã được gửi đến địa chỉ email mới. Vui lòng xác minh trước khi cập nhật.")
+                                .setConfirmText("OK")
+                                .setConfirmClickListener(sDialog -> sDialog.dismissWithAnimation())
+                                .show();
+                    } else {
+                        // Nếu có lỗi xảy ra khi gửi email xác minh
+                        new SweetAlertDialog(requireActivity(), SweetAlertDialog.ERROR_TYPE)
+                                .setTitleText("Thất bại")
+                                .setContentText("Không thể gửi email xác minh: " + task.getException().getMessage())
+                                .setConfirmText("OK")
+                                .setConfirmClickListener(SweetAlertDialog::dismissWithAnimation)
+                                .show();
+                    }
+                });
+    }
+
 }

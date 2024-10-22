@@ -85,7 +85,7 @@ public class HomeFragment extends Fragment {
         faculties_card.setOnClickListener(v -> {
             //Kiểm tra vai trò cua nguoi dung
             if(role_student.equals(userRole)){
-                new SweetAlertDialog(getActivity(), SweetAlertDialog.ERROR_TYPE)
+                new SweetAlertDialog(requireActivity(), SweetAlertDialog.ERROR_TYPE)
                         .setTitleText("Không thể truy cập")
                         .setContentText("Bạn không được cấp quyền truy cập.")
                         .setConfirmText("OK")

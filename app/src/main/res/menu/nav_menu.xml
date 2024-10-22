@@ -32,6 +32,10 @@
                 android:icon="@drawable/baseline_person_24"
                 android:title="Thông tin người dùng"/>
             <item
+                android:id="@+id/nav_change_password"
+                android:icon="@drawable/baseline_lock_24"
+                android:title="Thay đổi mật khẩu"/>
+            <item
                 android:id="@+id/nav_info"
                 android:icon="@drawable/baseline_info_24"
                 android:title="Thông tin ứng dụng"/>
@@ -39,6 +43,7 @@
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/baseline_exit_to_app_24"
                 android:title="Đăng xuất tài khoản"/>
+
         </menu>
     </item>
 
