@@ -5,6 +5,7 @@ import static com.example.app_quanly_hocsinh_sinhvien.MainActivity.role_student;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,11 +13,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
@@ -31,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView signupRedirect;
     private EditText login_email, login_password;
     private Button login_button;
+    private TextView tv_forgot_password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +66,15 @@ public class LoginActivity extends AppCompatActivity {
                 onClickLogIn();
             }
         });
+        tv_forgot_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickForgotPassword();
+            }
+        });
     }
+
+
 
     private void onClickLogIn() {
         String str_email = login_email.getText().toString().trim();
@@ -166,5 +180,60 @@ public class LoginActivity extends AppCompatActivity {
         login_email = findViewById(R.id.login_email);
         login_password = findViewById(R.id.login_password);
         login_button = findViewById(R.id.login_button);
+        tv_forgot_password = findViewById(R.id.tv_forgot_password);
     }
+
+    private void onClickForgotPassword() {
+        // Tạo hộp thoại nhập email
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Quên mật khẩu");
+
+        // Tạo một EditText để người dùng nhập email
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        input.setHint("Nhập email của bạn");
+        builder.setView(input);
+
+        // Nút xác nhận
+        builder.setPositiveButton("Xác nhận", (dialog, which) -> {
+            String emailAddress = input.getText().toString().trim();
+
+            if (!emailAddress.isEmpty()) {
+                FirebaseAuth auth = FirebaseAuth.getInstance();
+                auth.sendPasswordResetEmail(emailAddress)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
+                                        .setTitleText("Thành công")
+                                        .setContentText("Email đặt lại mật khẩu đã được gửi!")
+                                        .setConfirmText("OK")
+                                        .setConfirmClickListener(SweetAlertDialog::dismissWithAnimation)
+                                        .show();
+                            } else {
+                                new SweetAlertDialog(this, SweetAlertDialog.ERROR_TYPE)
+                                        .setTitleText("Lỗi")
+                                        .setContentText("Không thể gửi email đặt lại mật khẩu. Vui lòng thử lại.")
+                                        .setConfirmText("OK")
+                                        .setConfirmClickListener(SweetAlertDialog::dismissWithAnimation)
+                                        .show();
+                            }
+                        });
+            } else {
+                // Hiển thị thông báo nếu người dùng chưa nhập email
+                new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Thiếu email")
+                        .setContentText("Vui lòng nhập email để đặt lại mật khẩu!")
+                        .setConfirmText("OK")
+                        .setConfirmClickListener(SweetAlertDialog::dismissWithAnimation)
+                        .show();
+            }
+        });
+
+        // Nút hủy
+        builder.setNegativeButton("Hủy", (dialog, which) -> dialog.cancel());
+
+        // Hiển thị hộp thoại
+        builder.show();
+    }
+
 }
