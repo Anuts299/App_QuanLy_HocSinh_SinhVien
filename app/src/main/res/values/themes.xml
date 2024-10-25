@@ -7,4 +7,8 @@
     </style>
 
     <style name="Theme.App_QuanLy_HocSinh_SinhVien" parent="Base.Theme.App_QuanLy_HocSinh_SinhVien" />
+    <style name="roundedImageViewRounded">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>

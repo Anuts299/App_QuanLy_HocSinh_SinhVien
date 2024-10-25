@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn = "navigation_view">
+    tools:showIn="navigation_view">
+
     <group
         android:checkableBehavior="single">
 
+        <!-- Các mục chính -->
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/baseline_home_24"
@@ -13,7 +15,6 @@
             android:id="@+id/nav_chart"
             android:icon="@drawable/baseline_bar_chart_24"
             android:title="Thống kê"/>
-
         <item
             android:id="@+id/nav_gradestype"
             android:icon="@drawable/baseline_settings_24"
@@ -23,28 +24,29 @@
             android:icon="@drawable/baseline_settings_24"
             android:title="Cài đặt trình độ"/>
 
-    </group>
-    <item
-        android:title="Tài khoản">
-        <menu>
-            <item
-                android:id="@+id/nav_user"
-                android:icon="@drawable/baseline_person_24"
-                android:title="Thông tin người dùng"/>
-            <item
-                android:id="@+id/nav_change_password"
-                android:icon="@drawable/baseline_lock_24"
-                android:title="Thay đổi mật khẩu"/>
-            <item
-                android:id="@+id/nav_info"
-                android:icon="@drawable/baseline_info_24"
-                android:title="Thông tin ứng dụng"/>
-            <item
-                android:id="@+id/nav_logout"
-                android:icon="@drawable/baseline_exit_to_app_24"
-                android:title="Đăng xuất tài khoản"/>
+        <!-- Tiêu đề chú thích cho nhóm Tài khoản -->
+        <item
+            android:title="Tài khoản"
+            android:enabled="false" />
 
-        </menu>
-    </item>
+        <!-- Các mục trong nhóm Tài khoản -->
+        <item
+            android:id="@+id/nav_user"
+            android:icon="@drawable/baseline_person_24"
+            android:title="Thông tin người dùng"/>
+        <item
+            android:id="@+id/nav_change_password"
+            android:icon="@drawable/baseline_lock_24"
+            android:title="Thay đổi mật khẩu"/>
+        <item
+            android:id="@+id/nav_info"
+            android:icon="@drawable/baseline_info_24"
+            android:title="Thông tin ứng dụng"/>
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/baseline_exit_to_app_24"
+            android:title="Đăng xuất tài khoản"/>
+
+    </group>
 
 </menu>

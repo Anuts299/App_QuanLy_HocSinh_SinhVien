@@ -38,6 +38,8 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation(libs.firebase.database)
+    implementation(libs.firebase.storage)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -46,7 +48,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")
     implementation ("com.google.firebase:firebase-firestore")
-
+    implementation ("com.google.firebase:firebase-database")
 
     //SweetAlertDialog
     implementation ("com.github.f0ris.sweetalert:library:1.5.6")
@@ -57,6 +59,7 @@ dependencies {
 
     //Glide: Load image from URL
     implementation ("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor("com.github.bumptech.glide:glide:4.16.0")
 
     //CircularProgressIndicator (Material Design Components)
     implementation ("com.google.android.material:material:1.9.0")
