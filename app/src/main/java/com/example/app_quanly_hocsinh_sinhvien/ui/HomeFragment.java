@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,8 +70,10 @@ public class HomeFragment extends Fragment {
     private void initListener() {
         class_card.setOnClickListener(v -> {
             // Chuyển sang ClassFragment
+            Log.d("HomeFragment", "class_card clicked");
             ClassFragment classFragment = new ClassFragment();
             switchFragment(classFragment);
+            Log.d("HomeFragment", "class_card đã vào");
         });
         student_card.setOnClickListener(v -> {
             //Chuyển sang StudentFragment
@@ -112,10 +115,18 @@ public class HomeFragment extends Fragment {
 
     // Phương thức chuyển đổi giữa các fragment
     private void switchFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        try {
+            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+            Log.d("HomeFragment", "class_card đã vào");
+        } catch (Exception e) {
+            Log.e("HomeFragment", "Error switching fragment: " + e.getMessage());
+        }
     }
+
+
+
 }
