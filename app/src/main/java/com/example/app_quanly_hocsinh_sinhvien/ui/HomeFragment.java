@@ -114,7 +114,7 @@ public class HomeFragment extends Fragment {
     }
 
     // Phương thức chuyển đổi giữa các fragment
-    private void switchFragment(Fragment fragment) {
+    public void switchFragment(Fragment fragment) {
             FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, fragment);
