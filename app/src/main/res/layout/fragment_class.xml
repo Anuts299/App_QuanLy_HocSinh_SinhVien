@@ -1,15 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.ClassFragment">
 
-        <include
-            layout="@layout/recyclerview_layout"
+        <androidx.appcompat.widget.SearchView
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:id="@+id/searchClass"
+            app:iconifiedByDefault="false"
+            app:searchHintIcon="@null"
+            app:queryHint="Tìm kiếm..."
+            android:focusable="false"
+            android:background="@drawable/custom_box"
+            app:closeIcon="@drawable/baseline_clear_24"
+            app:searchIcon="@drawable/baseline_search_24"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            android:layout_marginTop="20dp"
+            android:layout_below="@+id/searchClass"/>
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_class"
             android:layout_width="wrap_content"

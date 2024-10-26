@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -40,6 +41,7 @@ public class ClassFragment extends Fragment {
     private RecyclerView recClass;
     private ClassroomAdapter mClassroomAdapter;
     private List<Classroom> mListClassroom;
+    private SearchView searchView;
 
 
 
@@ -56,7 +58,8 @@ public class ClassFragment extends Fragment {
     private void initUi(View view){
         fab_class = view.findViewById(R.id.fab_class);
         recClass = view.findViewById(R.id.recyclerview);
-
+        searchView = view.findViewById(R.id.searchClass);
+        searchView.clearFocus();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recClass.setLayoutManager(linearLayoutManager);
 
@@ -66,6 +69,7 @@ public class ClassFragment extends Fragment {
         recClass.setAdapter(mClassroomAdapter);
 
         recClass.setAdapter(mClassroomAdapter);
+        searchItemClassroom();
     }
 
     private void initListener(){
@@ -85,7 +89,32 @@ public class ClassFragment extends Fragment {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+    //Tìm kiếm lớp học
+    public void searchItemClassroom(){
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchList(newText);
+                return true;
+            }
+        });
+    }
+    //Tìm danh sách
+    public void searchList(String text){
+        ArrayList<Classroom> searchList = new ArrayList<>();
+        for(Classroom classroom : mListClassroom){
+            if(classroom.getMa_lop().toLowerCase().contains(text.toLowerCase())){
+                searchList.add(classroom);
+            }
+        }
+        mClassroomAdapter.searchClassroomList(searchList);
+    }
+    //Lấy danh sách lớp học từ database
     private void getListClassroomsFromRealtimeDatabase(){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("CLASSROOM");
