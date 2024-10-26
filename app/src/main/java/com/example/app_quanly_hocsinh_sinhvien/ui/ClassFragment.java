@@ -183,6 +183,7 @@ public class ClassFragment extends Fragment {
         bundle.putString("ten_khoa", classroom.getTen_khoa());
         bundle.putString("ten_co_van", classroom.getTen_co_van());
         bundle.putString("nam_hoc", classroom.getNam_hoc());
+        bundle.putString("id",classroom.getId());
         detailFragment.setArguments(bundle);
 
         // Chuyển sang DetailFragment

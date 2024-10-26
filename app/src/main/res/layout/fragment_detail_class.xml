@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".class_manage.DetailFragment">
 
     <TableLayout
@@ -120,4 +121,35 @@
                 android:padding="14dp" />
         </TableRow>
     </TableLayout>
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.github.clans.fab.FloatingActionMenu
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="30dp"
+            android:layout_marginRight="30dp"
+            app:menu_fab_size="normal"
+            app:menu_colorPressed="@color/Cornflower_blue"
+            app:menu_colorNormal="@color/Cornflower_blue"
+            app:menu_icon="@drawable/baseline_format_list_bulleted_24"
+            app:menu_openDirection="up"
+            app:menu_showShadow="true">
+            
+            <com.github.clans.fab.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/deleteButtonClass"
+                android:src="@drawable/baseline_delete_24"
+                app:fab_showShadow="true"
+                app:fab_colorNormal="@color/Bittersweet"
+                app:fab_size="mini"/>
+            
+        </com.github.clans.fab.FloatingActionMenu>
+
+    </RelativeLayout>
 </FrameLayout>
