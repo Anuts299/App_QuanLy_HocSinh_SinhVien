@@ -67,6 +67,8 @@ dependencies {
     implementation ("androidx.appcompat:appcompat:1.4.0") // Dùng phiên bản ổn định mới nhất
     implementation ("com.google.android.material:material:1.5.0") // hoặc phiên bản mới nhất
 
+    //Clans Fab github
+    implementation ("com.github.clans:fab:1.6.4")
 
 
 

@@ -87,9 +87,16 @@ public class LoginActivity extends AppCompatActivity {
             // Hiển thị thông báo thiếu mật khẩu
             showAlertDialog("Thiếu mật khẩu", "Vui lòng nhập mật khẩu", login_password);
         } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setCancelable(false);
+            builder.setView(R.layout.progress_layout);
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
             FirebaseAuth auth = FirebaseAuth.getInstance();
             auth.signInWithEmailAndPassword(str_email, str_password)
                     .addOnCompleteListener(this, task -> {
+                        dialog.dismiss();
                         if (task.isSuccessful()) {
                             // Đăng nhập thành công, lấy thông tin vai trò từ Firestore
                             String userId = auth.getCurrentUser().getUid();

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -134,9 +135,16 @@ public class SignUpActivity extends AppCompatActivity {
                     })
                     .show();
         } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setCancelable(false);
+            builder.setView(R.layout.progress_layout);
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
             FirebaseAuth auth = FirebaseAuth.getInstance();
             auth.createUserWithEmailAndPassword(str_email, str_password)
                     .addOnCompleteListener(this, task -> {
+                        dialog.dismiss();
                         if (task.isSuccessful()) {
                             // Xử lý khi đăng ký thành công
                             FirebaseFirestore db = FirebaseFirestore.getInstance();
