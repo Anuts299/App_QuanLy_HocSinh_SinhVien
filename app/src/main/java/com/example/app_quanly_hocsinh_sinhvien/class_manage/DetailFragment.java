@@ -7,12 +7,15 @@ import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.app_quanly_hocsinh_sinhvien.R;
+import com.example.app_quanly_hocsinh_sinhvien.ui.ClassFragment;
+import com.example.app_quanly_hocsinh_sinhvien.ui.HomeFragment;
 import com.github.clans.fab.FloatingActionButton;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -22,9 +25,11 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class DetailFragment extends Fragment {
 
-    TextView tv_de_name_class, tv_de_name_faculties, tv_de_name_lecturer, tv_de_academic_year;
-    FloatingActionButton deleteButtonClass;
+    TextView tv_de_name_class, tv_de_name_faculties, tv_de_name_lecturer, tv_de_academic_year, tv_de_name_class2;
+    FloatingActionButton deleteButtonClass, editButtonClass;
     String id = "";
+    private ClassFragment classFragment;
+    private HomeFragment homeFragment;
 
 
     @Override
@@ -39,6 +44,7 @@ public class DetailFragment extends Fragment {
             tv_de_name_faculties.setText(bundle.getString("ten_khoa"));
             tv_de_name_lecturer.setText(bundle.getString("ten_co_van"));
             tv_de_academic_year.setText(bundle.getString("nam_hoc"));
+            tv_de_name_class2.setText(bundle.getString("ten_lop"));
             id = bundle.getString("id");
         }
         deleteButtonClass.setOnClickListener(new View.OnClickListener() {
@@ -72,8 +78,8 @@ public class DetailFragment extends Fragment {
                                                             @Override
                                                             public void onClick(SweetAlertDialog sDialog) {
                                                                 sDialog.dismiss();
-                                                                // Trở về fragment trước đó
-                                                                requireActivity().getSupportFragmentManager().popBackStack();
+                                                                homeFragment = new HomeFragment();
+                                                                homeFragment.switchFragment(classFragment);
                                                             }
                                                         })
                                                         .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
@@ -94,7 +100,46 @@ public class DetailFragment extends Fragment {
                         .show();
             }
         });
+        editButtonClass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("EditButton", "Edit button clicked");
 
+                Bundle bundle = new Bundle();
+                String maLop = tv_de_name_class.getText().toString();
+                String tenLop = tv_de_name_class2.getText().toString();
+                String tenKhoa = tv_de_name_faculties.getText().toString();
+                String tenCoVan = tv_de_name_lecturer.getText().toString();
+                String namHoc = tv_de_academic_year.getText().toString();
+
+                Log.d("EditButton", "maLop: " + maLop);
+                Log.d("EditButton", "tenLop: " + tenLop);
+                Log.d("EditButton", "tenKhoa: " + tenKhoa);
+                Log.d("EditButton", "tenCoVan: " + tenCoVan);
+                Log.d("EditButton", "namHoc: " + namHoc);
+                Log.d("EditButton", "id: " + id);
+
+                bundle.putString("ma_lop", maLop);
+                bundle.putString("ten_lop", tenLop);
+                bundle.putString("ten_khoa", tenKhoa);
+                bundle.putString("ten_co_van", tenCoVan);
+                bundle.putString("nam_hoc", namHoc);
+                bundle.putString("id", id);
+
+                UpdateFragment updateFragment = new UpdateFragment();
+                updateFragment.setArguments(bundle);
+
+                try {
+                    requireActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, updateFragment)
+                            .addToBackStack(null)
+                            .commit();
+                    Log.d("EditButton", "Fragment replaced successfully");
+                } catch (Exception e) {
+                    Log.e("EditButton", "Error replacing fragment", e);
+                }
+            }
+        });
         return view;
 
     }
@@ -103,6 +148,8 @@ public class DetailFragment extends Fragment {
         tv_de_name_faculties = view.findViewById(R.id.tv_de_name_faculties);
         tv_de_name_lecturer = view.findViewById(R.id.tv_de_name_lecturer);
         tv_de_academic_year = view.findViewById(R.id.tv_de_academic_year);
+        tv_de_name_class2 = view.findViewById(R.id.tv_de_name_class2);
         deleteButtonClass = view.findViewById(R.id.deleteButtonClass);
+        editButtonClass = view.findViewById(R.id.editButtonClass);
     }
 }

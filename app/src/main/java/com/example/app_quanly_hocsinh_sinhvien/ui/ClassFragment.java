@@ -180,6 +180,7 @@ public class ClassFragment extends Fragment {
         // Truyền dữ liệu vào Bundle
         Bundle bundle = new Bundle();
         bundle.putString("ma_lop", classroom.getMa_lop());
+        bundle.putString("ten_lop",classroom.getTen_lop());
         bundle.putString("ten_khoa", classroom.getTen_khoa());
         bundle.putString("ten_co_van", classroom.getTen_co_van());
         bundle.putString("nam_hoc", classroom.getNam_hoc());

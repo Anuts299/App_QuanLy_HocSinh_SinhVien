@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".class_manage.UploadFragment">
+    tools:context=".class_manage.UpdateFragment">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -30,17 +30,17 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Thêm Lớp"
+                android:text="Chỉnh Sửa Lớp"
                 android:textSize="25dp"
                 android:textAlignment="center"
                 android:textColor="@color/Cornflower_blue"
                 android:layout_marginBottom="15dp"
                 android:textStyle="bold"/>
             <EditText
-                android:id="@+id/edt_code_class"
+                android:id="@+id/edt_update_code_class"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Mã lớp (VD: CCNTT22F)"
+                android:text="Mã lớp"
                 android:background="@drawable/custom_box"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
@@ -51,10 +51,10 @@
                 android:paddingRight="15dp"
                 android:layout_marginBottom="15dp"/>
             <EditText
-                android:id="@+id/edt_name_class"
+                android:id="@+id/edt_update_name_class"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Tên lớp (VD: Cao đẳng Công nghệ thông tin Kho 22 lớp F)"
+                android:text="Tên lớp"
                 android:background="@drawable/custom_box"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
@@ -65,10 +65,10 @@
                 android:paddingRight="15dp"
                 android:layout_marginBottom="15dp"/>
             <EditText
-                android:id="@+id/edt_name_faculty"
+                android:id="@+id/edt_update_name_faculty"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Tên khoa"
+                android:text="Tên khoa"
                 android:background="@drawable/custom_box"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
@@ -78,10 +78,10 @@
                 android:paddingLeft="15dp"
                 android:layout_marginBottom="15dp"/>
             <EditText
-                android:id="@+id/edt_name_lecturer"
+                android:id="@+id/edt_update_name_lecturer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Tên cố vấn"
+                android:text="Tên cố vấn"
                 android:background="@drawable/custom_box"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
@@ -91,10 +91,10 @@
                 android:paddingLeft="15dp"
                 android:layout_marginBottom="15dp"/>
             <EditText
-                android:id="@+id/edt_academic_year"
+                android:id="@+id/edt_update_academic_year"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Năm học (VD: 2022 - 2025)"
+                android:text="Năm học"
                 android:background="@drawable/custom_box"
                 android:paddingTop="10dp"
                 android:maxLines="1"
@@ -105,10 +105,10 @@
                 android:paddingRight="15dp"
                 android:layout_marginBottom="15dp"/>
             <Button
-                android:id="@+id/btn_upload_class"
+                android:id="@+id/btn_update_class"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="THÊM LỚP"
+                android:text="CHỈNH SỬA LỚP"
                 android:backgroundTint="@color/Cornflower_blue"
                 app:cornerRadius="25dp"
                 android:textSize="18dp"
