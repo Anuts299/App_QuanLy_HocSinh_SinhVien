@@ -15,9 +15,16 @@ import java.util.List;
 public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.ClassroomViewHolder> {
 
     private List<Classroom> mListClassroom;
+    private OnItemClickListener mListener;
 
-    public ClassroomAdapter(List<Classroom> mListClassroom) {
+    public interface OnItemClickListener {
+        void onItemClick(Classroom classroom);
+    }
+
+    // Constructor mới
+    public ClassroomAdapter(List<Classroom> mListClassroom, OnItemClickListener listener) {
         this.mListClassroom = mListClassroom;
+        this.mListener = listener;
     }
 
     @NonNull
@@ -35,6 +42,13 @@ public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.Clas
         }
         holder.tv_code_class.setText(classroom.getMa_lop());
         holder.tv_lecturer_class.setText(classroom.getTen_co_van());
+
+        // Thiết lập sự kiện click
+        holder.itemView.setOnClickListener(view -> {
+            if (mListener != null) {
+                mListener.onItemClick(classroom);
+            }
+        });
 
     }
 

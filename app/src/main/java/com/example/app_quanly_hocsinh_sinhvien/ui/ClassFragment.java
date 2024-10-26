@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import com.example.app_quanly_hocsinh_sinhvien.R;
 import com.example.app_quanly_hocsinh_sinhvien.class_manage.Classroom;
 import com.example.app_quanly_hocsinh_sinhvien.class_manage.ClassroomAdapter;
+import com.example.app_quanly_hocsinh_sinhvien.class_manage.DetailFragment;
 import com.example.app_quanly_hocsinh_sinhvien.class_manage.UploadFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.ChildEventListener;
@@ -59,8 +60,10 @@ public class ClassFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recClass.setLayoutManager(linearLayoutManager);
 
+
         mListClassroom = new ArrayList<>();
-        mClassroomAdapter = new ClassroomAdapter(mListClassroom);
+        mClassroomAdapter = new ClassroomAdapter(mListClassroom, classroom -> openDetailFragment(classroom));
+        recClass.setAdapter(mClassroomAdapter);
 
         recClass.setAdapter(mClassroomAdapter);
     }
@@ -140,6 +143,24 @@ public class ClassFragment extends Fragment {
 
             }
         });
+    }
+
+    private void openDetailFragment(Classroom classroom) {
+        DetailFragment detailFragment = new DetailFragment();
+
+        // Truyền dữ liệu vào Bundle
+        Bundle bundle = new Bundle();
+        bundle.putString("ma_lop", classroom.getMa_lop());
+        bundle.putString("ten_khoa", classroom.getTen_khoa());
+        bundle.putString("ten_co_van", classroom.getTen_co_van());
+        bundle.putString("nam_hoc", classroom.getNam_hoc());
+        detailFragment.setArguments(bundle);
+
+        // Chuyển sang DetailFragment
+        getParentFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, detailFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
 }
