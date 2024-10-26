@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -19,6 +20,7 @@ import com.example.app_quanly_hocsinh_sinhvien.class_manage.Classroom;
 import com.example.app_quanly_hocsinh_sinhvien.class_manage.ClassroomAdapter;
 import com.example.app_quanly_hocsinh_sinhvien.class_manage.UploadFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -84,27 +86,58 @@ public class ClassFragment extends Fragment {
     private void getListClassroomsFromRealtimeDatabase(){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("CLASSROOM");
-
-        myRef.addValueEventListener(new ValueEventListener() {
+        //Cách 1
+//        myRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+//                    Classroom classroom = dataSnapshot.getValue(Classroom.class);
+//                    mListClassroom.add(classroom);
+//                }
+//                mClassroomAdapter.notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                new SweetAlertDialog(getActivity(), SweetAlertDialog.ERROR_TYPE)
+//                        .setTitleText("Thất bại")
+//                        .setContentText("Lấy danh sách lớp thất bại")
+//                        .setConfirmText("OK")
+//                        .setConfirmClickListener(sDialog -> {
+//                            sDialog.dismissWithAnimation();
+//                        })
+//                        .show();
+//            }
+//        });
+        //Cách 2:
+        myRef.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-                    Classroom classroom = dataSnapshot.getValue(Classroom.class);
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Classroom classroom = snapshot.getValue(Classroom.class);
+                if(classroom != null){
                     mListClassroom.add(classroom);
+                    mClassroomAdapter.notifyDataSetChanged();
                 }
-                mClassroomAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                new SweetAlertDialog(getActivity(), SweetAlertDialog.ERROR_TYPE)
-                        .setTitleText("Thất bại")
-                        .setContentText("Lấy danh sách lớp thất bại")
-                        .setConfirmText("OK")
-                        .setConfirmClickListener(sDialog -> {
-                            sDialog.dismissWithAnimation();
-                        })
-                        .show();
+
             }
         });
     }
