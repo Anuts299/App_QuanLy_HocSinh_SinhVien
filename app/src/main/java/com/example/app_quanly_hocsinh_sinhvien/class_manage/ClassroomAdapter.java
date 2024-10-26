@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.app_quanly_hocsinh_sinhvien.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.ClassroomViewHolder> {
@@ -58,6 +59,11 @@ public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.Clas
             return mListClassroom.size();
         }
         return 0;
+    }
+
+    public void searchClassroomList(ArrayList<Classroom> searchList){
+        mListClassroom = searchList;
+        notifyDataSetChanged();
     }
 
     public class ClassroomViewHolder extends RecyclerView.ViewHolder{
