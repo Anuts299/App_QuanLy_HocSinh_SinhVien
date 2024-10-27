@@ -5,14 +5,19 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.app_quanly_hocsinh_sinhvien.R;
+import com.example.app_quanly_hocsinh_sinhvien.ui.ClassFragment;
+import com.example.app_quanly_hocsinh_sinhvien.ui.HomeFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
@@ -27,6 +32,9 @@ public class UpdateFragment extends Fragment {
     private Button btn_update_class;
     private String id = "";
     private DatabaseReference reference;
+    private TextView breadcrumb_home, breadcrumb_classroom;
+    HomeFragment homeFragment = new HomeFragment();
+    ClassFragment classFragment = new ClassFragment();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,6 +57,18 @@ public class UpdateFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 onClickButtonUpdateClass();
+            }
+        });
+        breadcrumb_home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchFragment(homeFragment);
+            }
+        });
+        breadcrumb_classroom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchFragment(classFragment);
             }
         });
         return view;
@@ -124,5 +144,14 @@ public class UpdateFragment extends Fragment {
         edt_update_name_lecturer = view.findViewById(R.id.edt_update_name_lecturer);
         edt_update_academic_year = view.findViewById(R.id.edt_update_academic_year);
         btn_update_class = view.findViewById(R.id.btn_update_class);
+        breadcrumb_home = view.findViewById(R.id.breadcrumb_home);
+        breadcrumb_classroom = view.findViewById(R.id.breadcrumb_classroom);
+    }
+    private void switchFragment(Fragment fragment) {
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.app_quanly_hocsinh_sinhvien.R;
 import com.example.app_quanly_hocsinh_sinhvien.class_manage.Classroom;
@@ -42,6 +43,7 @@ public class ClassFragment extends Fragment {
     private ClassroomAdapter mClassroomAdapter;
     private List<Classroom> mListClassroom;
     private SearchView searchView;
+    private TextView breadcrumb_home;
 
 
 
@@ -60,6 +62,7 @@ public class ClassFragment extends Fragment {
         recClass = view.findViewById(R.id.recyclerview);
         searchView = view.findViewById(R.id.searchClass);
         searchView.clearFocus();
+        breadcrumb_home = view.findViewById(R.id.breadcrumb_home);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recClass.setLayoutManager(linearLayoutManager);
 
@@ -78,6 +81,13 @@ public class ClassFragment extends Fragment {
             public void onClick(View v) {
                 UploadFragment uploadFragment = new UploadFragment();
                 switchFragment(uploadFragment);
+            }
+        });
+        breadcrumb_home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                HomeFragment homeFragment = new HomeFragment();
+                switchFragment(homeFragment);
             }
         });
     }

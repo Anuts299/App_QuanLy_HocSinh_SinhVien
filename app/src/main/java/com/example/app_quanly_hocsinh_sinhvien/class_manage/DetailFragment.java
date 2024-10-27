@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,11 +27,11 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class DetailFragment extends Fragment {
 
-    TextView tv_de_name_class, tv_de_name_faculties, tv_de_name_lecturer, tv_de_academic_year, tv_de_name_class2;
+    TextView tv_de_name_class, tv_de_name_faculties, tv_de_name_lecturer, tv_de_academic_year, tv_de_name_class2, breadcrumb_classroom, breadcrumb_home;
     FloatingActionButton deleteButtonClass, editButtonClass;
     String id = "";
-    private ClassFragment classFragment;
-    private HomeFragment homeFragment;
+    private ClassFragment classFragment = new ClassFragment();;
+    private HomeFragment homeFragment = new HomeFragment();
 
 
     @Override
@@ -47,6 +49,22 @@ public class DetailFragment extends Fragment {
             tv_de_name_class2.setText(bundle.getString("ten_lop"));
             id = bundle.getString("id");
         }
+        initListener();
+        return view;
+
+    }
+    private void initUi(View view){
+        tv_de_name_class = view.findViewById(R.id.tv_de_name_class);
+        tv_de_name_faculties = view.findViewById(R.id.tv_de_name_faculties);
+        tv_de_name_lecturer = view.findViewById(R.id.tv_de_name_lecturer);
+        tv_de_academic_year = view.findViewById(R.id.tv_de_academic_year);
+        tv_de_name_class2 = view.findViewById(R.id.tv_de_name_class2);
+        deleteButtonClass = view.findViewById(R.id.deleteButtonClass);
+        editButtonClass = view.findViewById(R.id.editButtonClass);
+        breadcrumb_classroom = view.findViewById(R.id.breadcrumb_classroom);
+        breadcrumb_home = view.findViewById(R.id.breadcrumb_home);
+    }
+    private void initListener(){
         deleteButtonClass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,8 +96,8 @@ public class DetailFragment extends Fragment {
                                                             @Override
                                                             public void onClick(SweetAlertDialog sDialog) {
                                                                 sDialog.dismiss();
-                                                                homeFragment = new HomeFragment();
-                                                                homeFragment.switchFragment(classFragment);
+
+                                                                switchFragment(classFragment);
                                                             }
                                                         })
                                                         .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
@@ -140,16 +158,24 @@ public class DetailFragment extends Fragment {
                 }
             }
         });
-        return view;
-
+        breadcrumb_home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchFragment(homeFragment);
+            }
+        });
+        breadcrumb_classroom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchFragment(classFragment);
+            }
+        });
     }
-    private void initUi(View view){
-        tv_de_name_class = view.findViewById(R.id.tv_de_name_class);
-        tv_de_name_faculties = view.findViewById(R.id.tv_de_name_faculties);
-        tv_de_name_lecturer = view.findViewById(R.id.tv_de_name_lecturer);
-        tv_de_academic_year = view.findViewById(R.id.tv_de_academic_year);
-        tv_de_name_class2 = view.findViewById(R.id.tv_de_name_class2);
-        deleteButtonClass = view.findViewById(R.id.deleteButtonClass);
-        editButtonClass = view.findViewById(R.id.editButtonClass);
+    public void switchFragment(Fragment fragment) {
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }

@@ -15,9 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.app_quanly_hocsinh_sinhvien.R;
 import com.example.app_quanly_hocsinh_sinhvien.ui.ClassFragment;
+import com.example.app_quanly_hocsinh_sinhvien.ui.HomeFragment;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,6 +33,9 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class UploadFragment extends Fragment {
     Button btn_upload_class;
     EditText edt_name_class, edt_name_faculty, edt_name_lecturer, edt_academic_year, edt_code_class;
+    TextView breadcrumb_home, breadcrumb_classroom;
+    HomeFragment homeFragment = new HomeFragment();
+    ClassFragment classFragment = new ClassFragment();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -54,7 +59,18 @@ public class UploadFragment extends Fragment {
             Classroom classroom = new Classroom(null,class_code, academic_year, name_lecturer, name_faculty, name_class);
             onClickUploadClass(classroom);
         });
-
+        breadcrumb_home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchFragment(homeFragment);
+            }
+        });
+        breadcrumb_classroom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchFragment(classFragment);
+            }
+        });
         return view;
     }
     private void initUi(View view){
@@ -64,6 +80,8 @@ public class UploadFragment extends Fragment {
         edt_name_lecturer = view.findViewById(R.id.edt_name_lecturer);
         edt_academic_year = view.findViewById(R.id.edt_academic_year);
         edt_code_class = view.findViewById(R.id.edt_code_class);
+        breadcrumb_home = view.findViewById(R.id.breadcrumb_home);
+        breadcrumb_classroom = view.findViewById(R.id.breadcrumb_classroom);
     }
 
     private void onClickUploadClass(Classroom classroom) {

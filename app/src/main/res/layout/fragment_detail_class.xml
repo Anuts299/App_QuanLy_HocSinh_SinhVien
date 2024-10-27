@@ -5,14 +5,61 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".class_manage.DetailFragment">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/breadcrumbs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="12dp"
+        android:gravity="center_vertical">
 
+        <TextView
+            android:id="@+id/breadcrumb_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trang chủ"
+            android:textColor="@color/Cornflower_blue"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" / "
+            android:textColor="@color/Cornflower_blue" />
+
+        <TextView
+            android:id="@+id/breadcrumb_classroom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lớp học"
+            android:textSize="16dp"
+            android:textColor="@color/Cornflower_blue"
+            android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" / "
+            android:textColor="@color/Cornflower_blue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Chi tiết lớp học"
+            android:textSize="16dp"
+            android:textColor="@color/Cornflower_blue" />
+    </LinearLayout>
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:divider="@color/Cornflower_blue"
         android:showDividers="middle"
         android:background="@drawable/background_table"
-        android:layout_margin="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="45dp"
         android:elevation="8dp">
 
         <TableRow
