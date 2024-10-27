@@ -4,15 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="176dp"
     android:gravity="bottom"
-    android:padding="16dp"
-    android:background="@color/Cornflower_blue"
+    android:paddingLeft="16dp"
+    android:paddingBottom="25dp"
+    android:background="@drawable/navigation_header_bg"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/img_avatar"
+        android:paddingTop="10dp"
         android:layout_width="85dp"
         android:layout_height="85dp"
-        android:paddingTop="18dp"
         android:src="@drawable/ic_account_def" />
 
     <TextView
