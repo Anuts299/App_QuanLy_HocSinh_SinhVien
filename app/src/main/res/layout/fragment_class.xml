@@ -5,21 +5,54 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.ClassFragment">
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal"
+            android:id="@+id/breadcrumbs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="12dp"
+            android:gravity="center_vertical">
 
+                <TextView
+                    android:id="@+id/breadcrumb_home"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Trang chủ"
+                    android:textSize="16dp"
+                    android:textColor="@color/Cornflower_blue"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" / "
+                    android:textColor="@color/Cornflower_blue" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Lớp học"
+                    android:textSize="16dp"
+                    android:textColor="@color/Cornflower_blue" />
+        </LinearLayout>
         <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchClass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="5dp"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
-            android:id="@+id/searchClass"
             app:iconifiedByDefault="false"
             app:searchHintIcon="@null"
             app:queryHint="Tìm kiếm..."
             android:focusable="false"
             android:background="@drawable/custom_box"
             app:closeIcon="@drawable/baseline_clear_24"
-            app:searchIcon="@drawable/baseline_search_24"/>
+            app:searchIcon="@drawable/baseline_search_24"
+            android:layout_below="@+id/breadcrumbs"/>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview"
             android:layout_width="match_parent"
@@ -39,6 +72,4 @@
             android:contentDescription="Thêm mục mới"
             android:src="@drawable/baseline_add_24"
             android:tint="@color/white" />
-
-
 </RelativeLayout>
