@@ -86,19 +86,19 @@ public class HomeFragment extends Fragment {
             switchFragment(subjectFragment);
         });
         faculties_card.setOnClickListener(v -> {
-            //Kiểm tra vai trò cua nguoi dung
-            if(role_student.equals(userRole)){
-                new SweetAlertDialog(requireActivity(), SweetAlertDialog.ERROR_TYPE)
-                        .setTitleText("Không thể truy cập")
-                        .setContentText("Bạn không được cấp quyền truy cập.")
-                        .setConfirmText("OK")
-                        .setConfirmClickListener(SweetAlertDialog::dismissWithAnimation)
-                        .show();
-            }else{
+//            //Kiểm tra vai trò cua nguoi dung
+//            if(role_student.equals(userRole)){
+//                new SweetAlertDialog(requireActivity(), SweetAlertDialog.ERROR_TYPE)
+//                        .setTitleText("Không thể truy cập")
+//                        .setContentText("Bạn không được cấp quyền truy cập.")
+//                        .setConfirmText("OK")
+//                        .setConfirmClickListener(SweetAlertDialog::dismissWithAnimation)
+//                        .show();
+//            }else{
                 //Chuyển sang FacultiesFragment
                 FacultiesFragment facultiesFragment = new FacultiesFragment();
                 switchFragment(facultiesFragment);
-            }
+//            }
         });
         input_score_card.setOnClickListener(v -> {
             //Chuyển sang FacultiesFragment

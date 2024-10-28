@@ -1,6 +1,4 @@
-package com.example.app_quanly_hocsinh_sinhvien.class_manage;
-
-import static android.content.Intent.getIntent;
+package com.example.app_quanly_hocsinh_sinhvien.faculty_manage;
 
 import android.os.Bundle;
 
@@ -16,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.app_quanly_hocsinh_sinhvien.R;
-import com.example.app_quanly_hocsinh_sinhvien.ui.ClassFragment;
+import com.example.app_quanly_hocsinh_sinhvien.ui.FacultiesFragment;
 import com.example.app_quanly_hocsinh_sinhvien.ui.HomeFragment;
 import com.github.clans.fab.FloatingActionButton;
 import com.google.firebase.database.DatabaseReference;
@@ -27,48 +25,40 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class DetailFragment extends Fragment {
 
-    TextView tv_de_name_class, tv_de_name_faculties, tv_de_name_lecturer, tv_de_academic_year, tv_de_name_class2, breadcrumb_classroom, breadcrumb_home;
-    FloatingActionButton deleteButtonClass, editButtonClass;
+    TextView tv_de_name_faculty, breadcrumb_home, breadcrumb_faculty;
     String id = "";
+    FloatingActionButton deleteButtonFaculty, editButtonFaculty;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_detail_class, container, false);
+        View view = inflater.inflate(R.layout.fragment_detail_faculty, container, false);
         initUi(view);
         Bundle bundle = getArguments();
         if(bundle != null){
-            tv_de_name_class.setText(bundle.getString("ma_lop"));
-            tv_de_name_faculties.setText(bundle.getString("ten_khoa"));
-            tv_de_name_lecturer.setText(bundle.getString("ten_co_van"));
-            tv_de_academic_year.setText(bundle.getString("nam_hoc"));
-            tv_de_name_class2.setText(bundle.getString("ten_lop"));
+            tv_de_name_faculty.setText(bundle.getString("ten_khoa"));
             id = bundle.getString("id");
         }
         initListener();
         return view;
-
     }
     private void initUi(View view){
-        tv_de_name_class = view.findViewById(R.id.tv_de_name_class);
-        tv_de_name_faculties = view.findViewById(R.id.tv_de_name_faculties);
-        tv_de_name_lecturer = view.findViewById(R.id.tv_de_name_lecturer);
-        tv_de_academic_year = view.findViewById(R.id.tv_de_academic_year);
-        tv_de_name_class2 = view.findViewById(R.id.tv_de_name_class2);
-        deleteButtonClass = view.findViewById(R.id.deleteButtonClass);
-        editButtonClass = view.findViewById(R.id.editButtonClass);
-        breadcrumb_classroom = view.findViewById(R.id.breadcrumb_classroom);
+        tv_de_name_faculty = view.findViewById(R.id.tv_de_name_faculty);
+        deleteButtonFaculty = view.findViewById(R.id.deleteButtonFaculty);
+        editButtonFaculty = view.findViewById(R.id.editButtonFaculty);
         breadcrumb_home = view.findViewById(R.id.breadcrumb_home);
+        breadcrumb_faculty = view.findViewById(R.id.breadcrumb_faculty);
     }
+
     private void initListener(){
-        deleteButtonClass.setOnClickListener(new View.OnClickListener() {
+        deleteButtonFaculty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Hiển thị SweetAlertDialog xác nhận xóa
                 new SweetAlertDialog(v.getContext(), SweetAlertDialog.WARNING_TYPE)
                         .setTitleText("Xác nhận xóa")
-                        .setContentText("Bạn có chắc chắn muốn xóa lớp học này không?")
+                        .setContentText("Bạn có chắc chắn muốn xóa khoa này không?")
                         .setConfirmText("Xóa")
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
@@ -79,31 +69,28 @@ public class DetailFragment extends Fragment {
                                 AlertDialog dialog = builder.create();
                                 dialog.show();
                                 // Xác nhận xóa - thực hiện xóa trong Firebase
-                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("CLASSROOM");
-                                reference.child(id) // Thay "id_classroom" bằng ID lớp học bạn muốn xóa
+                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("FACULTY");
+                                reference.child(id)
                                         .removeValue()
                                         .addOnCompleteListener(task -> {
                                             dialog.dismiss();
                                             if (task.isSuccessful()) {
                                                 sDialog
                                                         .setTitleText("Đã xóa!")
-                                                        .setContentText("Lớp học đã được xóa.")
+                                                        .setContentText("Khoa đã được xóa.")
                                                         .setConfirmText("OK")
                                                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                                             @Override
                                                             public void onClick(SweetAlertDialog sDialog) {
                                                                 sDialog.dismiss();
-
-                                                                switchFragment(new ClassFragment());
+                                                                switchFragment(new FacultiesFragment());
                                                             }
                                                         })
                                                         .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
-
-
-                                            } else {
+                                            }else {
                                                 sDialog
                                                         .setTitleText("Lỗi!")
-                                                        .setContentText("Không thể xóa lớp học.")
+                                                        .setContentText("Không thể xóa khoa.")
                                                         .setConfirmText("OK")
                                                         .setConfirmClickListener(SweetAlertDialog::dismissWithAnimation)
                                                         .changeAlertType(SweetAlertDialog.ERROR_TYPE);
@@ -115,22 +102,12 @@ public class DetailFragment extends Fragment {
                         .show();
             }
         });
-        editButtonClass.setOnClickListener(new View.OnClickListener() {
+        editButtonFaculty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Bundle bundle = new Bundle();
-                String maLop = tv_de_name_class.getText().toString().trim();
-                String tenLop = tv_de_name_class2.getText().toString().trim();
-                String tenKhoa = tv_de_name_faculties.getText().toString().trim();
-                String tenCoVan = tv_de_name_lecturer.getText().toString().trim();
-                String namHoc = tv_de_academic_year.getText().toString().trim();
-
-                bundle.putString("ma_lop", maLop);
-                bundle.putString("ten_lop", tenLop);
-                bundle.putString("ten_khoa", tenKhoa);
-                bundle.putString("ten_co_van", tenCoVan);
-                bundle.putString("nam_hoc", namHoc);
+                String tenkhoa = tv_de_name_faculty.getText().toString().trim();
+                bundle.putString("ten_khoa",tenkhoa);
                 bundle.putString("id", id);
 
                 UpdateFragment updateFragment = new UpdateFragment();
@@ -153,10 +130,10 @@ public class DetailFragment extends Fragment {
                 switchFragment(new HomeFragment());
             }
         });
-        breadcrumb_classroom.setOnClickListener(new View.OnClickListener() {
+        breadcrumb_faculty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switchFragment(new ClassFragment());
+                switchFragment(new FacultiesFragment());
             }
         });
     }

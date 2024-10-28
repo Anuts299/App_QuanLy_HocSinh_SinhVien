@@ -34,8 +34,6 @@ public class UploadFragment extends Fragment {
     Button btn_upload_class;
     EditText edt_name_class, edt_name_faculty, edt_name_lecturer, edt_academic_year, edt_code_class;
     TextView breadcrumb_home, breadcrumb_classroom;
-    HomeFragment homeFragment = new HomeFragment();
-    ClassFragment classFragment = new ClassFragment();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -62,13 +60,13 @@ public class UploadFragment extends Fragment {
         breadcrumb_home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switchFragment(homeFragment);
+                switchFragment(new HomeFragment());
             }
         });
         breadcrumb_classroom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switchFragment(classFragment);
+                switchFragment(new ClassFragment());
             }
         });
         return view;
@@ -145,10 +143,10 @@ public class UploadFragment extends Fragment {
     }
     // Phương thức chuyển đổi giữa các fragment
     private void switchFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        fragmentTransaction.commit();  // Không dùng addToBackStack(null)
     }
+
 }

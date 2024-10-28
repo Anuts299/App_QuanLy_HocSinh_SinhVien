@@ -2,65 +2,167 @@ package com.example.app_quanly_hocsinh_sinhvien.ui;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.app_quanly_hocsinh_sinhvien.R;
+import com.example.app_quanly_hocsinh_sinhvien.class_manage.ClassroomAdapter;
+import com.example.app_quanly_hocsinh_sinhvien.faculty_manage.DetailFragment;
+import com.example.app_quanly_hocsinh_sinhvien.faculty_manage.Faculty;
+import com.example.app_quanly_hocsinh_sinhvien.faculty_manage.FacultyAdapter;
+import com.example.app_quanly_hocsinh_sinhvien.faculty_manage.UploadFragment;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FacultiesFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class FacultiesFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public FacultiesFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FacultiesFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FacultiesFragment newInstance(String param1, String param2) {
-        FacultiesFragment fragment = new FacultiesFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    FloatingActionButton fab_faculty;
+    RecyclerView recyView_Faculty;
+    FacultyAdapter mFacultyAdapter;
+    private SearchView searchView;
+    List<Faculty> mListFaculty;
+    TextView breadcrumb_home;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_faculties, container, false);
+        View view = inflater.inflate(R.layout.fragment_faculties, container, false);
+        mListFaculty = new ArrayList<>();
+        mFacultyAdapter = new FacultyAdapter(mListFaculty, faculty -> openDetailFragment(faculty));
+        initUi(view);
+        initListener();
+        getListFacultyFromRealtimeDatabase();
+        return view;
+    }
+    private void initUi(View view){
+        fab_faculty = view.findViewById(R.id.fab_faculty);
+        recyView_Faculty = view.findViewById(R.id.recyView_Faculty);
+        breadcrumb_home = view.findViewById(R.id.breadcrumb_home);
+        searchView = view.findViewById(R.id.searchFaculty);
+        searchView.clearFocus();
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        recyView_Faculty.setLayoutManager(linearLayoutManager);
+
+        recyView_Faculty.setAdapter(mFacultyAdapter);
+        searchItemFaculty();
+    }
+    private void initListener(){
+        fab_faculty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UploadFragment uploadFragment = new UploadFragment();
+                switchFragment(uploadFragment);
+            }
+        });
+        breadcrumb_home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchFragment(new HomeFragment());
+            }
+        });
+    }
+    private void getListFacultyFromRealtimeDatabase(){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("FACULTY");
+
+        myRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Faculty faculty = snapshot.getValue(Faculty.class);
+                if(faculty != null){
+                    mListFaculty.add(faculty);
+                    mFacultyAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    // Phương thức chuyển đổi giữa các fragment
+    private void switchFragment(Fragment fragment) {
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.commit();  // Không dùng addToBackStack(null)
+    }
+
+    //Tìm kiếm khoa
+    public void searchItemFaculty(){
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchView.clearFocus();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchList(newText);
+                return true;
+            }
+        });
+    }
+    //Tìm danh sách
+    private void searchList(String text){
+        ArrayList<Faculty> searchList = new ArrayList<>();
+        for(Faculty faculty : mListFaculty){
+            if(faculty.getTen_khoa().toLowerCase().contains(text.toLowerCase())){
+                searchList.add(faculty);
+            }
+        }
+        mFacultyAdapter.searchFacultyList(searchList);
+    }
+
+    private void openDetailFragment(Faculty faculty){
+        DetailFragment detailFragment = new DetailFragment();
+        // Truyền dữ liệu vào Bundle
+        Bundle bundle = new Bundle();
+        bundle.putString("ten_khoa", faculty.getTen_khoa());
+        bundle.putString("id", faculty.getId());
+        detailFragment.setArguments(bundle);
+
+        // Chuyển sang DetailFragment
+        getParentFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, detailFragment)
+                .addToBackStack(null)
+                .commit();
     }
 }

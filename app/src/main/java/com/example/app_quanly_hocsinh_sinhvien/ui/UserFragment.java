@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -51,10 +52,8 @@ public class UserFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mView =  inflater.inflate(R.layout.fragment_user, container, false);
-
         initUi();
         setUserInformation();
-        progressIndicator = new CircularProgressIndicator(getActivity());
         mMainActivity = (MainActivity) getActivity();
         initListener();
         return mView;
@@ -157,6 +156,23 @@ public class UserFragment extends Fragment {
             return;
         }
         String str_full_name = edt_full_name.getText().toString().trim();
+        if(str_full_name.isEmpty()){
+            new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
+                    .setTitleText("Thiếu thông tin")
+                    .setContentText("Xin vui lòng điền đủ thông tin")
+                    .setConfirmText("OK")
+                    .setConfirmClickListener(sDialog -> {
+                        sDialog.dismissWithAnimation();
+                    })
+                    .show();
+            return;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setCancelable(false);
+        builder.setView(R.layout.progress_layout);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(str_full_name)
                 .setPhotoUri(mUri)
@@ -166,6 +182,7 @@ public class UserFragment extends Fragment {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
+                        dialog.dismiss();
                         if (task.isSuccessful()) {
                             new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
                                     .setTitleText("Thành công")
@@ -183,16 +200,28 @@ public class UserFragment extends Fragment {
 
     private void onClickUpdateEmail() {
         String str_new_email = edt_email.getText().toString().trim();
+        if(str_new_email.isEmpty()){
+            new SweetAlertDialog(getActivity(), SweetAlertDialog.SUCCESS_TYPE)
+                    .setTitleText("Thiếu thông tin")
+                    .setContentText("Xin vui lòng điền đủ thông tin")
+                    .setConfirmText("OK")
+                    .setConfirmClickListener(sDialog -> {
+                        sDialog.dismissWithAnimation();
+                    })
+                    .show();
+            return;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setCancelable(false);
+        builder.setView(R.layout.progress_layout);
+        AlertDialog dialog = builder.create();
+        dialog.show();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        progressIndicator.setVisibility(View.VISIBLE);
-        progressIndicator.setIndeterminate(true);
 
         // Gửi email xác minh tới email mới
         user.verifyBeforeUpdateEmail(str_new_email)
                 .addOnCompleteListener(task -> {
-                    progressIndicator.setVisibility(View.GONE); // Ẩn progress khi hoàn thành
-
+                    dialog.dismiss();
                     if (task.isSuccessful()) {
                         // Nếu email xác minh đã được gửi thành công
                         new SweetAlertDialog(requireActivity(), SweetAlertDialog.SUCCESS_TYPE)
