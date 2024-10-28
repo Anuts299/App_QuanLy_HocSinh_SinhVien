@@ -107,19 +107,16 @@
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:layout_marginBottom="15dp"/>
-            <EditText
-                android:id="@+id/edt_name_faculty"
+            <Spinner
+                android:id="@+id/spinner_name_faculty"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Tên khoa"
                 android:background="@drawable/custom_box"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:imeOptions="actionNext"
-                android:paddingLeft="15dp"
-                android:layout_marginBottom="15dp"/>
+                android:paddingStart="10dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:layout_marginBottom="15dp"
+                android:textAppearance="@style/SpinnerText" />
             <EditText
                 android:id="@+id/edt_name_lecturer"
                 android:layout_width="match_parent"
