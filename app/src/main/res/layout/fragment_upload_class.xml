@@ -116,7 +116,8 @@
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
                 android:layout_marginBottom="15dp"
-                android:textAppearance="@style/SpinnerText" />
+                android:textAppearance="@style/SpinnerText"
+                android:spinnerMode="dropdown"/>
             <EditText
                 android:id="@+id/edt_name_lecturer"
                 android:layout_width="match_parent"

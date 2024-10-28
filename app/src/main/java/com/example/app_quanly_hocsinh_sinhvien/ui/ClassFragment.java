@@ -12,9 +12,13 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.app_quanly_hocsinh_sinhvien.R;
@@ -22,6 +26,7 @@ import com.example.app_quanly_hocsinh_sinhvien.class_manage.Classroom;
 import com.example.app_quanly_hocsinh_sinhvien.class_manage.ClassroomAdapter;
 import com.example.app_quanly_hocsinh_sinhvien.class_manage.DetailFragment;
 import com.example.app_quanly_hocsinh_sinhvien.class_manage.UploadFragment;
+import com.example.app_quanly_hocsinh_sinhvien.faculty_manage.Faculty;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -44,6 +49,9 @@ public class ClassFragment extends Fragment {
     private List<Classroom> mListClassroom;
     private SearchView searchView;
     private TextView breadcrumb_home;
+    private DatabaseReference databaseReference;
+    private Spinner spinner_filter_faculty;
+    private List<String> mListFaculty;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,13 +61,75 @@ public class ClassFragment extends Fragment {
         mClassroomAdapter = new ClassroomAdapter(mListClassroom, classroom -> openDetailFragment(classroom));
         initUi(view);
         initListener();
+
+        databaseReference = FirebaseDatabase.getInstance().getReference("FACULTY");
+        mListFaculty = new ArrayList<>();
+
         getListClassroomsFromRealtimeDatabase();
+        loadFacultyList();
         return view;
     }
+
+    private void loadFacultyList(){
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mListFaculty.add("Tất cả");
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Faculty faculty = dataSnapshot.getValue(Faculty.class);
+                    if (faculty != null && faculty.getTen_khoa() != null) {
+                        mListFaculty.add(faculty.getTen_khoa());
+                        Log.d("ClassFragment", faculty.getTen_khoa());
+                    }
+                }
+                setupSpinner();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("ClassFragment", "Error loading faculty list", error.toException());
+            }
+        });
+    }
+    private void setupSpinner(){
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, mListFaculty);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_filter_faculty.setAdapter(adapter);
+
+        spinner_filter_faculty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String ten_khoa = parent.getItemAtPosition(position).toString();
+                filterClassroomByFaculty(ten_khoa);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+    private void filterClassroomByFaculty(String tenKhoa) {
+        ArrayList<Classroom> filteredList = new ArrayList<>();
+
+        if (tenKhoa.equals("Tất cả")) {
+            filteredList.addAll(mListClassroom);
+        } else {
+            for (Classroom classroom : mListClassroom) {
+                if (classroom.getTen_khoa().equalsIgnoreCase(tenKhoa)) {
+                    filteredList.add(classroom);
+                }
+            }
+        }
+
+        mClassroomAdapter.searchClassroomList(filteredList);
+    }
+
     private void initUi(View view){
         fab_class = view.findViewById(R.id.fab_class);
         recClass = view.findViewById(R.id.recyclerview);
         searchView = view.findViewById(R.id.searchClass);
+        spinner_filter_faculty = view.findViewById(R.id.spinner_filter_faculty);
         searchView.clearFocus();
         breadcrumb_home = view.findViewById(R.id.breadcrumb_home);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
