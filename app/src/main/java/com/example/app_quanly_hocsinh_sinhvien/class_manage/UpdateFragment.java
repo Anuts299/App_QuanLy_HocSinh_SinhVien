@@ -11,8 +11,10 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.app_quanly_hocsinh_sinhvien.R;
@@ -20,19 +22,29 @@ import com.example.app_quanly_hocsinh_sinhvien.ui.ClassFragment;
 import com.example.app_quanly_hocsinh_sinhvien.ui.HomeFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 
 public class UpdateFragment extends Fragment {
 
-    private EditText edt_update_code_class, edt_update_name_class, edt_update_name_faculty, edt_update_name_lecturer, edt_update_academic_year;
+    private EditText edt_update_code_class, edt_update_name_class, edt_update_name_lecturer, edt_update_academic_year;
     private Button btn_update_class;
     private String id = "";
     private DatabaseReference reference;
     private TextView breadcrumb_home, breadcrumb_classroom;
+    private Spinner spinner_update_name_faculty;
+
+    // Adapter và danh sách cho Spinner
+    private ArrayAdapter<String> facultyAdapter;
+    private ArrayList<String> facultyList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,11 +53,16 @@ public class UpdateFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_update_class, container, false);
 
         initUi(view);
+        facultyList = new ArrayList<>();
+        loadFacultyList();
         Bundle bundle = getArguments();
         if(bundle != null){
             edt_update_code_class.setText(bundle.getString("ma_lop"));
             edt_update_name_class.setText(bundle.getString("ten_lop"));
-            edt_update_name_faculty.setText(bundle.getString("ten_khoa"));
+            int position = facultyList.indexOf(bundle.getString("ten_khoa"));
+            if (position >= 0) {
+                spinner_update_name_faculty.setSelection(position);
+            }
             edt_update_name_lecturer.setText(bundle.getString("ten_co_van"));
             edt_update_academic_year.setText(bundle.getString("nam_hoc"));
             id = bundle.getString("id");
@@ -74,7 +91,7 @@ public class UpdateFragment extends Fragment {
     private void onClickButtonUpdateClass(){
         String str_code_class = edt_update_code_class.getText().toString().trim();
         String str_name_class = edt_update_name_class.getText().toString().trim();
-        String str_name_faculty = edt_update_name_faculty.getText().toString().trim();
+        String str_name_faculty = spinner_update_name_faculty.getSelectedItem().toString().trim();
         String str_name_lecturer = edt_update_name_lecturer.getText().toString().trim();
         String str_academic_year = edt_update_academic_year.getText().toString().trim();
         if (str_code_class.isEmpty() || str_name_class.isEmpty() || str_name_faculty.isEmpty() || str_name_lecturer.isEmpty() || str_academic_year.isEmpty()) {
@@ -135,15 +152,44 @@ public class UpdateFragment extends Fragment {
 
 
     }
+    private void loadFacultyList(){
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("FACULTY");
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                facultyList.clear();
+                for(DataSnapshot facultySnapshot : snapshot.getChildren()){
+                    String name_faculty = facultySnapshot.child("ten_khoa").getValue(String.class);
+                    if(name_faculty != null){
+                        facultyList.add(name_faculty);
+                    }
+                }
+                // Khởi tạo ArrayAdapter cho Spinner và tải dữ liệu khoa từ Firebase
+                facultyAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, facultyList);
+                facultyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_update_name_faculty.setAdapter(facultyAdapter);
+                facultyAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                new SweetAlertDialog(requireActivity(), SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Tải danh sách thất bại")
+                        .setConfirmText("OK")
+                        .show();
+            }
+        });
+    }
     private void initUi(View view){
         edt_update_code_class = view.findViewById(R.id.edt_update_code_class);
         edt_update_name_class = view.findViewById(R.id.edt_update_name_class);
-        edt_update_name_faculty = view.findViewById(R.id.edt_update_name_faculty);
+//        edt_update_name_faculty = view.findViewById(R.id.edt_update_name_faculty);
         edt_update_name_lecturer = view.findViewById(R.id.edt_update_name_lecturer);
         edt_update_academic_year = view.findViewById(R.id.edt_update_academic_year);
         btn_update_class = view.findViewById(R.id.btn_update_class);
         breadcrumb_home = view.findViewById(R.id.breadcrumb_home);
         breadcrumb_classroom = view.findViewById(R.id.breadcrumb_classroom);
+        spinner_update_name_faculty = view.findViewById(R.id.spinner_update_name_faculty);
     }
     private void switchFragment(Fragment fragment) {
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
