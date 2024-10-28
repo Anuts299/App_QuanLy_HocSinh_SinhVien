@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".class_manage.UploadFragment">
+    tools:context=".faculty_manage.UpdateFragment">
     <LinearLayout
         android:orientation="horizontal"
         android:id="@+id/breadcrumbs"
@@ -33,10 +32,10 @@
             android:textColor="@color/Cornflower_blue" />
 
         <TextView
-            android:id="@+id/breadcrumb_classroom"
+            android:id="@+id/breadcrumb_faculty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Lớp học"
+            android:text="Khoa"
             android:textSize="16dp"
             android:textColor="@color/Cornflower_blue"
             android:textStyle="bold"/>
@@ -49,7 +48,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Thêm lớp học"
+            android:text="Chỉnh sửa khoa"
             android:textSize="16dp"
             android:textColor="@color/Cornflower_blue" />
     </LinearLayout>
@@ -73,85 +72,30 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Thêm Lớp"
+                android:text="Chỉnh sửa Khoa"
                 android:textSize="25dp"
                 android:textAlignment="center"
                 android:textColor="@color/Cornflower_blue"
                 android:layout_marginBottom="15dp"
                 android:textStyle="bold"/>
             <EditText
-                android:id="@+id/edt_code_class"
+                android:id="@+id/edt_update_name_faculty"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Mã lớp (VD: CCNTT22F)"
+                android:text="Tên khoa"
                 android:background="@drawable/custom_box"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
                 android:maxLines="1"
                 android:ellipsize="end"
-                android:imeOptions="actionNext"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:layout_marginBottom="15dp"/>
-            <EditText
-                android:id="@+id/edt_name_class"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Tên lớp (VD: Cao đẳng Công nghệ thông tin Kho 22 lớp F)"
-                android:background="@drawable/custom_box"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:imeOptions="actionNext"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:layout_marginBottom="15dp"/>
-            <EditText
-                android:id="@+id/edt_name_faculty"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Tên khoa"
-                android:background="@drawable/custom_box"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:imeOptions="actionNext"
-                android:paddingLeft="15dp"
-                android:layout_marginBottom="15dp"/>
-            <EditText
-                android:id="@+id/edt_name_lecturer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Tên cố vấn"
-                android:background="@drawable/custom_box"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:maxLines="1"
-                android:imeOptions="actionNext"
-                android:ellipsize="end"
-                android:paddingLeft="15dp"
-                android:layout_marginBottom="15dp"/>
-            <EditText
-                android:id="@+id/edt_academic_year"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Năm học (VD: 2022 - 2025)"
-                android:background="@drawable/custom_box"
-                android:paddingTop="10dp"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:imeOptions="actionDone"
-                android:paddingBottom="10dp"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:layout_marginBottom="15dp"/>
             <Button
-                android:id="@+id/btn_upload_class"
+                android:id="@+id/btn_update_faculty"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="THÊM LỚP"
+                android:text="CHỈNH SỬA"
                 android:backgroundTint="@color/Cornflower_blue"
                 app:cornerRadius="25dp"
                 android:textSize="18dp"

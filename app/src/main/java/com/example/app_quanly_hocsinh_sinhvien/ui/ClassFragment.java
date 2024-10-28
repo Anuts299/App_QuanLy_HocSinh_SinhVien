@@ -45,13 +45,12 @@ public class ClassFragment extends Fragment {
     private SearchView searchView;
     private TextView breadcrumb_home;
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_class, container, false);
-
+        mListClassroom = new ArrayList<>();
+        mClassroomAdapter = new ClassroomAdapter(mListClassroom, classroom -> openDetailFragment(classroom));
         initUi(view);
         initListener();
         getListClassroomsFromRealtimeDatabase();
@@ -66,11 +65,6 @@ public class ClassFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recClass.setLayoutManager(linearLayoutManager);
 
-
-        mListClassroom = new ArrayList<>();
-        mClassroomAdapter = new ClassroomAdapter(mListClassroom, classroom -> openDetailFragment(classroom));
-        recClass.setAdapter(mClassroomAdapter);
-
         recClass.setAdapter(mClassroomAdapter);
         searchItemClassroom();
     }
@@ -79,32 +73,31 @@ public class ClassFragment extends Fragment {
         fab_class.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UploadFragment uploadFragment = new UploadFragment();
-                switchFragment(uploadFragment);
+                switchFragment(new UploadFragment());
             }
         });
         breadcrumb_home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HomeFragment homeFragment = new HomeFragment();
-                switchFragment(homeFragment);
+                switchFragment(new HomeFragment());
             }
         });
     }
     // Phương thức chuyển đổi giữa các fragment
     private void switchFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        fragmentTransaction.commit();  // Không dùng addToBackStack(null)
     }
+
     //Tìm kiếm lớp học
     public void searchItemClassroom(){
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                return false;
+                searchView.clearFocus();
+                return true;
             }
 
             @Override

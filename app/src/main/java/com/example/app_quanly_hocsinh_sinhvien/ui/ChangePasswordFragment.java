@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -49,8 +50,6 @@ public class ChangePasswordFragment extends Fragment {
         return mView;
     }
 
-
-
     // Phương thức ánh xạ UI
     private void initUi(View view) {
         edt_password_present = mView.findViewById(R.id.edt_password_present);
@@ -59,15 +58,6 @@ public class ChangePasswordFragment extends Fragment {
         btn_change_password = mView.findViewById(R.id.btn_change_password);
     }
 
-
-    // Phương thức chuyển đổi giữa các fragment
-    private void switchFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
 
     private void onClickChangePassword() {
         String str_password = edt_password_present.getText().toString().trim();
@@ -125,12 +115,19 @@ public class ChangePasswordFragment extends Fragment {
                     })
                     .show();
         }else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+            builder.setCancelable(false);
+            builder.setView(R.layout.progress_layout);
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), str_password);
 
             // Xác thực lại người dùng
             user.reauthenticate(credential)
                     .addOnCompleteListener(task -> {
+                        dialog.dismiss();
                         if (task.isSuccessful()) {
                             user.updatePassword(str_new_password)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
