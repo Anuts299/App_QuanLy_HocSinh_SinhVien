@@ -4,6 +4,7 @@ import static android.content.Intent.getIntent;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -19,8 +20,11 @@ import com.example.app_quanly_hocsinh_sinhvien.R;
 import com.example.app_quanly_hocsinh_sinhvien.ui.ClassFragment;
 import com.example.app_quanly_hocsinh_sinhvien.ui.HomeFragment;
 import com.github.clans.fab.FloatingActionButton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -40,7 +44,18 @@ public class DetailFragment extends Fragment {
         Bundle bundle = getArguments();
         if(bundle != null){
             tv_de_name_class.setText(bundle.getString("ma_lop"));
-            tv_de_name_faculties.setText(bundle.getString("ten_khoa"));
+            String id_khoa = bundle.getString("id_khoa");
+            // Gọi phương thức để lấy tên khoa từ id_khoa
+            getFacultyNameById(id_khoa, new FacultyCallback() {
+                @Override
+                public void onCallback(String ten_khoa) {
+                    if (ten_khoa != null) {
+                        tv_de_name_faculties.setText(ten_khoa);
+                    } else {
+                        tv_de_name_faculties.setText("Không tìm thấy tên khoa");
+                    }
+                }
+            });
             tv_de_name_lecturer.setText(bundle.getString("ten_co_van"));
             tv_de_academic_year.setText(bundle.getString("nam_hoc"));
             tv_de_name_class2.setText(bundle.getString("ten_lop"));
@@ -160,6 +175,31 @@ public class DetailFragment extends Fragment {
             }
         });
     }
+    public void getFacultyNameById(String id_khoa, final FacultyCallback callback) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("FACULTY");
+        databaseReference.child(id_khoa).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    String ten_khoa = dataSnapshot.child("ten_khoa").getValue(String.class);
+                    callback.onCallback(ten_khoa);
+                } else {
+                    callback.onCallback(null); // Khoa không tồn tại
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                callback.onCallback(null); // Xử lý lỗi
+            }
+        });
+    }
+
+    // Callback interface
+    public interface FacultyCallback {
+        void onCallback(String ten_khoa);
+    }
+
     private void switchFragment(Fragment fragment) {
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
