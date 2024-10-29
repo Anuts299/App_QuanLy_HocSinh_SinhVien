@@ -9,18 +9,18 @@ public class Classroom {
     private String ten_lop;
     private String nam_hoc;
     private String ten_co_van;
-    private String ten_khoa;
+    private String id_khoa;
 
     public Classroom() {
     }
 
-    public Classroom(String id, String ma_lop, String nam_hoc, String ten_co_van, String ten_khoa, String ten_lop) {
+    public Classroom(String id, String ma_lop, String nam_hoc, String ten_co_van, String ten_lop, String id_khoa) {
         this.id = id;
         this.ma_lop = ma_lop;
         this.nam_hoc = nam_hoc;
         this.ten_co_van = ten_co_van;
-        this.ten_khoa = ten_khoa;
         this.ten_lop = ten_lop;
+        this.id_khoa = id_khoa;
     }
 
     public String getId() {
@@ -63,12 +63,13 @@ public class Classroom {
         this.ten_co_van = ten_co_van;
     }
 
-    public String getTen_khoa() {
-        return ten_khoa;
+
+    public String getId_khoa() {
+        return id_khoa;
     }
 
-    public void setTen_khoa(String ten_khoa) {
-        this.ten_khoa = ten_khoa;
+    public void setId_khoa(String id_khoa) {
+        this.id_khoa = id_khoa;
     }
 
     public Map<String, Object> toMap() {
@@ -78,7 +79,7 @@ public class Classroom {
         result.put("ten_lop", ten_lop);
         result.put("nam_hoc", nam_hoc);
         result.put("ten_co_van", ten_co_van);
-        result.put("ten_khoa", ten_khoa);
+        result.put("id_khoa", id_khoa);
         return result;
     }
 
@@ -90,7 +91,7 @@ public class Classroom {
                 ", ten_lop='" + ten_lop + '\'' +
                 ", nam_hoc='" + nam_hoc + '\'' +
                 ", ten_co_van='" + ten_co_van + '\'' +
-                ", ten_khoa='" + ten_khoa + '\'' +
+                ", id_khoa='" + id_khoa + '\'' +
                 '}';
     }
 }

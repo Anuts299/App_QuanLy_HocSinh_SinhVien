@@ -36,7 +36,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -52,6 +54,7 @@ public class ClassFragment extends Fragment {
     private DatabaseReference databaseReference;
     private Spinner spinner_filter_faculty;
     private List<String> mListFaculty;
+    private List<Faculty> listFaculty;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,6 +67,7 @@ public class ClassFragment extends Fragment {
 
         databaseReference = FirebaseDatabase.getInstance().getReference("FACULTY");
         mListFaculty = new ArrayList<>();
+        listFaculty = new ArrayList<>();
 
         getListClassroomsFromRealtimeDatabase();
         loadFacultyList();
@@ -79,7 +83,7 @@ public class ClassFragment extends Fragment {
                     Faculty faculty = dataSnapshot.getValue(Faculty.class);
                     if (faculty != null && faculty.getTen_khoa() != null) {
                         mListFaculty.add(faculty.getTen_khoa());
-                        Log.d("ClassFragment", faculty.getTen_khoa());
+                        listFaculty.add(faculty);
                     }
                 }
                 setupSpinner();
@@ -112,18 +116,33 @@ public class ClassFragment extends Fragment {
     private void filterClassroomByFaculty(String tenKhoa) {
         ArrayList<Classroom> filteredList = new ArrayList<>();
 
+        Map<String, String> tenKhoaToIdKhoaMap = new HashMap<>();
+        for (Faculty faculty : listFaculty) {
+            tenKhoaToIdKhoaMap.put(faculty.getTen_khoa(), faculty.getId());
+        }
+
         if (tenKhoa.equals("Tất cả")) {
             filteredList.addAll(mListClassroom);
         } else {
-            for (Classroom classroom : mListClassroom) {
-                if (classroom.getTen_khoa().equalsIgnoreCase(tenKhoa)) {
-                    filteredList.add(classroom);
+            String idKhoa = tenKhoaToIdKhoaMap.get(tenKhoa);
+            Log.d("ClassFragment", "Available faculties: " + tenKhoaToIdKhoaMap.keySet());
+            if (idKhoa != null) {
+                Log.d("ClassFragment", idKhoa);
+            } else {
+                Log.d("ClassFragment", "idKhoa is null for faculty: " + tenKhoa);
+            }
+            if (idKhoa != null) {
+                for (Classroom classroom : mListClassroom) {
+                    if (classroom.getId_khoa().equals(idKhoa)) {
+                        filteredList.add(classroom);
+                    }
                 }
             }
         }
 
         mClassroomAdapter.searchClassroomList(filteredList);
     }
+
 
     private void initUi(View view){
         fab_class = view.findViewById(R.id.fab_class);
@@ -137,6 +156,7 @@ public class ClassFragment extends Fragment {
 
         recClass.setAdapter(mClassroomAdapter);
         searchItemClassroom();
+
     }
 
     private void initListener(){
@@ -254,7 +274,7 @@ public class ClassFragment extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putString("ma_lop", classroom.getMa_lop());
         bundle.putString("ten_lop",classroom.getTen_lop());
-        bundle.putString("ten_khoa", classroom.getTen_khoa());
+        bundle.putString("id_khoa", classroom.getId_khoa());
         bundle.putString("ten_co_van", classroom.getTen_co_van());
         bundle.putString("nam_hoc", classroom.getNam_hoc());
         bundle.putString("id",classroom.getId());
