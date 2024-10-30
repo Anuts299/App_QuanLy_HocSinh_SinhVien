@@ -156,7 +156,6 @@ public class ClassFragment extends Fragment {
 
         recClass.setAdapter(mClassroomAdapter);
         searchItemClassroom();
-
     }
 
     private void initListener(){
