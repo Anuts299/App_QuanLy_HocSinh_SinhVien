@@ -34,6 +34,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class FacultiesFragment extends Fragment {
@@ -100,12 +101,32 @@ public class FacultiesFragment extends Fragment {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
+                Faculty faculty = snapshot.getValue(Faculty.class);
+                if(faculty == null || mListFaculty == null || mListFaculty.isEmpty()){
+                    return;
+                }
+                for(int i = 0; i < mListFaculty.size(); i++){
+                    if(Objects.equals(faculty.getId(), mListFaculty.get(i).getId())){
+                        mListFaculty.set(i, faculty);
+                        break;
+                    }
+                }
+                mFacultyAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
+                Faculty faculty = snapshot.getValue(Faculty.class);
+                if(faculty == null || mListFaculty == null || mListFaculty.isEmpty()){
+                    return;
+                }
+                for(int i = 0; i < mListFaculty.size(); i++){
+                    if(Objects.equals(faculty.getId(), mListFaculty.get(i).getId())){
+                        mListFaculty.remove(mListFaculty.get(i));
+                        break;
+                    }
+                }
+                mFacultyAdapter.notifyDataSetChanged();
             }
 
             @Override
