@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class TeacherFragment extends Fragment {
@@ -155,12 +156,34 @@ public class TeacherFragment extends Fragment {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Lecturer lecturer = snapshot.getValue(Lecturer.class);
+                if(lecturer == null || mListLecturer == null || mListLecturer.isEmpty()){
+                    return;
+                }
 
+                for(int i = 0; i < mListLecturer.size(); i++){
+                    if(Objects.equals(lecturer.getId(), mListLecturer.get(i).getId())){
+                        mListLecturer.set(i, lecturer);
+                        break;
+                    }
+                }
+                mLecturerAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+                Lecturer lecturer = snapshot.getValue(Lecturer.class);
+                if(lecturer == null || mListLecturer == null || mListLecturer.isEmpty()){
+                    return;
+                }
 
+                for(int i = 0; i < mListLecturer.size(); i++){
+                    if(Objects.equals(lecturer.getId(), mListLecturer.get(i).getId())){
+                        mListLecturer.remove(mListLecturer.get(i));
+                        break;
+                    }
+                }
+                mLecturerAdapter.notifyDataSetChanged();
             }
 
             @Override

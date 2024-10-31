@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -210,30 +211,7 @@ public class ClassFragment extends Fragment {
     private void getListClassroomsFromRealtimeDatabase(){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("CLASSROOM");
-        //Cách 1
-//        myRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-//                    Classroom classroom = dataSnapshot.getValue(Classroom.class);
-//                    mListClassroom.add(classroom);
-//                }
-//                mClassroomAdapter.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//                new SweetAlertDialog(getActivity(), SweetAlertDialog.ERROR_TYPE)
-//                        .setTitleText("Thất bại")
-//                        .setContentText("Lấy danh sách lớp thất bại")
-//                        .setConfirmText("OK")
-//                        .setConfirmClickListener(sDialog -> {
-//                            sDialog.dismissWithAnimation();
-//                        })
-//                        .show();
-//            }
-//        });
-        //Cách 2:
+
         myRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -246,12 +224,32 @@ public class ClassFragment extends Fragment {
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
+                Classroom classroom = snapshot.getValue(Classroom.class);
+                if(classroom == null || mListClassroom == null || mListClassroom.isEmpty()){
+                    return;
+                }
+                for(int i = 0; i < mListClassroom.size(); i++){
+                    if(Objects.equals(classroom.getId(), mListClassroom.get(i).getId())){
+                        mListClassroom.set(i, classroom);
+                        break;
+                    }
+                }
+                mClassroomAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
+                Classroom classroom = snapshot.getValue(Classroom.class);
+                if(classroom == null || mListClassroom == null || mListClassroom.isEmpty()){
+                    return;
+                }
+                for(int i = 0; i < mListClassroom.size(); i++){
+                    if(Objects.equals(classroom.getId(), mListClassroom.get(i).getId())){
+                        mListClassroom.remove(mListClassroom.get(i));
+                        break;
+                    }
+                }
+                mClassroomAdapter.notifyDataSetChanged();
             }
 
             @Override
