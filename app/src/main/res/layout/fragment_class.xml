@@ -53,6 +53,18 @@
             app:closeIcon="@drawable/baseline_clear_24"
             app:searchIcon="@drawable/baseline_search_24"
             android:layout_below="@+id/breadcrumbs"/>
+        <TextView
+            android:id="@+id/tv_display_results"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kết quả: "
+            android:layout_below="@id/searchClass"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="12dp"
+            android:textSize="18sp"
+            android:textColor="@color/Bittersweet"
+            android:textStyle="bold"/>
         <Spinner
             android:id="@+id/spinner_filter_faculty"
             android:layout_width="200dp"

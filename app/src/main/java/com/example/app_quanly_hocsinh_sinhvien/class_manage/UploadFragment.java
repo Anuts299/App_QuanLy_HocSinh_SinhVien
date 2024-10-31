@@ -38,14 +38,18 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class UploadFragment extends Fragment {
     Button btn_upload_class;
-    EditText edt_name_class, edt_name_lecturer, edt_academic_year, edt_code_class;
-    private Spinner spinner_name_faculty;
+    EditText edt_name_class, edt_academic_year, edt_code_class;
+    private Spinner spinner_name_faculty, spinner_name_lecturer;
     TextView breadcrumb_home, breadcrumb_classroom;
 
     // Adapter và danh sách cho Spinner
     private ArrayAdapter<String> facultyAdapter;
     private ArrayList<String> facultyList;
     private Map<String, String> facultyMap = new HashMap<>();
+
+    private ArrayAdapter<String> lecturerAdapter;
+    private ArrayList<String> lecturerList;
+    private Map<String, String> lecturerMap = new HashMap<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,16 +58,19 @@ public class UploadFragment extends Fragment {
         initUi(view);
 
         facultyList = new ArrayList<>();
+        lecturerList = new ArrayList<>();
         loadFacultyList();
+        loadLecturerList();
 
         btn_upload_class.setOnClickListener(v -> {
             String class_code = edt_code_class.getText().toString().trim();
             String name_class = edt_name_class.getText().toString().trim();
             String name_faculty = spinner_name_faculty.getSelectedItem().toString().trim();
             String id_faculty = facultyMap.get(name_faculty);
-            String name_lecturer = edt_name_lecturer.getText().toString().trim();
+            String name_lecturer = spinner_name_lecturer.getSelectedItem().toString().trim();
+            String id_lecturer = lecturerMap.get(name_lecturer);
             String academic_year = edt_academic_year.getText().toString().trim();
-            if (class_code.isEmpty() || name_class.isEmpty() || id_faculty.isEmpty() || name_lecturer.isEmpty() || academic_year.isEmpty()) {
+            if (class_code.isEmpty() || name_class.isEmpty() || id_faculty == null || id_faculty.isEmpty() || id_lecturer == null || id_lecturer.isEmpty() || academic_year.isEmpty()) {
                 new SweetAlertDialog(requireActivity(), SweetAlertDialog.WARNING_TYPE)
                         .setTitleText("Thiếu thông tin")
                         .setContentText("Vui lòng điền đầy đủ thông tin.")
@@ -71,7 +78,7 @@ public class UploadFragment extends Fragment {
                         .show();
                 return; // Dừng lại nếu có trường nào đó rỗng
             }
-            Classroom classroom = new Classroom(null,class_code, academic_year, name_lecturer, name_class, id_faculty);
+            Classroom classroom = new Classroom(null,class_code, academic_year, id_lecturer, name_class, id_faculty);
             onClickUploadClass(classroom);
         });
         breadcrumb_home.setOnClickListener(new View.OnClickListener() {
@@ -92,7 +99,7 @@ public class UploadFragment extends Fragment {
         btn_upload_class = view.findViewById(R.id.btn_upload_class);
         edt_name_class = view.findViewById(R.id.edt_name_class);
         spinner_name_faculty = view.findViewById(R.id.spinner_name_faculty);
-        edt_name_lecturer = view.findViewById(R.id.edt_name_lecturer);
+        spinner_name_lecturer = view.findViewById(R.id.spinner_name_lecturer);
         edt_academic_year = view.findViewById(R.id.edt_academic_year);
         edt_code_class = view.findViewById(R.id.edt_code_class);
         breadcrumb_home = view.findViewById(R.id.breadcrumb_home);
@@ -117,6 +124,37 @@ public class UploadFragment extends Fragment {
                 facultyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spinner_name_faculty.setAdapter(facultyAdapter);
                 facultyAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                new SweetAlertDialog(requireActivity(), SweetAlertDialog.WARNING_TYPE)
+                        .setTitleText("Tải danh sách thất bại")
+                        .setConfirmText("OK")
+                        .show();
+            }
+        });
+    }
+    private void loadLecturerList(){
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("LECTURER");
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                lecturerList.clear();
+                for(DataSnapshot lecturerSnapshot : snapshot.getChildren()){
+                    String id_lecturer = lecturerSnapshot.getKey();
+                    String name_lecturer = lecturerSnapshot.child("ten_giang_vien").getValue(String.class);
+                    if(id_lecturer != null && name_lecturer != null){
+                        lecturerList.add(name_lecturer);
+                        lecturerMap.put(name_lecturer, id_lecturer);
+                    }
+                }
+
+                // Khởi tạo ArrayAdapter cho Spinner và tải dữ liệu giảng viên từ Firebase
+                lecturerAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, lecturerList);
+                lecturerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner_name_lecturer.setAdapter(lecturerAdapter);
+                lecturerAdapter.notifyDataSetChanged();
             }
 
             @Override
