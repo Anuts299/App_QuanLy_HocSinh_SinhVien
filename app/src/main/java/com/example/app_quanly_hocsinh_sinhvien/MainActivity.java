@@ -173,6 +173,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 replaceFragment(new ChangePasswordFragment());
                 mCurrentFragment = FRAGMENT_CHANGE_PASSWORD;
             }
+        }else if(id == R.id.nav_level){
+            if(mCurrentFragment != FRAGMENT_LEVEL){
+                replaceFragment(new LevelFragment());
+                mCurrentFragment = FRAGMENT_LEVEL;
+            }
         } else if (id == R.id.nav_logout) {
             new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                     .setTitleText("Đăng xuất tài khoản")
