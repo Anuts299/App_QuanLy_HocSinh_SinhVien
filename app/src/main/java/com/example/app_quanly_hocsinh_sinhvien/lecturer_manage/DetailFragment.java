@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,7 @@ public class DetailFragment extends Fragment {
             id = bundle.getString("id");
             tv_de_name_lecturer.setText(bundle.getString("ten_giang_vien"));
             tv_de_name_faculty.setText(bundle.getString("ten_khoa"));
+            tv_de_name_level.setText(bundle.getString("ten_trinh_do"));
         }
         return view;
     }
@@ -67,48 +69,56 @@ public class DetailFragment extends Fragment {
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
                             public void onClick(SweetAlertDialog sDialog) {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-                                builder.setCancelable(false);
-                                builder.setView(R.layout.progress_layout);
-                                AlertDialog dialog = builder.create();
-                                dialog.show();
-                                // Xác nhận xóa - thực hiện xóa trong Firebase
-                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("LECTURER");
-                                reference.child(id) // Thay "id" bằng ID lớp học bạn muốn xóa
-                                        .removeValue()
-                                        .addOnCompleteListener(task -> {
-                                            dialog.dismiss();
-                                            if (task.isSuccessful()) {
-                                                sDialog
-                                                        .setTitleText("Đã xóa!")
-                                                        .setContentText("Giảng viên đã được xóa.")
-                                                        .setConfirmText("OK")
-                                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                                            @Override
-                                                            public void onClick(SweetAlertDialog sDialog) {
-                                                                sDialog.dismiss();
+                                if (id != null && !id.isEmpty()) { // Kiểm tra id hợp lệ
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+                                    builder.setCancelable(false);
+                                    builder.setView(R.layout.progress_layout);
+                                    AlertDialog dialog = builder.create();
+                                    dialog.show();
 
-                                                                switchFragment(new TeacherFragment());
-                                                            }
-                                                        })
-                                                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
-
-
-                                            } else {
-                                                sDialog
-                                                        .setTitleText("Lỗi!")
-                                                        .setContentText("Không thể xóa giảng viên.")
-                                                        .setConfirmText("OK")
-                                                        .setConfirmClickListener(SweetAlertDialog::dismissWithAnimation)
-                                                        .changeAlertType(SweetAlertDialog.ERROR_TYPE);
-                                            }
-                                        });
+                                    // Thực hiện xóa trong Firebase
+                                    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("LECTURER");
+                                    reference.child(id)
+                                            .removeValue()
+                                            .addOnCompleteListener(task -> {
+                                                dialog.dismiss();
+                                                if (task.isSuccessful()) {
+                                                    sDialog
+                                                            .setTitleText("Đã xóa!")
+                                                            .setContentText("Giảng viên đã được xóa.")
+                                                            .setConfirmText("OK")
+                                                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                                                @Override
+                                                                public void onClick(SweetAlertDialog sDialog) {
+                                                                    sDialog.dismiss();
+                                                                    switchFragment(new TeacherFragment()); // Điều hướng sang fragment khác
+                                                                }
+                                                            })
+                                                            .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                                                } else {
+                                                    sDialog
+                                                            .setTitleText("Lỗi!")
+                                                            .setContentText("Không thể xóa giảng viên.")
+                                                            .setConfirmText("OK")
+                                                            .setConfirmClickListener(SweetAlertDialog::dismissWithAnimation)
+                                                            .changeAlertType(SweetAlertDialog.ERROR_TYPE);
+                                                }
+                                            });
+                                } else {
+                                    sDialog
+                                            .setTitleText("Lỗi!")
+                                            .setContentText("ID không hợp lệ.")
+                                            .setConfirmText("OK")
+                                            .setConfirmClickListener(SweetAlertDialog::dismissWithAnimation)
+                                            .changeAlertType(SweetAlertDialog.ERROR_TYPE);
+                                }
                             }
                         })
                         .setCancelButton("Hủy", SweetAlertDialog::dismiss)
                         .show();
             }
         });
+
         breadcrumb_home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,7 +128,35 @@ public class DetailFragment extends Fragment {
         breadcrumb_lecturer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switchFragment(new LevelFragment());
+                switchFragment(new TeacherFragment());
+            }
+        });
+        editButtonLecturer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Bundle bundle = new Bundle();
+                String ten_giang_vien = tv_de_name_lecturer.getText().toString().trim();
+                String ten_khoa = tv_de_name_faculty.getText().toString().trim();
+                String ten_trinh_do = tv_de_name_level.getText().toString().trim();
+
+                bundle.putString("ten_giang_vien", ten_giang_vien);
+                bundle.putString("ten_khoa", ten_khoa);
+                bundle.putString("ten_trinh_do",ten_trinh_do);
+                bundle.putString("id",id);
+
+                UpdateFragment updateFragment = new UpdateFragment();
+                updateFragment.setArguments(bundle);
+
+                try {
+                    requireActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, updateFragment)
+                            .addToBackStack(null)
+                            .commit();
+                    Log.d("EditButton", "Fragment replaced successfully");
+                } catch (Exception e) {
+                    Log.e("EditButton", "Error replacing fragment", e);
+                }
             }
         });
     }

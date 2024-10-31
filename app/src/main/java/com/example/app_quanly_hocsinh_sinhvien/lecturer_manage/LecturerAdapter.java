@@ -22,6 +22,8 @@ public class LecturerAdapter extends RecyclerView.Adapter<LecturerAdapter.Lectur
 
     private Map<String, String> idToFacultyNameMap;
 
+    private Map<String, String> idToLevelNameMap;
+
     private OnItemClickListener mListener;
 
     public interface OnItemClickListener {
@@ -29,9 +31,10 @@ public class LecturerAdapter extends RecyclerView.Adapter<LecturerAdapter.Lectur
     }
 
     //- phần hiển thị các giảng viên
-    public LecturerAdapter(List<Lecturer> mListLecturer, Map<String, String> idToFacultyNameMap, OnItemClickListener listener) {
+    public LecturerAdapter(List<Lecturer> mListLecturer, Map<String, String> idToFacultyNameMap, Map<String, String> idToLevelNameMap, OnItemClickListener listener) {
         this.mListLecturer = mListLecturer;
         this.idToFacultyNameMap = idToFacultyNameMap;
+        this.idToLevelNameMap = idToLevelNameMap;
         this.mListener = listener;
     }
 
