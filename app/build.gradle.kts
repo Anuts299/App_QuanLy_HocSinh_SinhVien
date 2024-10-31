@@ -70,6 +70,12 @@ dependencies {
     //Clans Fab github
     implementation ("com.github.clans:fab:1.6.4")
 
+    //Material Dialogs
+    implementation ("com.afollestad.material-dialogs:core:3.3.0")
+    implementation("com.afollestad.material-dialogs:input:3.3.0")
+
+
+
 
 
 }
