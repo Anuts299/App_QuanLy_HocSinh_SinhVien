@@ -12,19 +12,23 @@ import com.example.app_quanly_hocsinh_sinhvien.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.ClassroomViewHolder> {
 
     private List<Classroom> mListClassroom;
     private OnItemClickListener mListener;
 
+    private Map<String, String> idToLecturerMap;
+
     public interface OnItemClickListener {
         void onItemClick(Classroom classroom);
     }
 
     // Constructor mới
-    public ClassroomAdapter(List<Classroom> mListClassroom, OnItemClickListener listener) {
+    public ClassroomAdapter(List<Classroom> mListClassroom, Map<String, String> idToLecturerMap, OnItemClickListener listener) {
         this.mListClassroom = mListClassroom;
+        this.idToLecturerMap = idToLecturerMap;
         this.mListener = listener;
     }
 
@@ -42,7 +46,9 @@ public class ClassroomAdapter extends RecyclerView.Adapter<ClassroomAdapter.Clas
             return;
         }
         holder.tv_code_class.setText(classroom.getMa_lop());
-        holder.tv_lecturer_class.setText(classroom.getTen_co_van());
+
+        String tenGiangVien = idToLecturerMap.get(classroom.getId_giang_vien());
+        holder.tv_lecturer_class.setText(tenGiangVien != null ? tenGiangVien : "Cố vấn không xác định");
 
         // Thiết lập sự kiện click
         holder.itemView.setOnClickListener(view -> {

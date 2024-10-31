@@ -118,19 +118,17 @@
                 android:layout_marginBottom="15dp"
                 android:textAppearance="@style/SpinnerText"
                 android:spinnerMode="dropdown"/>
-            <EditText
-                android:id="@+id/edt_name_lecturer"
+            <Spinner
+                android:id="@+id/spinner_name_lecturer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Tên cố vấn"
                 android:background="@drawable/custom_box"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:maxLines="1"
-                android:imeOptions="actionNext"
-                android:ellipsize="end"
-                android:paddingLeft="15dp"
-                android:layout_marginBottom="15dp"/>
+                android:paddingStart="10dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:layout_marginBottom="15dp"
+                android:textAppearance="@style/SpinnerText"
+                android:spinnerMode="dropdown"/>
             <EditText
                 android:id="@+id/edt_academic_year"
                 android:layout_width="match_parent"

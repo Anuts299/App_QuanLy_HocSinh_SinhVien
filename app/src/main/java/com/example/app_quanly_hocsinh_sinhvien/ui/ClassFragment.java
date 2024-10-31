@@ -51,18 +51,21 @@ public class ClassFragment extends Fragment {
     private ClassroomAdapter mClassroomAdapter;
     private List<Classroom> mListClassroom;
     private SearchView searchView;
-    private TextView breadcrumb_home;
+    private TextView breadcrumb_home, tv_display_results;
     private DatabaseReference databaseReference;
     private Spinner spinner_filter_faculty;
     private List<String> mListFaculty;
     private List<Faculty> listFaculty;
+
+    //HasMap chuyển id_giangvien thành ten_giang_vien
+    private Map<String, String> idToLecturerNameMap = new HashMap<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_class, container, false);
         mListClassroom = new ArrayList<>();
-        mClassroomAdapter = new ClassroomAdapter(mListClassroom, classroom -> openDetailFragment(classroom));
+        mClassroomAdapter = new ClassroomAdapter(mListClassroom, idToLecturerNameMap, classroom -> openDetailFragment(classroom));
         initUi(view);
         initListener();
 
@@ -72,6 +75,7 @@ public class ClassFragment extends Fragment {
 
         getListClassroomsFromRealtimeDatabase();
         loadFacultyList();
+        createIdToLecturerNameMap();
         return view;
     }
 
@@ -96,6 +100,29 @@ public class ClassFragment extends Fragment {
             }
         });
     }
+
+    private void createIdToLecturerNameMap() {
+        DatabaseReference facultyRef = FirebaseDatabase.getInstance().getReference("LECTURER");
+        facultyRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot lecturerSnapshot : snapshot.getChildren()) {
+                    String id_lecturer = lecturerSnapshot.getKey();
+                    String name_lecturer = lecturerSnapshot.child("ten_giang_vien").getValue(String.class);
+                    if (id_lecturer != null && name_lecturer != null) {
+                        idToLecturerNameMap.put(id_lecturer, name_lecturer);
+                    }
+                }
+                mClassroomAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("TeacherFragment", "Error loading faculties", error.toException());
+            }
+        });
+    }
+
     private void setupSpinner(){
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, mListFaculty);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -114,6 +141,7 @@ public class ClassFragment extends Fragment {
             }
         });
     }
+
     private void filterClassroomByFaculty(String tenKhoa) {
         ArrayList<Classroom> filteredList = new ArrayList<>();
 
@@ -142,6 +170,7 @@ public class ClassFragment extends Fragment {
         }
 
         mClassroomAdapter.searchClassroomList(filteredList);
+        updateDisplayedItemCount();
     }
 
 
@@ -152,6 +181,7 @@ public class ClassFragment extends Fragment {
         spinner_filter_faculty = view.findViewById(R.id.spinner_filter_faculty);
         searchView.clearFocus();
         breadcrumb_home = view.findViewById(R.id.breadcrumb_home);
+        tv_display_results = view.findViewById(R.id.tv_display_results);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recClass.setLayoutManager(linearLayoutManager);
 
@@ -180,7 +210,11 @@ public class ClassFragment extends Fragment {
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.commit();  // Không dùng addToBackStack(null)
     }
-
+    // Phương thức cập nhật số lượng lớp học đang hiển thị
+    private void updateDisplayedItemCount() {
+        int itemCount = mClassroomAdapter.getItemCount();
+        tv_display_results.setText("Kết quả: " + itemCount);
+    }
     //Tìm kiếm lớp học
     public void searchItemClassroom(){
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -206,6 +240,7 @@ public class ClassFragment extends Fragment {
             }
         }
         mClassroomAdapter.searchClassroomList(searchList);
+        updateDisplayedItemCount();
     }
     //Lấy danh sách lớp học từ database
     private void getListClassroomsFromRealtimeDatabase(){
@@ -219,6 +254,7 @@ public class ClassFragment extends Fragment {
                 if(classroom != null){
                     mListClassroom.add(classroom);
                     mClassroomAdapter.notifyDataSetChanged();
+                    updateDisplayedItemCount();
                 }
             }
 
@@ -235,6 +271,7 @@ public class ClassFragment extends Fragment {
                     }
                 }
                 mClassroomAdapter.notifyDataSetChanged();
+                updateDisplayedItemCount();
             }
 
             @Override
@@ -250,6 +287,7 @@ public class ClassFragment extends Fragment {
                     }
                 }
                 mClassroomAdapter.notifyDataSetChanged();
+                updateDisplayedItemCount();
             }
 
             @Override
@@ -272,7 +310,7 @@ public class ClassFragment extends Fragment {
         bundle.putString("ma_lop", classroom.getMa_lop());
         bundle.putString("ten_lop",classroom.getTen_lop());
         bundle.putString("id_khoa", classroom.getId_khoa());
-        bundle.putString("ten_co_van", classroom.getTen_co_van());
+        bundle.putString("ten_co_van", idToLecturerNameMap.get(classroom.getId_giang_vien()));
         bundle.putString("nam_hoc", classroom.getNam_hoc());
         bundle.putString("id",classroom.getId());
         detailFragment.setArguments(bundle);
