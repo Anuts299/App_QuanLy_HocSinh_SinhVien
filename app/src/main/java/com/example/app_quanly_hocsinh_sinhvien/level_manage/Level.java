@@ -33,6 +33,7 @@ public class Level {
 
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
+        result.put("id", id);
         result.put("ten_trinh_do", ten_trinh_do);
         return result;
     }

@@ -29,6 +29,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -45,6 +48,7 @@ public class UpdateFragment extends Fragment {
     // Adapter và danh sách cho Spinner
     private ArrayAdapter<String> facultyAdapter;
     private ArrayList<String> facultyList;
+    private Map<String, String> facultyMap = new HashMap<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,9 +96,10 @@ public class UpdateFragment extends Fragment {
         String str_code_class = edt_update_code_class.getText().toString().trim();
         String str_name_class = edt_update_name_class.getText().toString().trim();
         String str_name_faculty = spinner_update_name_faculty.getSelectedItem().toString().trim();
+        String id_faculty = facultyMap.get(str_name_faculty);
         String str_name_lecturer = edt_update_name_lecturer.getText().toString().trim();
         String str_academic_year = edt_update_academic_year.getText().toString().trim();
-        if (str_code_class.isEmpty() || str_name_class.isEmpty() || str_name_faculty.isEmpty() || str_name_lecturer.isEmpty() || str_academic_year.isEmpty()) {
+        if (str_code_class.isEmpty() || str_name_class.isEmpty() || Objects.requireNonNull(id_faculty).isEmpty() || str_name_lecturer.isEmpty() || str_academic_year.isEmpty()) {
             new SweetAlertDialog(requireActivity(), SweetAlertDialog.WARNING_TYPE)
                     .setTitleText("Thiếu thông tin")
                     .setContentText("Vui lòng điền đầy đủ thông tin.")
@@ -109,7 +114,7 @@ public class UpdateFragment extends Fragment {
         AlertDialog dialog = builder.create();
         dialog.show();
 
-        Classroom classroom = new Classroom(id, str_code_class, str_academic_year, str_name_lecturer, str_name_faculty, str_name_class);
+        Classroom classroom = new Classroom(id, str_code_class, str_academic_year, str_name_lecturer, str_name_class, id_faculty);
         reference.setValue(classroom).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -124,7 +129,7 @@ public class UpdateFragment extends Fragment {
                                 Bundle resultBundle = new Bundle();
                                 resultBundle.putString("ma_lop", str_code_class);
                                 resultBundle.putString("ten_lop", str_name_class);
-                                resultBundle.putString("ten_khoa", str_name_faculty);
+                                resultBundle.putString("id_khoa", id_faculty);
                                 resultBundle.putString("ten_co_van", str_name_lecturer);
                                 resultBundle.putString("nam_hoc", str_academic_year);
 
@@ -159,9 +164,11 @@ public class UpdateFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 facultyList.clear();
                 for(DataSnapshot facultySnapshot : snapshot.getChildren()){
+                    String id_faculty = facultySnapshot.getKey();
                     String name_faculty = facultySnapshot.child("ten_khoa").getValue(String.class);
                     if(name_faculty != null){
                         facultyList.add(name_faculty);
+                        facultyMap.put(name_faculty, id_faculty);
                     }
                 }
                 // Khởi tạo ArrayAdapter cho Spinner và tải dữ liệu khoa từ Firebase
