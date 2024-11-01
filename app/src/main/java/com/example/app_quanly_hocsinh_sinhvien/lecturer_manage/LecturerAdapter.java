@@ -12,6 +12,7 @@ import com.example.app_quanly_hocsinh_sinhvien.R;
 import com.example.app_quanly_hocsinh_sinhvien.class_manage.Classroom;
 import com.example.app_quanly_hocsinh_sinhvien.class_manage.ClassroomAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -74,6 +75,11 @@ public class LecturerAdapter extends RecyclerView.Adapter<LecturerAdapter.Lectur
             return mListLecturer.size();
         }
         return 0;
+    }
+
+    public void searchLecturerList(ArrayList<Lecturer> searchList){
+        mListLecturer = searchList;
+        notifyDataSetChanged();
     }
 
     //Phần hiển thị các giảng viên
