@@ -8,13 +8,15 @@ import java.util.Map;
 public class Faculty {
     String id;
     String ten_khoa;
+    String ma_dinh_dang;
 
     public Faculty() {
     }
 
-    public Faculty(String id, String ten_khoa) {
+    public Faculty(String id, String ten_khoa, String ma_dinh_dang) {
         this.id = id;
         this.ten_khoa = ten_khoa;
+        this.ma_dinh_dang = ma_dinh_dang;
     }
 
     public String getId() {
@@ -33,10 +35,19 @@ public class Faculty {
         this.ten_khoa = ten_khoa;
     }
 
+    public String getMa_dinh_dang() {
+        return ma_dinh_dang;
+    }
+
+    public void setMa_dinh_dang(String ma_dinh_dang) {
+        this.ma_dinh_dang = ma_dinh_dang;
+    }
+
     public Map<String, Object> toMap(){
         HashMap<String, Object> result = new HashMap<>();
         result.put("id",id);
         result.put("ten_khoa", ten_khoa);
+        result.put("ma_dinh_dang", ma_dinh_dang);
         return result;
     }
 
@@ -45,6 +56,7 @@ public class Faculty {
         return "Faculty{" +
                 "id='" + id + '\'' +
                 ", ten_khoa='" + ten_khoa + '\'' +
+                ", ma_dinh_dang='" + ma_dinh_dang + '\'' +
                 '}';
     }
 }

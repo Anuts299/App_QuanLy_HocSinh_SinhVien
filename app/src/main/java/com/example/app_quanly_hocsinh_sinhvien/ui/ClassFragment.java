@@ -118,7 +118,7 @@ public class ClassFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("TeacherFragment", "Error loading faculties", error.toException());
+                Log.e("ClassFragment", "Error loading Lecturer", error.toException());
             }
         });
     }
@@ -155,11 +155,6 @@ public class ClassFragment extends Fragment {
         } else {
             String idKhoa = tenKhoaToIdKhoaMap.get(tenKhoa);
             Log.d("ClassFragment", "Available faculties: " + tenKhoaToIdKhoaMap.keySet());
-            if (idKhoa != null) {
-                Log.d("ClassFragment", idKhoa);
-            } else {
-                Log.d("ClassFragment", "idKhoa is null for faculty: " + tenKhoa);
-            }
             if (idKhoa != null) {
                 for (Classroom classroom : mListClassroom) {
                     if (classroom.getId_khoa().equals(idKhoa)) {

@@ -91,6 +91,19 @@
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:layout_marginBottom="15dp"/>
+            <EditText
+                android:id="@+id/edt_update_format_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Mã định dạng"
+                android:background="@drawable/custom_box"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:layout_marginBottom="15dp"/>
             <Button
                 android:id="@+id/btn_update_faculty"
                 android:layout_width="wrap_content"

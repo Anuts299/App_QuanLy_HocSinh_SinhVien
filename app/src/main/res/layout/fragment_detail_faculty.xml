@@ -69,6 +69,7 @@
             android:divider="@color/Cornflower_blue"
             android:showDividers="middle">
             <TextView
+                android:id="@+id/tv_de_name_faculty"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -85,18 +86,28 @@
             android:layout_height="wrap_content"
             android:divider="@color/Cornflower_blue"
             android:showDividers="middle">
-
             <TextView
-                android:id="@+id/tv_de_name_faculty"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TÊN KHOA"
+                android:text="Mã định dạng"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="@color/Cornflower_blue"
                 android:gravity="center"
-                android:padding="14dp" />
+                android:padding="10dp" />
+            <TextView
+                android:id="@+id/tv_de_format_code"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="MÃ ĐỊNH DẠNG"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/Cornflower_blue"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:padding="10dp" />
 
         </TableRow>
 

@@ -1,15 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.StudentFragment">
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:id="@+id/breadcrumbs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="12dp"
+        android:gravity="center_vertical">
 
-    <!-- TODO: Update blank fragment layout -->
+        <TextView
+            android:id="@+id/breadcrumb_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trang chủ"
+            android:textSize="16dp"
+            android:textColor="@color/Cornflower_blue"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" / "
+            android:textColor="@color/Cornflower_blue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Học sinh - Sinh viên"
+            android:textSize="16dp"
+            android:textColor="@color/Cornflower_blue" />
+    </LinearLayout>
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchStudent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        app:iconifiedByDefault="false"
+        app:searchHintIcon="@null"
+        app:queryHint="Mã số, Tên sinh viên,..."
+        android:focusable="false"
+        android:background="@drawable/custom_box"
+        app:closeIcon="@drawable/baseline_clear_24"
+        app:searchIcon="@drawable/baseline_search_24"
+        android:layout_below="@+id/breadcrumbs"/>
+    <Spinner
+        android:id="@+id/spinner_filter_class"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/searchStudent"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="45dp"
+        android:background="@drawable/custom_box"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:paddingStart="10dp"
+        android:spinnerMode="dropdown" />
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@id/searchStudent"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="12dp"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/baseline_filter_list_24"/>
     <TextView
+        android:id="@+id/tv_display_results"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Kết quả: "
+        android:layout_below="@id/searchStudent"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="12dp"
+        android:textSize="18sp"
+        android:textColor="@color/Bittersweet"
+        android:textStyle="bold"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyView_Student"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Sinh viên"
-        android:gravity="center" />
+        android:scrollbars="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/spinner_filter_class"/>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_student"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="30dp"
+        android:backgroundTint="@color/Cornflower_blue"
+        android:contentDescription="Thêm mục mới"
+        android:src="@drawable/baseline_add_24"
+        android:tint="@color/white" />
 
-</FrameLayout>
+</RelativeLayout>

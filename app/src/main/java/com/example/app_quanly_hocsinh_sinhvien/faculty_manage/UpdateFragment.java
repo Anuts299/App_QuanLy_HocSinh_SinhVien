@@ -28,7 +28,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class UpdateFragment extends Fragment {
 
-    private EditText edt_update_name_faculty;
+    private EditText edt_update_name_faculty, edt_update_format_code;
     private Button btn_update_faculty;
     private String id = "";
     private DatabaseReference reference;
@@ -43,6 +43,7 @@ public class UpdateFragment extends Fragment {
         Bundle bundle = getArguments();
         if(bundle != null){
             edt_update_name_faculty.setText(bundle.getString("ten_khoa"));
+            edt_update_format_code.setText(bundle.getString("ma_dinh_dang"));
             id = bundle.getString("id");
         }
         reference = FirebaseDatabase.getInstance().getReference("FACULTY").child(id);
@@ -68,7 +69,8 @@ public class UpdateFragment extends Fragment {
     }
     private void onClickButtonUpdateFaculty(){
         String str_name_faculty = edt_update_name_faculty.getText().toString().trim();
-        if(str_name_faculty.isEmpty()){
+        String str_format_code = edt_update_format_code.getText().toString().trim();
+        if(str_name_faculty.isEmpty() || str_format_code.isEmpty()){
             new SweetAlertDialog(requireActivity(), SweetAlertDialog.WARNING_TYPE)
                     .setTitleText("Thiếu thông tin")
                     .setContentText("Vui lòng điền đầy đủ thông tin.")
@@ -83,7 +85,7 @@ public class UpdateFragment extends Fragment {
         AlertDialog dialog = builder.create();
         dialog.show();
 
-        Faculty faculty = new Faculty(id, str_name_faculty);
+        Faculty faculty = new Faculty(id, str_name_faculty, str_format_code);
         reference.setValue(faculty).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -97,6 +99,7 @@ public class UpdateFragment extends Fragment {
 
                                 Bundle resultBundle = new Bundle();
                                 resultBundle.putString("ten_khoa",str_name_faculty);
+                                resultBundle.putString("ma_dinh_dang",str_format_code);
 
                                 DetailFragment detailFragment = new DetailFragment();
                                 detailFragment.setArguments(resultBundle);
@@ -121,6 +124,7 @@ public class UpdateFragment extends Fragment {
     }
     private void initUi(View view){
         edt_update_name_faculty = view.findViewById(R.id.edt_update_name_faculty);
+        edt_update_format_code = view.findViewById(R.id.edt_update_format_code);
         btn_update_faculty = view.findViewById(R.id.btn_update_faculty);
         breadcrumb_home = view.findViewById(R.id.breadcrumb_home);
         breadcrumb_faculty = view.findViewById(R.id.breadcrumb_faculty);

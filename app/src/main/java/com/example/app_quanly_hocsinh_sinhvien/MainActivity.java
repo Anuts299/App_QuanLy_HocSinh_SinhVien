@@ -248,31 +248,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(requestCode == MY_REQUEST_CODES){
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 openGallery();
-            }else if (!ActivityCompat.shouldShowRequestPermissionRationale(this, permissions[0]))
-            {
-                // Quyền đã bị từ chối vĩnh viễn (người dùng chọn "Don't ask again")
-                new AlertDialog.Builder(this)
-                        .setMessage("Bạn cần cấp quyền trong phần cài đặt")
-                        .setPositiveButton("Đi đến cài đặt", (dialog, which) -> {
-                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                                    Uri.fromParts("package", getPackageName(), null));
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                        })
-                        .setNegativeButton("Cancel", null)
-                        .show();
-            }else {
-                Log.d("PermissionResult", "grantResults: " + Arrays.toString(grantResults));
-                new SweetAlertDialog(this, SweetAlertDialog.NORMAL_TYPE)
-                        .setTitleText("Truy cập thất bại")
-                        .setContentText("Vui lòng cho phép truy cập")
-                        .setConfirmText("OK")
-                        .setConfirmClickListener(sDialog -> {
-                            sDialog.dismissWithAnimation();
-
-                        })
-                        .show();
             }
+//            else if (!ActivityCompat.shouldShowRequestPermissionRationale(this, permissions[0]))
+//            {
+//                // Quyền đã bị từ chối vĩnh viễn (người dùng chọn "Don't ask again")
+//                new AlertDialog.Builder(this)
+//                        .setMessage("Bạn cần cấp quyền trong phần cài đặt")
+//                        .setPositiveButton("Đi đến cài đặt", (dialog, which) -> {
+//                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+//                                    Uri.fromParts("package", getPackageName(), null));
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                            startActivity(intent);
+//                        })
+//                        .setNegativeButton("Cancel", null)
+//                        .show();
+//            }else {
+//                Log.d("PermissionResult", "grantResults: " + Arrays.toString(grantResults));
+//                new SweetAlertDialog(this, SweetAlertDialog.NORMAL_TYPE)
+//                        .setTitleText("Truy cập thất bại")
+//                        .setContentText("Vui lòng cho phép truy cập")
+//                        .setConfirmText("OK")
+//                        .setConfirmClickListener(sDialog -> {
+//                            sDialog.dismissWithAnimation();
+//
+//                        })
+//                        .show();
+//            }
         }
     }
 

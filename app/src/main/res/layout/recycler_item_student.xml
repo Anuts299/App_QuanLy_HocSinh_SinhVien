@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/recCardClass"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginVertical="10dp"
+    android:layout_marginBottom="5dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="8dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/recImageStudent"
+            android:layout_width="75dp"
+            android:layout_height="85dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginStart="25dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/students_2995459" />
+        <TextView
+            android:id="@+id/tv_name_student"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tên sinh viên"
+            android:textColor="@color/Bittersweet"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:layout_toEndOf="@+id/recImageStudent"
+            android:layout_marginTop="15dp"
+            />
+        <TextView
+            android:id="@+id/tv_code_student"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mã sinh viên"
+            android:textColor="@color/Cornflower_blue"
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="20dp"
+            android:layout_toEndOf="@+id/recImageStudent"
+            android:layout_marginTop="45dp"
+            android:textStyle="bold"
+            />
+        <TextView
+            android:id="@+id/tv_code_class_student"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mã lớp"
+            android:textColor="@color/Cornflower_blue"
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="20dp"
+            android:layout_toEndOf="@+id/recImageStudent"
+            android:layout_marginTop="75dp"
+            />
+        <TextView
+            android:id="@+id/tv_level_student"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Trình độ"
+            android:textColor="@color/Cornflower_blue"
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="20dp"
+            android:layout_toEndOf="@+id/recImageStudent"
+            android:layout_marginTop="105dp"
+            android:layout_marginBottom="15dp"
+            />
+    </RelativeLayout>
+
+
+</androidx.cardview.widget.CardView>
