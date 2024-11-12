@@ -57,6 +57,8 @@ public class FacultiesFragment extends Fragment {
         getListFacultyFromRealtimeDatabase();
         return view;
     }
+
+
     private void initUi(View view){
         fab_faculty = view.findViewById(R.id.fab_faculty);
         recyView_Faculty = view.findViewById(R.id.recyView_Faculty);
@@ -181,6 +183,7 @@ public class FacultiesFragment extends Fragment {
         Bundle bundle = new Bundle();
         bundle.putString("ten_khoa", faculty.getTen_khoa());
         bundle.putString("id", faculty.getId());
+        bundle.putString("ma_dinh_dang", faculty.getMa_dinh_dang());
         detailFragment.setArguments(bundle);
 
         // Chuyển sang DetailFragment

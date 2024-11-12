@@ -31,7 +31,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class UploadFragment extends Fragment {
     private TextView breadcrumb_home, breadcrumb_faculty;
-    private EditText edt_name_faculty;
+    private EditText edt_name_faculty, edt_format_code;
     private Button btn_upload_faculty;
 
     @Override
@@ -47,6 +47,7 @@ public class UploadFragment extends Fragment {
         breadcrumb_home = view.findViewById(R.id.breadcrumb_home);
         breadcrumb_faculty = view.findViewById(R.id.breadcrumb_faculty);
         edt_name_faculty = view.findViewById(R.id.edt_name_faculty);
+        edt_format_code = view.findViewById(R.id.edt_format_code);
         btn_upload_faculty = view.findViewById(R.id.btn_upload_faculty);
     }
     private void iniListener(){
@@ -54,7 +55,8 @@ public class UploadFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String name_faculty = edt_name_faculty.getText().toString().trim();
-                if(name_faculty.isEmpty()){
+                String format_code = edt_format_code.getText().toString().trim();
+                if(name_faculty.isEmpty() || format_code.isEmpty()){
                     new SweetAlertDialog(requireActivity(), SweetAlertDialog.WARNING_TYPE)
                             .setTitleText("Thiếu thông tin")
                             .setContentText("Vui lòng điền đầy đủ thông tin.")
@@ -62,7 +64,7 @@ public class UploadFragment extends Fragment {
                             .show();
                     return; // Dừng lại nếu có trường nào đó rỗng
                 }
-                Faculty faculty = new Faculty(null, name_faculty);
+                Faculty faculty = new Faculty(null, name_faculty, format_code);
                 onClickUploadFaculty(faculty);
             }
         });

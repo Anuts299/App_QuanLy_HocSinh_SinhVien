@@ -27,6 +27,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -96,7 +97,7 @@ public class UpdateFragment extends Fragment {
         });
         return view;
     }
-    private void onClickButtonUpdateClass(){
+    private void onClickButtonUpdateClass() {
         String str_code_class = edt_update_code_class.getText().toString().trim();
         String str_name_class = edt_update_name_class.getText().toString().trim();
         String str_name_faculty = spinner_update_name_faculty.getSelectedItem().toString().trim();
@@ -104,6 +105,7 @@ public class UpdateFragment extends Fragment {
         String str_name_lecturer = spinner_update_name_lecturer.getSelectedItem().toString().trim();
         String id_lecturer = lecturerMap.get(str_name_lecturer);
         String str_academic_year = edt_update_academic_year.getText().toString().trim();
+
         if (str_code_class.isEmpty() || str_name_class.isEmpty() || Objects.requireNonNull(id_faculty).isEmpty() || Objects.requireNonNull(id_lecturer).isEmpty() || str_academic_year.isEmpty()) {
             new SweetAlertDialog(requireActivity(), SweetAlertDialog.WARNING_TYPE)
                     .setTitleText("Thiếu thông tin")
@@ -119,49 +121,74 @@ public class UpdateFragment extends Fragment {
         AlertDialog dialog = builder.create();
         dialog.show();
 
-        Classroom classroom = new Classroom(id, str_code_class, str_academic_year, id_lecturer, str_name_class, id_faculty);
-        reference.setValue(classroom).addOnCompleteListener(new OnCompleteListener<Void>() {
+        DatabaseReference classRef = FirebaseDatabase.getInstance().getReference("CLASSROOM");
+        Query checkClassQuery = classRef.orderByChild("ma_lop").equalTo(str_code_class);
+
+        checkClassQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 dialog.dismiss();
-                if (task.isSuccessful()) {
-                    new SweetAlertDialog(requireActivity(), SweetAlertDialog.SUCCESS_TYPE)
-                            .setTitleText("Chỉnh sửa lớp thành công")
+                if (dataSnapshot.exists()) {
+                    new SweetAlertDialog(requireActivity(), SweetAlertDialog.WARNING_TYPE)
+                            .setTitleText("Lớp đã tồn tại")
+                            .setContentText("Mã lớp này đã có trong hệ thống.")
                             .setConfirmText("OK")
-                            .setConfirmClickListener(sDialog -> {
-                                sDialog.dismissWithAnimation();
-                                // Sau khi cập nhật thành công,tạo một bundle mới để truyền dữ liệu
-                                Bundle resultBundle = new Bundle();
-                                resultBundle.putString("ma_lop", str_code_class);
-                                resultBundle.putString("ten_lop", str_name_class);
-                                resultBundle.putString("id_khoa", id_faculty);
-                                resultBundle.putString("ten_co_van", str_name_lecturer);
-                                resultBundle.putString("nam_hoc", str_academic_year);
-
-                                // Thiết lập lại kết quả cho DetailFragment
-                                DetailFragment detailFragment = new DetailFragment();
-                                detailFragment.setArguments(resultBundle);
-
-                                // Quay lại DetailFragment
-                                getParentFragmentManager().beginTransaction()
-                                        .replace(R.id.fragment_container, detailFragment)
-                                        .addToBackStack(null)
-                                        .commit();
-                            })
                             .show();
                 } else {
-                    new SweetAlertDialog(requireActivity(), SweetAlertDialog.ERROR_TYPE)
-                            .setTitleText("Lỗi!")
-                            .setContentText("Không thể cập nhật lớp.")
-                            .setConfirmText("OK")
-                            .setConfirmClickListener(SweetAlertDialog::dismissWithAnimation)
-                            .show();
+                    // Nếu mã lớp chưa tồn tại, tiến hành cập nhật lớp
+                    dialog.show(); // Hiển thị lại dialog khi thực hiện cập nhật
+                    Classroom classroom = new Classroom(id, str_code_class, str_academic_year, id_lecturer, str_name_class, id_faculty);
+
+                    reference.setValue(classroom).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            dialog.dismiss();
+                            if (task.isSuccessful()) {
+                                new SweetAlertDialog(requireActivity(), SweetAlertDialog.SUCCESS_TYPE)
+                                        .setTitleText("Chỉnh sửa lớp thành công")
+                                        .setConfirmText("OK")
+                                        .setConfirmClickListener(sDialog -> {
+                                            sDialog.dismissWithAnimation();
+                                            Bundle resultBundle = new Bundle();
+                                            resultBundle.putString("ma_lop", str_code_class);
+                                            resultBundle.putString("ten_lop", str_name_class);
+                                            resultBundle.putString("id_khoa", id_faculty);
+                                            resultBundle.putString("ten_co_van", str_name_lecturer);
+                                            resultBundle.putString("nam_hoc", str_academic_year);
+
+                                            DetailFragment detailFragment = new DetailFragment();
+                                            detailFragment.setArguments(resultBundle);
+
+                                            getParentFragmentManager().beginTransaction()
+                                                    .replace(R.id.fragment_container, detailFragment)
+                                                    .addToBackStack(null)
+                                                    .commit();
+                                        })
+                                        .show();
+                            } else {
+                                new SweetAlertDialog(requireActivity(), SweetAlertDialog.ERROR_TYPE)
+                                        .setTitleText("Lỗi!")
+                                        .setContentText("Không thể cập nhật lớp.")
+                                        .setConfirmText("OK")
+                                        .show();
+                            }
+                        }
+                    });
                 }
             }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                dialog.dismiss();
+                new SweetAlertDialog(requireActivity(), SweetAlertDialog.ERROR_TYPE)
+                        .setTitleText("Lỗi!")
+                        .setContentText("Lỗi khi truy vấn dữ liệu.")
+                        .setConfirmText("OK")
+                        .show();
+            }
         });
-
-
     }
+
     private void loadFacultyList(){
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("FACULTY");
         myRef.addValueEventListener(new ValueEventListener() {

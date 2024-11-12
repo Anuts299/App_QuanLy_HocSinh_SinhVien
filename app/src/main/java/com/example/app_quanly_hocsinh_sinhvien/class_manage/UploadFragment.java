@@ -167,7 +167,6 @@ public class UploadFragment extends Fragment {
         });
     }
     private void onClickUploadClass(Classroom classroom) {
-        ClassFragment classFragment = new ClassFragment();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("CLASSROOM");
         Query checkClass = myRef.orderByChild("ma_lop").equalTo(classroom.getMa_lop());
@@ -178,11 +177,13 @@ public class UploadFragment extends Fragment {
         AlertDialog dialog = builder.create();
         dialog.show();
 
+        // Kiểm tra sự tồn tại của lớp học trước khi thêm
         checkClass.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                dialog.dismiss(); // Đảm bảo dialog luôn được đóng
+                dialog.dismiss();
                 if (dataSnapshot.exists()) {
+                    // Thông báo lỗi khi mã lớp đã tồn tại
                     new SweetAlertDialog(requireActivity(), SweetAlertDialog.WARNING_TYPE)
                             .setTitleText("Lớp đã tồn tại")
                             .setContentText("Mã lớp này đã có trong hệ thống.")
@@ -190,7 +191,7 @@ public class UploadFragment extends Fragment {
                             .setConfirmClickListener(SweetAlertDialog::dismissWithAnimation)
                             .show();
                 } else {
-                    // Sử dụng push() để Firebase tự tạo ID
+                    // Nếu mã lớp không tồn tại, tiếp tục thêm lớp mới
                     String key = myRef.push().getKey();
                     classroom.setId(key);
                     myRef.child(key).setValue(classroom, new DatabaseReference.CompletionListener() {
@@ -202,14 +203,13 @@ public class UploadFragment extends Fragment {
                                         .setContentText("Lỗi: " + error.getMessage())
                                         .setConfirmText("OK")
                                         .show();
-                                switchFragment(classFragment);
                             } else {
                                 new SweetAlertDialog(requireActivity(), SweetAlertDialog.SUCCESS_TYPE)
                                         .setTitleText("Thêm lớp thành công")
                                         .setConfirmText("OK")
                                         .show();
-                                switchFragment(classFragment);
                             }
+                            switchFragment(new ClassFragment());  // Chuyển fragment
                         }
                     });
                 }
@@ -226,6 +226,7 @@ public class UploadFragment extends Fragment {
             }
         });
     }
+
     // Phương thức chuyển đổi giữa các fragment
     private void switchFragment(Fragment fragment) {
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
