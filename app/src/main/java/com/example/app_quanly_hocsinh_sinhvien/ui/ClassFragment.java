@@ -211,7 +211,7 @@ public class ClassFragment extends Fragment {
         tv_display_results.setText("Kết quả: " + itemCount);
     }
     //Tìm kiếm lớp học
-    public void searchItemClassroom(){
+    private void searchItemClassroom(){
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -227,7 +227,7 @@ public class ClassFragment extends Fragment {
         });
     }
     //Tìm danh sách
-    public void searchList(String text){
+    private void searchList(String text){
         ArrayList<Classroom> searchList = new ArrayList<>();
         for(Classroom classroom : mListClassroom){
             if(classroom.getMa_lop().toLowerCase().contains(text.toLowerCase())){
