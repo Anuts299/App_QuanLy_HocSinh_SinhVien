@@ -136,7 +136,6 @@ public class UpdateFragment extends Fragment {
                             .show();
                 } else {
                     // Nếu mã lớp chưa tồn tại, tiến hành cập nhật lớp
-                    dialog.show(); // Hiển thị lại dialog khi thực hiện cập nhật
                     Classroom classroom = new Classroom(id, str_code_class, str_academic_year, id_lecturer, str_name_class, id_faculty);
 
                     reference.setValue(classroom).addOnCompleteListener(new OnCompleteListener<Void>() {

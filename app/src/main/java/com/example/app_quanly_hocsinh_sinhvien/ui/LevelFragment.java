@@ -1,6 +1,7 @@
 package com.example.app_quanly_hocsinh_sinhvien.ui;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.app_quanly_hocsinh_sinhvien.FragmentActionListener;
 import com.example.app_quanly_hocsinh_sinhvien.R;
 import com.example.app_quanly_hocsinh_sinhvien.level_manage.Level;
 import com.example.app_quanly_hocsinh_sinhvien.level_manage.LevelAdapter;
@@ -50,6 +52,19 @@ public class LevelFragment extends Fragment {
     private LevelAdapter mLevelAdapter;
     private List<Level> mListLevel;
     private TextView breadcrumb_home;
+
+    private FragmentActionListener mListenerHome;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        // Kiểm tra xem context có phải là MainActivity và thực thi FragmentActionListener không
+        if (context instanceof FragmentActionListener) {
+            mListenerHome = (FragmentActionListener) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement FragmentActionListener");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -97,7 +112,9 @@ public class LevelFragment extends Fragment {
         breadcrumb_home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switchFragment(new HomeFragment());
+                if (mListenerHome != null) {
+                    mListenerHome.onFragmentAction(R.id.nav_home);
+                }
             }
         });
     }

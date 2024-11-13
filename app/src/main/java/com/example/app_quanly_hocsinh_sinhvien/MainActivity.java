@@ -45,6 +45,7 @@ import com.example.app_quanly_hocsinh_sinhvien.ui.GradestypeFragment;
 import com.example.app_quanly_hocsinh_sinhvien.ui.HomeFragment;
 import com.example.app_quanly_hocsinh_sinhvien.ui.InfoFragment;
 import com.example.app_quanly_hocsinh_sinhvien.ui.LevelFragment;
+import com.example.app_quanly_hocsinh_sinhvien.ui.MajorFragment;
 import com.example.app_quanly_hocsinh_sinhvien.ui.UserFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -55,7 +56,8 @@ import java.util.Arrays;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener, FragmentActionListener {
     public static final int MY_REQUEST_CODES =10;
     public static String role_admin = "Quản trị viên hệ thống",
             role_lecturer = "Giảng viên bộ môn",
@@ -68,8 +70,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int FRAGMENT_USER = 4;
     private static final int FRAGMENT_INFO = 5;
     private static final int FRAGMENT_CHANGE_PASSWORD = 6;
+    private static final int FRAGMENT_MAJOR = 7;
 
-    private int mCurrentFragment = FRAGMENT_HOME;
+    public int mCurrentFragment = FRAGMENT_HOME;
 
     final private UserFragment mUserFragment = new UserFragment();
 
@@ -162,6 +165,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if(mCurrentFragment != FRAGMENT_INFO){
                 replaceFragment(new InfoFragment());
                 mCurrentFragment = FRAGMENT_INFO;
+            }
+        }else if(id == R.id.nav_major){
+            if(mCurrentFragment != FRAGMENT_MAJOR){
+                replaceFragment(new MajorFragment());
+                mCurrentFragment = FRAGMENT_MAJOR;
             }
         }else if(id == R.id.nav_chart){
             if(mCurrentFragment != FRAGMENT_CHART){
@@ -283,4 +291,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         intent.setAction(Intent.ACTION_GET_CONTENT);
         mActivityResultLauncher.launch(Intent.createChooser(intent,"Chọn hình ảnh"));
     }
+
+
+    @Override
+    public void onFragmentAction(int actionId) {
+
+        if (actionId == R.id.nav_home) {
+            // Xóa toàn bộ các fragment trong back stack để quay lại HomeFragment
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            if (fragmentManager.getBackStackEntryCount() > 0) {
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            }
+            // Thay thế fragment hoặc điều hướng về HomeFragment
+            replaceFragment(new HomeFragment());
+            mCurrentFragment = FRAGMENT_HOME;
+            mNavigationView.getMenu().findItem(R.id.nav_home).setChecked(true);
+        }
+    }
+
+
 }
