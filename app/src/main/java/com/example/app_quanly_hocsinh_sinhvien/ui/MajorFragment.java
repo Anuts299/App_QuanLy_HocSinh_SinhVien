@@ -233,23 +233,27 @@ public class MajorFragment extends Fragment {
         updateDisplayedItemCount();
     }
     private void setupSpinner(){
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, mListFaculty);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_filter_faculty.setAdapter(adapter);
+        Context context = getContext();
+        if (context != null) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, mListFaculty);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner_filter_faculty.setAdapter(adapter);
 
-        spinner_filter_faculty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String ten_khoa = parent.getItemAtPosition(position).toString();
-                filterMajorByFaculty(ten_khoa);
-            }
+            spinner_filter_faculty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    String ten_khoa = parent.getItemAtPosition(position).toString();
+                    filterMajorByFaculty(ten_khoa);
+                }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-            }
-        });
+                }
+            });
+        }
     }
+
 
     private void filterMajorByFaculty(String tenKhoa) {
         ArrayList<Major> filteredList = new ArrayList<>();

@@ -44,9 +44,11 @@ public class TeacherFragment extends Fragment {
 
     FloatingActionButton fab_lecturer;
     TextView breadcrumb_home, tv_display_results;
+
     private RecyclerView recLecturer;
     private LecturerAdapter mLecturerAdapter;
     private List<Lecturer> mListLecturer;
+
     private androidx.appcompat.widget.SearchView searchView;
     private Map<String, String> idToFacultyNameMap = new HashMap<>();
     private Map<String, String> idToLevelNameMap = new HashMap<>();
