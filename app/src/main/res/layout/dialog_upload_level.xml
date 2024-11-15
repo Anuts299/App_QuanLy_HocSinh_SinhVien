@@ -23,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
-                android:text="Thêm trình độ"
+                android:text="Thêm Trình độ"
                 android:textAlignment="center"
                 android:textColor="@color/Cornflower_blue"
                 android:textSize="25sp"
@@ -43,6 +43,18 @@
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:layout_marginBottom="15dp"/>
+            <Spinner
+                android:id="@+id/spinner_weight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_box"
+                android:paddingStart="10dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:layout_marginBottom="15dp"
+                android:textAppearance="@style/SpinnerText"
+                android:spinnerMode="dropdown"
+                android:visibility="gone"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
