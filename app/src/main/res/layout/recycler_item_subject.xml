@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/recCardFaculty"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginVertical="10dp"
+    android:layout_marginBottom="5dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="8dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/recImageSubject"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginStart="25dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/literature_12418787" />
+        <TextView
+            android:id="@+id/tv_name_subject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tên môn học"
+            android:textColor="@color/Cornflower_blue"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:layout_toEndOf="@+id/tv_code_subject"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="25dp" />
+        <TextView
+            android:id="@+id/tv_code_subject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mã môn học"
+            android:textColor="@color/Bittersweet"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:layout_toEndOf="@+id/recImageSubject"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp" />
+        <TextView
+            android:id="@+id/tv_credit_subject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Số ĐVHT: "
+            android:textColor="@color/Cornflower_blue"
+            android:textSize="20dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:layout_toEndOf="@+id/recImageSubject"
+            android:layout_marginTop="38dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginBottom="10dp"/>
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
