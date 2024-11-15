@@ -51,6 +51,7 @@ public class LevelFragment extends Fragment {
     private RecyclerView recLevel;
     private LevelAdapter mLevelAdapter;
     private List<Level> mListLevel;
+
     private TextView breadcrumb_home;
 
     private FragmentActionListener mListenerHome;
@@ -276,7 +277,7 @@ public class LevelFragment extends Fragment {
 
         TextView titleTextView = dialog.findViewById(R.id.tv_level); // Adjust ID if needed
         if (titleTextView != null) {
-            titleTextView.setText("Chỉnh sửa trình độ");
+            titleTextView.setText("Chỉnh sửa Trình độ");
         }
 
         // Find the "Thêm trình độ" button and set new text
@@ -335,7 +336,7 @@ public class LevelFragment extends Fragment {
         // Hiển thị SweetAlertDialog xác nhận xóa
         new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE)
                 .setTitleText("Xác nhận xóa")
-                .setContentText("Bạn có chắc chắn muốn xóa trình độ học này không?")
+                .setContentText("Bạn có chắc chắn muốn xóa trình độ này không?")
                 .setConfirmText("Xóa")
                 .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                     @Override
@@ -368,7 +369,7 @@ public class LevelFragment extends Fragment {
                                     } else {
                                         sDialog
                                                 .setTitleText("Lỗi!")
-                                                .setContentText("Không thể xóa lớp học.")
+                                                .setContentText("Không thể xóa trình độ.")
                                                 .setConfirmText("OK")
                                                 .setConfirmClickListener(SweetAlertDialog::dismissWithAnimation)
                                                 .changeAlertType(SweetAlertDialog.ERROR_TYPE);
@@ -385,7 +386,4 @@ public class LevelFragment extends Fragment {
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.commit();  // Không dùng addToBackStack(null)
     }
-
-
-
 }
