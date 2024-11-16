@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/nen_home"
+    android:paddingBottom="35dp"
+    tools:context=".ui.HomeFragment">
+
+    <!-- CardView 1 -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/class_card"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/faculties_card"
+        app:layout_constraintDimensionRatio="1:0.8"
+        app:layout_constraintEnd_toStartOf="@+id/student_card"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:scaleType="fitCenter"
+                android:src="@drawable/class_img"
+                android:translationY="-10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/roboto_bold"
+                android:text="Lớp học"
+                android:textColor="@color/Cornflower_blue"
+                android:textSize="18sp"
+                android:translationY="65dp" />
+        </FrameLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <!-- CardView 2 -->
+    <androidx.cardview.widget.CardView
+    android:id="@+id/student_card"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="10dp"
+    app:layout_constraintDimensionRatio="1:0.8"
+    app:layout_constraintBottom_toTopOf="@+id/input_score_card"
+    app:layout_constraintStart_toEndOf="@id/class_card"
+    app:layout_constraintEnd_toStartOf="@+id/subject_card"
+    android:layout_margin="8dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/students_2995459"
+                android:scaleType="fitCenter"
+                android:layout_gravity="center_horizontal"
+                android:translationY="-10dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Sinh viên"
+                android:translationY="65dp"
+                android:textColor="@color/Cornflower_blue"
+                android:textSize="18sp"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/roboto_bold"/>
+        </FrameLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <!-- CardView 3 -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/subject_card"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="10dp"
+        app:layout_constraintDimensionRatio="1:0.8"
+        app:layout_constraintBottom_toTopOf="@+id/input_score_card"
+        app:layout_constraintStart_toEndOf="@id/student_card"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="8dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/literature_12418787"
+                android:scaleType="fitCenter"
+                android:layout_gravity="center_horizontal"
+                android:translationY="-10dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Môn học"
+                android:translationY="65dp"
+                android:textColor="@color/Cornflower_blue"
+                android:textSize="18sp"
+                android:fontFamily="@font/roboto_bold"/>
+        </FrameLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/faculties_card"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:0.8"
+        app:layout_constraintEnd_toEndOf="@+id/class_card"
+        app:layout_constraintEnd_toStartOf="@+id/input_score_card"
+        app:layout_constraintStart_toStartOf="@+id/class_card">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:scaleType="fitCenter"
+                android:src="@drawable/employee_engagement"
+                android:translationY="-8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="@font/roboto_bold"
+                android:text="Khoa"
+                android:textColor="@color/Cornflower_blue"
+                android:textSize="18sp"
+
+                android:translationY="65dp" />
+        </FrameLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/input_score_card"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="10dp"
+        app:layout_constraintDimensionRatio="1:0.8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/student_card"
+        app:layout_constraintEnd_toEndOf="@id/student_card">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/report_card_2893763"
+                android:scaleType="fitCenter"
+                android:layout_gravity="center_horizontal"
+                android:translationY="-10dp"/> <!-- Dịch chuyển lên trên -->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Chấm điểm"
+                android:translationY="65dp"
+                android:textColor="@color/Cornflower_blue"
+                android:textSize="18dp"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/roboto_bold"/>
+        </FrameLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/teacher_card"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="10dp"
+        app:layout_constraintDimensionRatio="1:0.8"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/subject_card"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="8dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/lecturer_14661120"
+                android:scaleType="fitCenter"
+                android:layout_gravity="center_horizontal"
+                android:translationY="-8dp"/> <!-- Dịch chuyển lên trên -->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Giảng viên"
+                android:translationY="65dp"
+                android:textColor="@color/Cornflower_blue"
+                android:textSize="18dp"
+                android:fontFamily="@font/roboto_bold"/>
+        </FrameLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -154,7 +154,7 @@
                    android:src="@drawable/employee_engagement"
                    android:scaleType="fitCenter"
                    android:layout_gravity="center_horizontal"
-                   android:translationY="-10dp"/> <!-- Dịch chuyển lên trên -->
+                   android:translationY="-10dp"/>
 
                <TextView
                    android:layout_width="wrap_content"
