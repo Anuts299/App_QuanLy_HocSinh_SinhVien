@@ -2,10 +2,13 @@ package com.example.app_quanly_hocsinh_sinhvien.faculty_manage;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,33 +17,53 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.app_quanly_hocsinh_sinhvien.R;
+import com.example.app_quanly_hocsinh_sinhvien.lecturer_manage.Lecturer;
+import com.example.app_quanly_hocsinh_sinhvien.lecturer_manage.LecturerAdapter;
 import com.example.app_quanly_hocsinh_sinhvien.ui.FacultiesFragment;
 import com.example.app_quanly_hocsinh_sinhvien.ui.HomeFragment;
 import com.github.clans.fab.FloatingActionButton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 
 public class DetailFragment extends Fragment {
 
-    TextView tv_de_name_faculty, breadcrumb_home, breadcrumb_faculty, tv_de_format_code;
+    private TextView tv_de_name_faculty, breadcrumb_home, breadcrumb_faculty, tv_de_format_code, tv_result_lecturer;
     String id = "";
     FloatingActionButton deleteButtonFaculty, editButtonFaculty;
+    private RecyclerView recyView_LecturerSm;
+
+    private LecturerAdapter mLecturerAdapter;
+    private List<Lecturer> mLecturerList;
+
+    private Map<String, String> idToLevelNameMap = new HashMap<>();
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_detail_faculty, container, false);
+        mLecturerList = new ArrayList<>();
         initUi(view);
         Bundle bundle = getArguments();
         if(bundle != null){
             tv_de_name_faculty.setText(bundle.getString("ten_khoa"));
             tv_de_format_code.setText(bundle.getString("ma_dinh_dang"));
             id = bundle.getString("id");
+            loadLecturers();
         }
+        createIdToLevelNameMap();
         initListener();
         return view;
     }
@@ -51,6 +74,13 @@ public class DetailFragment extends Fragment {
         editButtonFaculty = view.findViewById(R.id.editButtonFaculty);
         breadcrumb_home = view.findViewById(R.id.breadcrumb_home);
         breadcrumb_faculty = view.findViewById(R.id.breadcrumb_faculty);
+        tv_result_lecturer = view.findViewById(R.id.tv_result_lecturer);
+        recyView_LecturerSm = view.findViewById(R.id.recyView_LecturerSm);
+
+        mLecturerAdapter = new LecturerAdapter(mLecturerList, null, idToLevelNameMap, null);
+        mLecturerAdapter.setSimpleMode(true);
+        recyView_LecturerSm.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyView_LecturerSm.setAdapter(mLecturerAdapter);
     }
 
     private void initListener(){
@@ -138,6 +168,47 @@ public class DetailFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 switchFragment(new FacultiesFragment());
+            }
+        });
+    }
+    private void loadLecturers() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("LECTURER");
+        reference.orderByChild("id_khoa").equalTo(id).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mLecturerList.clear();
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    Lecturer lecturer = data.getValue(Lecturer.class);
+                    mLecturerList.add(lecturer);
+                }
+                mLecturerAdapter.notifyDataSetChanged();
+                tv_result_lecturer.setText("Số lượng giảng viên: " + mLecturerList.size());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("FirebaseError", error.getMessage());
+            }
+        });
+    }
+    private void createIdToLevelNameMap() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("LEVEL");
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot levelSnapshot : snapshot.getChildren()) {
+                    String id_level = levelSnapshot.getKey();
+                    String name_level = levelSnapshot.child("ten_trinh_do").getValue(String.class);
+                    if (id_level != null && name_level != null) {
+                        idToLevelNameMap.put(id_level, name_level);
+                    }
+                }
+                mLecturerAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("TeacherFragment", "Error loading levels", error.toException());
             }
         });
     }

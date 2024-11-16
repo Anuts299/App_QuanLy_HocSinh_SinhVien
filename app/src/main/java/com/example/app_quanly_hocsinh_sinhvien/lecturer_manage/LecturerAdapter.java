@@ -27,6 +27,14 @@ public class LecturerAdapter extends RecyclerView.Adapter<LecturerAdapter.Lectur
 
     private OnItemClickListener mListener;
 
+    private boolean isSimpleMode; // true nếu chỉ hiển thị tên
+
+    public void setSimpleMode(boolean simpleMode) {
+        this.isSimpleMode = simpleMode;
+        notifyDataSetChanged();
+    }
+
+
     public interface OnItemClickListener {
         void onItemClick(Lecturer lecturer);
     }
@@ -54,18 +62,30 @@ public class LecturerAdapter extends RecyclerView.Adapter<LecturerAdapter.Lectur
         if(lecturer == null){
             return;
         }
+        // Hiển thị tên giảng viên
         holder.tv_name_lecturer.setText(lecturer.getTen_giang_vien());
 
-        // Get faculty name using the id_khoa
-        String tenKhoa = idToFacultyNameMap.get(lecturer.getId_khoa());
-        holder.tv_name_faculty.setText(tenKhoa != null ? tenKhoa : "Khoa không xác định");
-
-        // Thiết lập sự kiện click
-        holder.itemView.setOnClickListener(view -> {
-            if (mListener != null) {
-                mListener.onItemClick(lecturer);
+        // Cập nhật các thành phần theo chế độ đơn giản hay đầy đủ
+        if (isSimpleMode) {
+            holder.itemView.setOnClickListener(null); // Không xử lý sự kiện bấm
+            String tenTrinhDo = idToLevelNameMap.get(lecturer.getId_trinh_do());
+            if (tenTrinhDo != null) {
+                holder.tv_name_faculty.setText(tenTrinhDo); // Hiển thị trình độ nếu có
+            } else {
+                holder.tv_name_faculty.setText("Trình độ không xác định");
             }
-        });
+        } else {
+            // Hiển thị thông tin đầy đủ
+            String tenKhoa = idToFacultyNameMap.get(lecturer.getId_khoa());
+            holder.tv_name_faculty.setText(tenKhoa != null ? tenKhoa : "Khoa không xác định");
+
+            // Thiết lập sự kiện click
+            holder.itemView.setOnClickListener(view -> {
+                if (mListener != null) {
+                    mListener.onItemClick(lecturer);
+                }
+            });
+        }
     }
 
     //Phần hiển thị các giảng viên
