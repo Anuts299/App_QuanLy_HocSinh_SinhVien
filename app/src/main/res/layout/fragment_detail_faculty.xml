@@ -123,7 +123,7 @@
             android:id="@+id/tv_result_lecturer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Số lượng giáo viên : "
+            android:text="Số lượng giáo viên: "
             android:textSize="18sp"
             android:textColor="@color/Bittersweet"
             android:textStyle="bold"

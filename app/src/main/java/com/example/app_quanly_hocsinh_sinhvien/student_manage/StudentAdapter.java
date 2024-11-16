@@ -24,6 +24,13 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
 
     private OnClickItemListener mListener;
 
+    private boolean isSimpleMode;
+
+    public void setSimpleMode(boolean simpleMode){
+        this.isSimpleMode = simpleMode;
+        notifyDataSetChanged();
+    }
+
     public interface OnClickItemListener{
         void onItemClick(Student student);
     }
@@ -50,29 +57,58 @@ public class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentV
         }
         holder.tv_name_student.setText(student.getTen_sinh_vien());
         holder.tv_code_student.setText(student.getId());
-        // Tải hình ảnh từ URL hoặc đường dẫn
-        String imagePath = student.getHinh_anh();
-        if (imagePath != null && !imagePath.isEmpty()) {
-            Glide.with(holder.itemView.getContext())
-                    .load(imagePath)
-                    .into(holder.recImageStudent);
-        } else {
+        if (isSimpleMode) {
+            holder.itemView.setOnClickListener(null);
+            holder.tv_level_student.setVisibility(View.GONE);
+            holder.tv_code_class_student.setVisibility(View.GONE);
 
+            // Chuyển đổi dp sang pixels (px)
+            int sizeInPx = (int) (55 * holder.itemView.getContext().getResources().getDisplayMetrics().density);
+
+            // Đặt chiều rộng và chiều cao
+            ViewGroup.LayoutParams sizeParams = holder.recImageStudent.getLayoutParams();
+            sizeParams.width = sizeInPx;  // Chiều rộng 50dp
+            sizeParams.height = sizeInPx; // Chiều cao 50dp
+            holder.recImageStudent.setLayoutParams(sizeParams);
+
+            // Thêm marginTop 15dp
+            ViewGroup.MarginLayoutParams marginParams = (ViewGroup.MarginLayoutParams) holder.recImageStudent.getLayoutParams();
+            int marginInPx = (int) (15 * holder.itemView.getContext().getResources().getDisplayMetrics().density);
+            marginParams.setMargins(marginParams.leftMargin, marginInPx, marginParams.rightMargin, marginParams.bottomMargin);
+            holder.recImageStudent.setLayoutParams(marginParams);
+
+            // Thiết lập ScaleType
+            holder.recImageStudent.setScaleType(ImageView.ScaleType.FIT_XY);
+
+            // Đặt hình ảnh
             holder.recImageStudent.setImageResource(R.drawable.students_2995459);
         }
+        else{
+            // Tải hình ảnh từ URL hoặc đường dẫn
+            String imagePath = student.getHinh_anh();
+            if (imagePath != null && !imagePath.isEmpty()) {
+                Glide.with(holder.itemView.getContext())
+                        .load(imagePath)
+                        .into(holder.recImageStudent);
+            } else {
 
-        String maLop = idToClassMap.get(student.getId_lop());
-        holder.tv_code_class_student.setText(maLop != null ? maLop : "Mã lớp không xác định");
-
-        String tenTrinhdo = idToLevelMap.get(student.getId_trinh_do());
-        holder.tv_level_student.setText(tenTrinhdo != null ? tenTrinhdo : "Trình độ không xác định");
-
-        // Thiết lập sự kiện click
-        holder.itemView.setOnClickListener(view -> {
-            if (mListener != null) {
-                mListener.onItemClick(student);
+                holder.recImageStudent.setImageResource(R.drawable.students_2995459);
             }
-        });
+
+            String maLop = idToClassMap.get(student.getId_lop());
+            holder.tv_code_class_student.setText(maLop != null ? maLop : "Mã lớp không xác định");
+
+            String tenTrinhdo = idToLevelMap.get(student.getId_trinh_do());
+            holder.tv_level_student.setText(tenTrinhdo != null ? tenTrinhdo : "Trình độ không xác định");
+
+            // Thiết lập sự kiện click
+            holder.itemView.setOnClickListener(view -> {
+                if (mListener != null) {
+                    mListener.onItemClick(student);
+                }
+            });
+        }
+
     }
 
     @Override

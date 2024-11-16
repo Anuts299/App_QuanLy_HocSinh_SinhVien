@@ -50,150 +50,172 @@
             android:textSize="16dp"
             android:textColor="@color/Cornflower_blue" />
     </LinearLayout>
-    <TableLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:divider="@color/Cornflower_blue"
-        android:showDividers="middle"
-        android:background="@drawable/background_table"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginTop="45dp"
-        android:elevation="8dp">
-
-        <TableRow
+        android:orientation="vertical">
+        <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:divider="@color/Cornflower_blue"
-            android:showDividers="middle">
+            android:showDividers="middle"
+            android:background="@drawable/background_table"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="45dp"
+            android:elevation="8dp">
 
-            <TextView
-                android:id="@+id/tv_de_name_class"
-                android:layout_width="0dp"
+            <TableRow
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="MÃ LỚP"
-                android:textSize="25sp"
-                android:textStyle="bold"
-                android:textColor="@color/Bittersweet"
-                android:gravity="center"
-                android:padding="14dp" />
+                android:divider="@color/Cornflower_blue"
+                android:showDividers="middle">
 
-        </TableRow>
+                <TextView
+                    android:id="@+id/tv_de_name_class"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="MÃ LỚP"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/Bittersweet"
+                    android:gravity="center"
+                    android:padding="14dp" />
 
-        <TableRow
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Tên lớp"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/Cornflower_blue"
+                    android:gravity="center"
+                    android:padding="14dp" />
+
+                <TextView
+                    android:id="@+id/tv_de_name_class2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="Tên lớp"
+                    android:textSize="20sp"
+                    android:textStyle="normal"
+                    android:textColor="@color/Cornflower_blue"
+                    android:gravity="center"
+                    android:padding="14dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Khoa"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/Cornflower_blue"
+                    android:gravity="center"
+                    android:padding="14dp" />
+
+                <TextView
+                    android:id="@+id/tv_de_name_faculties"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="Tên khoa"
+                    android:textSize="20sp"
+                    android:textStyle="normal"
+                    android:textColor="@color/Cornflower_blue"
+                    android:gravity="center"
+                    android:padding="14dp" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Cố vấn"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/Cornflower_blue"
+                    android:gravity="center"
+                    android:padding="14dp" />
+
+                <TextView
+                    android:id="@+id/tv_de_name_lecturer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:padding="14dp"
+                    android:text="Tên cố vấn"
+                    android:textColor="@color/Cornflower_blue"
+                    android:textSize="20sp"
+                    android:textStyle="normal" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Năm học"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/Cornflower_blue"
+                    android:gravity="center"
+                    android:padding="14dp" />
+
+                <TextView
+                    android:id="@+id/tv_de_academic_year"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="Năm học"
+                    android:textSize="20sp"
+                    android:textStyle="normal"
+                    android:textColor="@color/Cornflower_blue"
+                    android:gravity="center"
+                    android:padding="14dp" />
+            </TableRow>
+
+        </TableLayout>
+        <TextView
+            android:id="@+id/tv_result_student"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Số lượng sinh viên: "
+            android:textSize="18sp"
+            android:textColor="@color/Bittersweet"
+            android:textStyle="bold"
+            android:layout_marginStart="20dp"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyView_StudentSm"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            android:layout_marginTop="10dp" />
+    </LinearLayout>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Tên lớp"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@color/Cornflower_blue"
-                android:gravity="center"
-                android:padding="14dp" />
-
-            <TextView
-                android:id="@+id/tv_de_name_class2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="Tên lớp"
-                android:textSize="20sp"
-                android:textStyle="normal"
-                android:textColor="@color/Cornflower_blue"
-                android:gravity="center"
-                android:padding="14dp" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Khoa"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@color/Cornflower_blue"
-                android:gravity="center"
-                android:padding="14dp" />
-
-            <TextView
-                android:id="@+id/tv_de_name_faculties"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="Tên khoa"
-                android:textSize="20sp"
-                android:textStyle="normal"
-                android:textColor="@color/Cornflower_blue"
-                android:gravity="center"
-                android:padding="14dp" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Cố vấn"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@color/Cornflower_blue"
-                android:gravity="center"
-                android:padding="14dp" />
-
-            <TextView
-                android:id="@+id/tv_de_name_lecturer"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:gravity="center"
-                android:padding="14dp"
-                android:text="Tên cố vấn"
-                android:textColor="@color/Cornflower_blue"
-                android:textSize="20sp"
-                android:textStyle="normal" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Năm học"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/Cornflower_blue"
-                android:gravity="center"
-                android:padding="14dp" />
-
-            <TextView
-                android:id="@+id/tv_de_academic_year"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="Năm học"
-                android:textSize="20sp"
-                android:textStyle="normal"
-                android:textColor="@color/Cornflower_blue"
-                android:gravity="center"
-                android:padding="14dp" />
-        </TableRow>
-    </TableLayout>
     
     <RelativeLayout
         android:layout_width="match_parent"
@@ -211,6 +233,7 @@
             app:menu_colorNormal="@color/Cornflower_blue"
             app:menu_icon="@drawable/baseline_format_list_bulleted_24"
             app:menu_openDirection="up"
+            android:elevation="16dp"
             app:menu_showShadow="true">
 
             <com.github.clans.fab.FloatingActionButton
