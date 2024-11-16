@@ -9,6 +9,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +19,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.app_quanly_hocsinh_sinhvien.R;
+import com.example.app_quanly_hocsinh_sinhvien.lecturer_manage.Lecturer;
+import com.example.app_quanly_hocsinh_sinhvien.student_manage.Student;
+import com.example.app_quanly_hocsinh_sinhvien.student_manage.StudentAdapter;
 import com.example.app_quanly_hocsinh_sinhvien.ui.ClassFragment;
 import com.example.app_quanly_hocsinh_sinhvien.ui.HomeFragment;
 import com.github.clans.fab.FloatingActionButton;
@@ -26,20 +31,28 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 
 public class DetailFragment extends Fragment {
 
-    TextView tv_de_name_class, tv_de_name_faculties, tv_de_name_lecturer, tv_de_academic_year, tv_de_name_class2, breadcrumb_classroom, breadcrumb_home;
+    private TextView tv_de_name_class, tv_de_name_faculties, tv_de_name_lecturer, tv_de_academic_year, tv_de_name_class2, breadcrumb_classroom, breadcrumb_home, tv_result_student;
     FloatingActionButton deleteButtonClass, editButtonClass;
     String id = "";
+
+    private RecyclerView recyView_StudentSm;
+    private StudentAdapter mStudentAdapter;
+    private List<Student> mStudentList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_detail_class, container, false);
+        mStudentList = new ArrayList<>();
         initUi(view);
         Bundle bundle = getArguments();
         if(bundle != null){
@@ -60,6 +73,7 @@ public class DetailFragment extends Fragment {
             tv_de_academic_year.setText(bundle.getString("nam_hoc"));
             tv_de_name_class2.setText(bundle.getString("ten_lop"));
             id = bundle.getString("id");
+            loadStudent();
         }
         initListener();
         return view;
@@ -75,6 +89,13 @@ public class DetailFragment extends Fragment {
         editButtonClass = view.findViewById(R.id.editButtonClass);
         breadcrumb_classroom = view.findViewById(R.id.breadcrumb_classroom);
         breadcrumb_home = view.findViewById(R.id.breadcrumb_home);
+        tv_result_student = view.findViewById(R.id.tv_result_student);
+        recyView_StudentSm = view.findViewById(R.id.recyView_StudentSm);
+
+        mStudentAdapter = new StudentAdapter(null, null, mStudentList, null);
+        mStudentAdapter.setSimpleMode(true);
+        recyView_StudentSm.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyView_StudentSm.setAdapter(mStudentAdapter);
     }
     private void initListener(){
         deleteButtonClass.setOnClickListener(new View.OnClickListener() {
@@ -175,7 +196,26 @@ public class DetailFragment extends Fragment {
             }
         });
     }
+    private void loadStudent() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("STUDENT");
+        reference.orderByChild("id_lop").equalTo(id).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mStudentList.clear();
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    Student student = data.getValue(Student.class);
+                    mStudentList.add(student);
+                }
+                mStudentAdapter.notifyDataSetChanged();
+                tv_result_student.setText("Số lượng sinh viên: " + mStudentList.size());
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("FirebaseError", error.getMessage());
+            }
+        });
+    }
     private void getFacultyNameById(String id_khoa, final FacultyCallback callback) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("FACULTY");
         databaseReference.child(id_khoa).addListenerForSingleValueEvent(new ValueEventListener() {
