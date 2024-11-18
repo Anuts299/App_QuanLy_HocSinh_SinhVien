@@ -122,19 +122,19 @@ public class UpdateFragment extends Fragment {
         dialog.show();
 
         DatabaseReference classRef = FirebaseDatabase.getInstance().getReference("CLASSROOM");
-        Query checkClassQuery = classRef.orderByChild("ma_lop").equalTo(str_code_class);
+//        Query checkClassQuery = classRef.orderByChild("ma_lop").equalTo(str_code_class);
 
-        checkClassQuery.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                dialog.dismiss();
-                if (dataSnapshot.exists()) {
-                    new SweetAlertDialog(requireActivity(), SweetAlertDialog.WARNING_TYPE)
-                            .setTitleText("Lớp đã tồn tại")
-                            .setContentText("Mã lớp này đã có trong hệ thống.")
-                            .setConfirmText("OK")
-                            .show();
-                } else {
+//        checkClassQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                dialog.dismiss();
+//                if (dataSnapshot.exists()) {
+//                    new SweetAlertDialog(requireActivity(), SweetAlertDialog.WARNING_TYPE)
+//                            .setTitleText("Lớp đã tồn tại")
+//                            .setContentText("Mã lớp này đã có trong hệ thống.")
+//                            .setConfirmText("OK")
+//                            .show();
+//                } else {
                     // Nếu mã lớp chưa tồn tại, tiến hành cập nhật lớp
                     Classroom classroom = new Classroom(id, str_code_class, str_academic_year, id_lecturer, str_name_class, id_faculty);
 
@@ -173,19 +173,19 @@ public class UpdateFragment extends Fragment {
                             }
                         }
                     });
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                dialog.dismiss();
-                new SweetAlertDialog(requireActivity(), SweetAlertDialog.ERROR_TYPE)
-                        .setTitleText("Lỗi!")
-                        .setContentText("Lỗi khi truy vấn dữ liệu.")
-                        .setConfirmText("OK")
-                        .show();
-            }
-        });
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                dialog.dismiss();
+//                new SweetAlertDialog(requireActivity(), SweetAlertDialog.ERROR_TYPE)
+//                        .setTitleText("Lỗi!")
+//                        .setContentText("Lỗi khi truy vấn dữ liệu.")
+//                        .setConfirmText("OK")
+//                        .show();
+//            }
+//        });
     }
 
     private void loadFacultyList(){

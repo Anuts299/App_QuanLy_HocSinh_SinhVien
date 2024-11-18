@@ -94,7 +94,7 @@ public class UploadFragment extends Fragment {
                 String id_faculty = facultyMap.get(name_faculty);
                 String name_level = spinner_name_level.getSelectedItem().toString().trim();
                 String id_level = levelMap.get(name_level);
-                if (name_major.isEmpty() || id_level.isEmpty() || id_faculty == null || id_faculty.isEmpty() || id_level.isEmpty()) {
+                if (name_major.isEmpty() || id_level.isEmpty() || id_faculty == null || id_faculty.isEmpty() || id_level == null) {
                     new SweetAlertDialog(requireActivity(), SweetAlertDialog.WARNING_TYPE)
                             .setTitleText("Thiếu thông tin")
                             .setContentText("Vui lòng điền đầy đủ thông tin.")

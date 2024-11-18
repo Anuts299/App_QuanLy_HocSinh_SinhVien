@@ -1,15 +1,275 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.GradesFragment">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/breadcrumbs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="12dp"
+        android:gravity="center_vertical">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+        <TextView
+            android:id="@+id/breadcrumb_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trang chủ"
+            android:textColor="@color/Cornflower_blue"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" / "
+            android:textColor="@color/Cornflower_blue" />
+
+        <TextView
+            android:id="@+id/breadcrumb_inputscore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nhập điểm"
+            android:textSize="16dp"
+            android:textColor="@color/Cornflower_blue" />
+    </LinearLayout>
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Nhập điểm"
-        android:gravity="center"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        app:cardCornerRadius="30dp"
+        app:cardElevation="20dp">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:background="@drawable/custom_box">
 
-</FrameLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nhập Điểm"
+                android:textSize="25dp"
+                android:textAlignment="center"
+                android:textColor="@color/Cornflower_blue"
+                android:layout_marginBottom="15dp"
+                android:textStyle="bold"/>
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="@color/Cornflower_blue"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:showDividers="middle">
+
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Khoa"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/Cornflower_blue"
+                        android:gravity="center"
+                        android:padding="14dp" />
+
+                    <Spinner
+                        android:id="@+id/spinner_name_faculty"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/custom_box"
+                        android:paddingStart="10dp"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"
+                        android:layout_marginBottom="15dp"
+                        android:textAppearance="@style/SpinnerText"
+                        android:layout_weight="2"
+                        android:ellipsize="end"
+                        android:spinnerMode="dropdown"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Lớp"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/Cornflower_blue"
+                        android:gravity="center"
+                        android:padding="14dp" />
+
+                    <Spinner
+                        android:id="@+id/spinner_name_class"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/custom_box"
+                        android:paddingStart="10dp"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"
+                        android:layout_marginBottom="15dp"
+                        android:textAppearance="@style/SpinnerText"
+                        android:layout_weight="2"
+                        android:ellipsize="end"
+                        android:spinnerMode="dropdown"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Sinh viên"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/Cornflower_blue"
+                        android:gravity="center"
+                        android:padding="14dp" />
+
+                    <Spinner
+                        android:id="@+id/spinner_name_student"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/custom_box"
+                        android:paddingStart="10dp"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"
+                        android:layout_marginBottom="15dp"
+                        android:textAppearance="@style/SpinnerText"
+                        android:layout_weight="2"
+                        android:ellipsize="end"
+                        android:spinnerMode="dropdown"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Môn học"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/Cornflower_blue"
+                        android:gravity="center"
+                        android:padding="14dp" />
+
+                    <Spinner
+                        android:id="@+id/spinner_name_subject"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/custom_box"
+                        android:paddingStart="10dp"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"
+                        android:layout_marginBottom="15dp"
+                        android:textAppearance="@style/SpinnerText"
+                        android:layout_weight="2"
+                        android:ellipsize="end"
+                        android:spinnerMode="dropdown"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Loại điểm"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/Cornflower_blue"
+                        android:gravity="center"
+                        android:padding="14dp" />
+                    <Spinner
+                        android:id="@+id/spinner_name_gradestype"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/custom_box"
+                        android:paddingStart="10dp"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"
+                        android:layout_marginBottom="15dp"
+                        android:textAppearance="@style/SpinnerText"
+                        android:layout_weight="2"
+                        android:ellipsize="end"
+                        android:spinnerMode="dropdown"/>
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="14dp"
+                        android:text="Số điểm"
+                        android:textColor="@color/Cornflower_blue"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                    <EditText
+                        android:id="@+id/edt_inputscore"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:hint="Nhập số điểm"
+                        android:textSize="18sp"
+                        android:textStyle="normal"
+                        android:textColor="@color/Cornflower_blue"
+                        android:background="@drawable/custom_box"
+                        android:gravity="center"
+                        android:padding="12dp" />
+                </TableRow>
+
+            </TableLayout>
+            <Button
+                android:id="@+id/btn_upload_grades"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="LƯU ĐIỂM"
+                android:backgroundTint="@color/Cornflower_blue"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                app:cornerRadius="25dp"
+                android:layout_marginTop="20dp" />
+
+        </LinearLayout>
+        </ScrollView>
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>
