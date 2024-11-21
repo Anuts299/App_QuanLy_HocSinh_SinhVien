@@ -26,6 +26,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -292,10 +293,16 @@ public class GradesFragment extends Fragment {
 
             }
         });
-
+        breadcrumb_home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchFragment(new HomeFragment());
+            }
+        });
         btn_upload_grades.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("GradesFragment", "Đã nhấn");
                 String name_faculty = spinner_name_faculty.getSelectedItem().toString().trim();
                 String id_faculty = facultyMap.get(name_faculty);
                 String name_class = spinner_name_class.getSelectedItem().toString().trim();
@@ -308,9 +315,14 @@ public class GradesFragment extends Fragment {
                 String id_gradestype = gradestypeMap.get(name_gradestype);
                 String inputScore = edt_inputscore.getText().toString().trim();
 
-                if (id_faculty == null || id_faculty.isEmpty() || id_class == null || id_class.isEmpty() || id_student == null || id_student.isEmpty() ||
-                        id_subject == null || id_subject.isEmpty() || id_gradestype == null || id_gradestype.isEmpty() || inputScore.isEmpty()) {
-                    showDialogError("Thiếu thông tin", "OK","Vui lòng điển đủ thông tin");
+                // Kiểm tra thông tin cơ bản
+                if (id_faculty == null || id_faculty.isEmpty() ||
+                        id_class == null || id_class.isEmpty() ||
+                        id_student == null || id_student.isEmpty() ||
+                        id_subject == null || id_subject.isEmpty() ||
+                        id_gradestype == null || id_gradestype.isEmpty() ||
+                        inputScore.isEmpty()) {
+                    showDialogError("Thiếu thông tin", "OK", "Vui lòng điền đủ thông tin");
                     return;
                 }
 
@@ -327,42 +339,73 @@ public class GradesFragment extends Fragment {
                     return;
                 }
 
-                InputScore inputScore1 = new InputScore(null, id_faculty, id_gradestype, id_class, id_subject, id_student, grade);
-                onClickUploadGrade(inputScore1);
-            }
-        });
-        breadcrumb_home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switchFragment(new HomeFragment());
+                // Kiểm tra trùng ID trong Firebase
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = database.getReference("TRANSCRIPT");
+
+                Query query = myRef.orderByChild("id_sinh_vien").equalTo(id_student);
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        boolean isUpdated = false;
+
+                        // Duyệt qua tất cả các bản ghi của sinh viên đó
+                        for (DataSnapshot data : snapshot.getChildren()) {
+                            InputScore existingScore = data.getValue(InputScore.class);
+                            if (existingScore != null &&
+                                    existingScore.getId_khoa().equals(id_faculty) &&
+                                    existingScore.getId_lop().equals(id_class) &&
+                                    existingScore.getId_mon_hoc().equals(id_subject)) {
+
+                                // Nếu đã có điểm cho môn học này, cập nhật điểm
+                                addGradeToExistingScore(existingScore, id_gradestype, grade);
+                                myRef.child(existingScore.getId()).setValue(existingScore);
+                                showDialogSuccess("Cập nhật điểm thành công", "OK", null);
+                                isUpdated = true;
+                                break;
+                            }
+                        }
+
+                        // Nếu không có bản ghi trùng, tạo bản ghi mới
+                        if (!isUpdated) {
+                            InputScore newScore = new InputScore();
+                            newScore.setId_khoa(id_faculty);
+                            newScore.setId_lop(id_class);
+                            newScore.setId_sinh_vien(id_student);
+                            newScore.setId_mon_hoc(id_subject);
+                            newScore.setId_loai_diem(id_gradestype);
+                            addGradeToExistingScore(newScore, id_gradestype, grade);
+
+                            String key = myRef.push().getKey();
+                            newScore.setId(key);
+                            myRef.child(key).setValue(newScore);
+                            showDialogSuccess("Thêm điểm thành công", "OK", null);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        showDialogError("Lỗi kiểm tra dữ liệu", "OK", "Vui lòng thử lại sau");
+                    }
+                });
+
             }
         });
     }
 
-
-    private void onClickUploadGrade(InputScore inputScore){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("GRADE");
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setCancelable(false);
-        builder.setView(R.layout.progress_layout);
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
-        String key = myRef.push().getKey();
-        inputScore.setId(key);
-        myRef.child(key).setValue(inputScore, new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                dialog.dismiss();
-                if(error != null){
-                    showDialogError("Lưu điểm thất bại", "OK", "Xin vui lòng thử lại sau");
-                }else{
-                    showDialogSuccess("Thêm điểm thành công thành công", "OK", null);
-                }
-            }
-        });
+    // Hàm thêm điểm vào danh sách
+    private void addGradeToExistingScore(InputScore inputScore, String id_gradestype, float grade) {
+        if (id_gradestype.equals("-OBixkUmu8ABm1JDJUXe")) {
+            inputScore.getDiemKTTX().add(grade);
+        } else if (id_gradestype.equals("-OBj9pnR1Ky_NmQnaDIt")) {
+            inputScore.getDiemKTDK().add(grade);
+        } else if (id_gradestype.equals("-OBkTa1ZnMeCFA2CEo_x")) {
+            inputScore.getDiemThi().add(grade);
+        } else if (id_gradestype.equals("-OBj9xNg7wvIM8xciLTO")) {
+            inputScore.getDiemThi2().add(grade);
+        }else{
+            showDialogError("Loại điểm không hơp lệ: "+id_gradestype,"OK", "Hãy chọn loại điểm khác");
+        }
     }
     private void initUi(View view){
         breadcrumb_home = view.findViewById(R.id.breadcrumb_home);

@@ -253,6 +253,7 @@
                         android:textColor="@color/Cornflower_blue"
                         android:background="@drawable/custom_box"
                         android:gravity="center"
+                        android:inputType="numberDecimal"
                         android:padding="12dp" />
                 </TableRow>
 
