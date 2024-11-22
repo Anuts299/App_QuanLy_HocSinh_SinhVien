@@ -175,8 +175,9 @@ public class TranscrpitAdapter extends RecyclerView.Adapter<TranscrpitAdapter.Tr
                 e.printStackTrace();
             }
         }
-        if (listener != null) {
-            listener.onTranscriptCalculated(tbm, tbhp, position);
+
+        if (listener != null && tbhp != 0.0F) {
+            listener.onTranscriptCalculated(so_TC, tbhp, position);
         }
     }
 
