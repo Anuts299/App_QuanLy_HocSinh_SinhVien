@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.app_quanly_hocsinh_sinhvien.FragmentActionListener;
 import com.example.app_quanly_hocsinh_sinhvien.R;
 import com.example.app_quanly_hocsinh_sinhvien.gradestype_manage.Gradestype;
 import com.example.app_quanly_hocsinh_sinhvien.input_score.InputScore;
@@ -42,7 +43,7 @@ import java.util.Map;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
 
-public class DetailFragment extends Fragment {
+public class DetailFragment extends Fragment implements FragmentActionListener {
 
     TextView breadcrumb_home, breadcrumb_student, tv_de_name_student, tv_de_code_student, tv_de_code_class, tv_de_birthday, tv_de_gender_student,
             tv_de_locate_student, tv_de_phonenumber_student, tv_de_email_student, tv_de_admissiondate_student, tv_de_name_level, tv_sum_credit, tv_sum_avg_10, tv_sum_avg_4, tv_classification;
@@ -57,7 +58,29 @@ public class DetailFragment extends Fragment {
     private Map<String, String> idToSubjectMap = new HashMap<>();
     private Map<String, Integer> idToCreditsMap = new HashMap<>();
 
+    private int totalSoTC = 0;
+    private float totalTBHP = 0;
+    private int countTBHP = 0;
 
+
+    @Override
+    public void onFragmentAction(int actionId) {
+
+    }
+
+    @Override
+    public void onTranscriptCalculated(int soTC, float tbhp, int position) {
+        totalSoTC += soTC;
+        tv_sum_credit.setText(""+totalSoTC);
+
+        totalTBHP += tbhp;
+        countTBHP++;
+        float averageTBHP = totalTBHP / countTBHP;
+        float averageScale4 = convertToScale4(averageTBHP);
+        tv_sum_avg_10.setText(String.format("%.2f", averageTBHP));
+        tv_sum_avg_4.setText(String.format("%.2f", averageScale4));
+        tv_classification.setText(getClassification(totalSoTC, tbhp));
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -107,6 +130,10 @@ public class DetailFragment extends Fragment {
         tv_de_email_student = view.findViewById(R.id.tv_de_email_student);
         tv_de_admissiondate_student = view.findViewById(R.id.tv_de_admissiondate_student);
         tv_de_name_level = view.findViewById(R.id.tv_de_name_level);
+        tv_sum_credit = view.findViewById(R.id.tv_sum_credit);
+        tv_sum_avg_10 = view.findViewById(R.id.tv_sum_avg_10);
+        tv_sum_avg_4 = view.findViewById(R.id.tv_sum_avg_4);
+        tv_classification = view.findViewById(R.id.tv_classification);
         editButtonStudent = view.findViewById(R.id.editButtonStudent);
         deleteButtonStudent = view.findViewById(R.id.deleteButtonStudent);
         image_de_student = view.findViewById(R.id.image_de_student);
@@ -230,21 +257,17 @@ public class DetailFragment extends Fragment {
     }
 
     private void loadTranscript() {
-        Log.d("DetailFragment", "Đang load");
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("TRANSCRIPT");
         if (id != null && !id.isEmpty()) {
-            Log.d("DetailFragment", "id không rỗng: " + id);
             reference.orderByChild("id_sinh_vien").equalTo(id).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    Log.d("DetailFragment", "Snapshot count: " + snapshot.getChildrenCount());
                     if (snapshot.exists()) {
                         mTranscriptList.clear();
                         for (DataSnapshot data : snapshot.getChildren()) {
                             InputScore inputScore = data.getValue(InputScore.class);
                             if (inputScore != null) {
                                 mTranscriptList.add(inputScore);
-                                Log.d("DetailFragment", inputScore.toString());
                             } else {
                                 Log.d("DetailFragment", "Data is null for a child");
                             }
@@ -293,11 +316,25 @@ public class DetailFragment extends Fragment {
         });
     }
     private void loadTableRecap(){
-//        mtranscrpitAdapter.setOnTranscriptCalculatedListener((tbm, tbhp, position) -> {
-//            // Xử lý giá trị TBM và TBHP ở đây
-//            Log.d("Transcript Data", "Position: " + position + ", TBM: " + tbm + ", TBHP: " + tbhp);
-//        });
-
+        mtranscrpitAdapter.setOnTranscriptCalculatedListener(this);
+    }
+    private float convertToScale4(float score10) {
+        if (score10 >= 8.5) return 4.0f;
+        if (score10 >= 8.0) return 3.7f;
+        if (score10 >= 7.0) return 3.0f;
+        if (score10 >= 6.5) return 2.7f;
+        if (score10 >= 5.5) return 2.0f;
+        if (score10 >= 5.0) return 1.7f;
+        if (score10 >= 4.0) return 1.0f;
+        return 0.0f;
+    }
+    private String getClassification(int totalSoTC, float tbhp) {
+        // Ví dụ phân loại theo tổng tín chỉ và TBHP
+        if (tbhp >= 9.0 && totalSoTC >= 80) return "Xuất sắc";
+        else if (tbhp >= 8.0 && totalSoTC >= 70) return "Giỏi";
+        else if (tbhp >= 7.0 && totalSoTC >= 60) return "Khá";
+        else if (tbhp >= 5.0 && totalSoTC >= 50) return "Trung bình";
+        return "Yếu";
     }
     private void switchFragment(Fragment fragment) {
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
@@ -306,6 +343,7 @@ public class DetailFragment extends Fragment {
 //        fragmentTransaction.addToBackStack(null); // Thêm dòng này để fragment vào back stack
         fragmentTransaction.commit();
     }
+
 
 
 }

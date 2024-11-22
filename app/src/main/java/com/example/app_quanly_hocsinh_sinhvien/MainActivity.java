@@ -310,7 +310,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onTranscriptCalculated(float tbm, float tbhp, int position) {
+    public void onTranscriptCalculated(int soTC, float tbhp, int position) {
 
     }
 
