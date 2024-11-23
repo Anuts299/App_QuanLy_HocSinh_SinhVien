@@ -74,6 +74,7 @@ dependencies {
     implementation ("com.afollestad.material-dialogs:core:3.3.0")
     implementation("com.afollestad.material-dialogs:input:3.3.0")
 
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
 
 
