@@ -1,17 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.ChartFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:id="@+id/breadcrumbs"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Chart Fragment"
-        android:textSize="30dp"
-        android:layout_centerInParent="true"
-        android:textColor="@color/Cornflower_blue"/>
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="12dp"
+        android:gravity="center_vertical">
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/breadcrumb_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trang chủ"
+            android:textSize="16dp"
+            android:textColor="@color/Cornflower_blue"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" / "
+            android:textColor="@color/Cornflower_blue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thống kê"
+            android:textSize="16dp"
+            android:textColor="@color/Cornflower_blue" />
+    </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_table"
+                android:elevation="10dp">
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/chart_sd_fa"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
+            </androidx.cardview.widget.CardView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Số lượng sinh viên theo từng khoa"
+                android:textColor="@color/Bittersweet"
+                android:textStyle="bold"
+                android:textSize="15dp"
+                android:layout_marginBottom="20dp"
+                android:layout_gravity="center_horizontal"/>
+            <Spinner
+                android:id="@+id/spinner_year"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_box"
+                android:paddingStart="10dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:layout_marginBottom="5dp"
+                android:textAppearance="@style/SpinnerText"
+                android:spinnerMode="dropdown"/>
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_table"
+                android:elevation="10dp">
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/chart_sd_aca"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
+            </androidx.cardview.widget.CardView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Số lượng sinh viên nhập học theo từng tháng"
+                android:textColor="@color/Bittersweet"
+                android:textStyle="bold"
+                android:textSize="15dp"
+                android:layout_gravity="center_horizontal"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -189,9 +189,16 @@ public class StudentFragment extends Fragment {
                         break;
                     }
                 }
-                updateRecyclerView();
-                updateDisplayedItemCount();
+
+                // Kiểm tra trạng thái Fragment trước khi cập nhật giao diện
+                if (isAdded() && getActivity() != null) {
+                    updateRecyclerView();
+                    updateDisplayedItemCount();
+                } else {
+                    Log.w("StudentFragment", "Fragment not attached to an activity. Skipping UI updates.");
+                }
             }
+
 
             @Override
             public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -206,13 +213,13 @@ public class StudentFragment extends Fragment {
     }
 
     private void updateRecyclerView() {
-        requireActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mStudentAdapter.notifyDataSetChanged();
-            }
-        });
+        if (isAdded() && getActivity() != null) { // Kiểm tra Fragment vẫn gắn với Activity
+            requireActivity().runOnUiThread(() -> mStudentAdapter.notifyDataSetChanged());
+        } else {
+            Log.w("StudentFragment", "Cannot update RecyclerView: Fragment not attached to an activity.");
+        }
     }
+
 
     // Phương thức chuyển đổi giữa các fragment
     private void switchFragment(Fragment fragment) {
