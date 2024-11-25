@@ -55,7 +55,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class UpdateFragment extends Fragment {
 
     private EditText edt_code_student, edt_ud_name_student, edt_ud_locate_student, edt_ud_phonenumber_student, edt_ud_email_student;
-    private Spinner spinner_ud_gender, spinner_ud_name_class, spinner_ud_name_level;
+    private Spinner spinner_ud_gender, spinner_ud_name_class, spinner_ud_name_level, spinner_ud_program;
     private Button btn_upload_student;
     private DatabaseReference reference;
     private ImageView image_ud_student;
@@ -98,7 +98,20 @@ public class UpdateFragment extends Fragment {
             if (gender != null) {
                 int genderPosition = ((ArrayAdapter<String>) spinner_ud_gender.getAdapter()).getPosition(gender);
                 spinner_ud_gender.setSelection(genderPosition);
+            }else {
+                spinner_ud_gender.setSelection(0);
             }
+            String program = bundle.getString("he_dao_tao");
+            ArrayAdapter<String> adapter = (ArrayAdapter<String>) spinner_ud_program.getAdapter();
+
+            int programPosition = program != null ? adapter.getPosition(program) : 0; // 0: Vị trí đầu tiên
+
+            if (programPosition != -1) {
+                spinner_ud_program.setSelection(programPosition);
+            } else {
+                spinner_ud_program.setSelection(0); // Luôn chọn vị trí đầu tiên
+            }
+
             String className = bundle.getString("ma_lop");
             // Sử dụng `post` để trì hoãn việc thiết lập `classPosition` cho đến khi adapter đã được gán vào spinner
             view.post(() -> {
@@ -181,6 +194,7 @@ public class UpdateFragment extends Fragment {
         spinner_ud_gender = view.findViewById(R.id.spinner_ud_gender);
         spinner_ud_name_class = view.findViewById(R.id.spinner_ud_name_class);
         spinner_ud_name_level = view.findViewById(R.id.spinner_ud_name_level);
+        spinner_ud_program = view.findViewById(R.id.spinner_ud_program);
         btn_upload_student = view.findViewById(R.id.btn_upload_student);
         breadcrumb_home = view.findViewById(R.id.breadcrumb_home);
         breadcrumb_student = view.findViewById(R.id.breadcrumb_student);
@@ -197,6 +211,20 @@ public class UpdateFragment extends Fragment {
         // Thiết lập layout cho các item trong Spinner
         adapterGender.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_ud_gender.setAdapter(adapterGender);
+
+        String[] programs = {
+                "Chính quy",         // Formal Education/Regular Program
+                "Vừa học vừa làm",   // Part-Time Education
+                "Liên thông",        // Bridging Program
+                "Đào tạo từ xa",     // Distance Learning Program
+                "Tại chức",          // In-Service Training
+                "Cao học",           // Postgraduate Program
+                "Đào tạo nghề",      // Vocational Training
+                "Kỹ thuật viên"      // Technician Program
+        };
+        ArrayAdapter<String> adapterProgram = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_item, programs);
+        adapterProgram.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_ud_program.setAdapter(adapterProgram);
     }
     private void loadClassList(){
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("CLASSROOM");
@@ -269,7 +297,7 @@ public class UpdateFragment extends Fragment {
         String str_phone_student = edt_ud_phonenumber_student.getText().toString().trim();
         String str_email_student = edt_ud_email_student.getText().toString().trim();
         String str_gender_student = spinner_ud_gender.getSelectedItem().toString().trim();
-
+        String str_program = spinner_ud_program.getSelectedItem().toString().trim();
         // Kiểm tra số điện thoại
         if (!str_phone_student.matches("\\d{10}")) {
             showAlert("Lỗi dữ liệu nhập", "Hãy nhập đúng số điện thoại (10 chữ số)");
@@ -315,7 +343,7 @@ public class UpdateFragment extends Fragment {
         dialog.show();
 
         Student student = new Student(id, str_name_student, birthdateString, str_gender_student,
-                    str_locate_student, str_phone_student, str_email_student, admissiondateString, imageURL, id_name_class, id_name_level);
+                    str_locate_student, str_phone_student, str_email_student, admissiondateString, imageURL, id_name_class, id_name_level, str_program);
 
         reference.child(id).setValue(student).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -338,6 +366,7 @@ public class UpdateFragment extends Fragment {
                                 resultBundle.putString("ngay_nhap_hoc", admissiondateString);
                                 resultBundle.putString("trinh_do", str_name_level);
                                 resultBundle.putString("hinh_anh", imageURL);
+                                resultBundle.putString("he_dao_tao", str_program);
                                 resultBundle.putString("ma_sinh_vien", id);
                                 DetailFragment detailFragment = new DetailFragment();
                                 detailFragment.setArguments(resultBundle);

@@ -353,6 +353,33 @@
                         android:gravity="center"
                         android:padding="14dp" />
                 </TableRow>
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Hệ đào tạo"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/Cornflower_blue"
+                        android:gravity="center"
+                        android:padding="14dp" />
+
+                    <TextView
+                        android:id="@+id/tv_de_program"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="Hệ đào tạo"
+                        android:textSize="20sp"
+                        android:textStyle="normal"
+                        android:textColor="@color/Cornflower_blue"
+                        android:gravity="center"
+                        android:padding="14dp" />
+                </TableRow>
             </TableLayout>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyView_transcript"
@@ -486,6 +513,7 @@
             app:menu_icon="@drawable/baseline_format_list_bulleted_24"
             app:menu_openDirection="up"
             app:menu_showShadow="true">
+
 
             <com.github.clans.fab.FloatingActionButton
                 android:layout_width="wrap_content"

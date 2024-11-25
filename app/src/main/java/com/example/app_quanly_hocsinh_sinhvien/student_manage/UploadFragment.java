@@ -63,7 +63,7 @@ public class UploadFragment extends Fragment {
 
     private TextView breadcrumb_home, breadcrumb_student, tv_birthdate_student, tv_admissiondate_student;
     private EditText edt_code_student, edt_name_student, edt_locate_student, edt_phonenumber_student, edt_email_student;
-    private Spinner spinner_gender, spinner_name_class, spinner_name_level;
+    private Spinner spinner_gender, spinner_name_class, spinner_name_level, spinner_program;
     private Button btn_upload_student;
     private ImageView image_upload_student;
     private String imageURL;
@@ -162,6 +162,20 @@ public class UploadFragment extends Fragment {
         // Gán adapter cho Spinner
         spinner_gender.setAdapter(adapterGender);
 
+        spinner_program = view.findViewById(R.id.spinner_program);
+        String[] programs = {
+                "Chính quy",         // Formal Education/Regular Program
+                "Vừa học vừa làm",   // Part-Time Education
+                "Liên thông",        // Bridging Program
+                "Đào tạo từ xa",     // Distance Learning Program
+                "Tại chức",          // In-Service Training
+                "Cao học",           // Postgraduate Program
+                "Đào tạo nghề",      // Vocational Training
+                "Kỹ thuật viên"      // Technician Program
+        };
+        ArrayAdapter<String> adapterProgram = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_spinner_item, programs);
+        adapterProgram.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_program.setAdapter(adapterProgram);
         spinner_name_class = view.findViewById(R.id.spinner_name_class);
         spinner_name_level = view.findViewById(R.id.spinner_name_level);
         btn_upload_student = view.findViewById(R.id.btn_upload_student);
@@ -331,7 +345,7 @@ public class UploadFragment extends Fragment {
         String str_phone_student = edt_phonenumber_student.getText().toString().trim();
         String str_email_student = edt_email_student.getText().toString().trim();
         String str_gender_student = spinner_gender.getSelectedItem().toString().trim();
-
+        String str_program = spinner_program.getSelectedItem().toString().trim();
         // Sử dụng AtomicReference cho str_code_student
         AtomicReference<String> str_code_student = new AtomicReference<>("");
 
@@ -375,13 +389,13 @@ public class UploadFragment extends Fragment {
                     // Kiểm tra tất cả các trường bắt buộc
                     if (str_code_student.get().isEmpty() || str_name_student.isEmpty() || str_locate_student.isEmpty() ||
                             str_phone_student.isEmpty() || str_email_student.isEmpty() || str_gender_student.isEmpty() ||
-                            birthdateString.isEmpty() || admissiondateString.isEmpty() ||
+                            birthdateString.isEmpty() || admissiondateString.isEmpty() || str_program.isEmpty() ||
                             id_name_class == null || id_name_level == null || id_name_level.isEmpty()) {
 
                         showAlert("Thiếu thông tin", "Vui lòng điền đầy đủ thông tin.");
                     } else {
                         Student student = new Student(str_code_student.get(), str_name_student, birthdateString, str_gender_student,
-                                str_locate_student, str_phone_student, str_email_student, admissiondateString, imageURL, id_name_class, id_name_level);
+                                str_locate_student, str_phone_student, str_email_student, admissiondateString, imageURL, id_name_class, id_name_level, str_program);
                         saveDataStudent(student);
                     }
                 } else {
