@@ -15,6 +15,7 @@ public class Student {
     private String hinh_anh;
     private String id_lop;
     private String id_trinh_do;
+    private String he_dao_tao;
 
     // Constructor không tham số
     public Student() {
@@ -23,7 +24,7 @@ public class Student {
     // Constructor đầy đủ
     public Student(String id, String ten_sinh_vien, String ngay_sinh, String gioi_tinh, String dia_chi,
                    String so_dien_thoai, String email, String ngay_nhap_hoc, String hinh_anh,
-                   String id_lop, String id_trinh_do) {
+                   String id_lop, String id_trinh_do, String he_dao_tao) {
         this.id = id;
         this.ten_sinh_vien = ten_sinh_vien;
         this.ngay_sinh = ngay_sinh;  // Lưu ngày sinh dưới dạng String
@@ -35,6 +36,15 @@ public class Student {
         this.hinh_anh = hinh_anh;
         this.id_lop = id_lop;
         this.id_trinh_do = id_trinh_do;
+        this.he_dao_tao = he_dao_tao;
+    }
+
+    public String getHe_dao_tao() {
+        return he_dao_tao;
+    }
+
+    public void setHe_dao_tao(String he_dao_tao) {
+        this.he_dao_tao = he_dao_tao;
     }
 
     // Getters và Setters
@@ -141,6 +151,7 @@ public class Student {
         result.put("hinh_anh", hinh_anh);
         result.put("id_lop", id_lop);
         result.put("id_trinh_do", id_trinh_do);
+        result.put("he_dao_tao", he_dao_tao);
         return result;
     }
 
@@ -158,6 +169,7 @@ public class Student {
                 ", hinh_anh='" + hinh_anh + '\'' +
                 ", id_lop='" + id_lop + '\'' +
                 ", id_trinh_do='" + id_trinh_do + '\'' +
+                ", he_dao_tao='" + he_dao_tao + '\'' +
                 '}';
     }
 }

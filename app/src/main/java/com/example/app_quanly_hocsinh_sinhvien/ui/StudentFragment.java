@@ -344,6 +344,7 @@ public class StudentFragment extends Fragment {
         bundle.putString("ngay_nhap_hoc", student.getNgay_nhap_hoc());
         bundle.putString("trinh_do", idToNameLevelMap.get(student.getId_trinh_do()));
         bundle.putString("hinh_anh", student.getHinh_anh());
+        bundle.putString("he_dao_tao", student.getHe_dao_tao());
         bundle.putString("id", student.getId());
         detailFragment.setArguments(bundle);
 

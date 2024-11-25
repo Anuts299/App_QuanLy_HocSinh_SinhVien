@@ -1,5 +1,10 @@
 package com.example.app_quanly_hocsinh_sinhvien.student_manage;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
+import android.app.DownloadManager;
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,6 +16,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +41,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,7 +59,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class DetailFragment extends Fragment implements FragmentActionListener {
 
-    TextView breadcrumb_home, breadcrumb_student, tv_de_name_student, tv_de_code_student, tv_de_code_class, tv_de_birthday, tv_de_gender_student,
+    TextView breadcrumb_home, breadcrumb_student, tv_de_name_student, tv_de_code_student, tv_de_code_class, tv_de_birthday, tv_de_gender_student, tv_de_program,
             tv_de_locate_student, tv_de_phonenumber_student, tv_de_email_student, tv_de_admissiondate_student, tv_de_name_level, tv_sum_credit, tv_sum_avg_10, tv_sum_avg_4, tv_classification;
     ImageView image_de_student;
     FloatingActionButton editButtonStudent, deleteButtonStudent;
@@ -101,6 +115,7 @@ public class DetailFragment extends Fragment implements FragmentActionListener {
             tv_de_email_student.setText(bundle.getString("email"));
             tv_de_admissiondate_student.setText(bundle.getString("ngay_nhap_hoc"));
             tv_de_name_level.setText(bundle.getString("trinh_do"));
+            tv_de_program.setText(bundle.getString("he_dao_tao"));
             hinh_anh = bundle.getString("hinh_anh");
             Glide.with(getActivity()).load(bundle.getString("hinh_anh")).into(image_de_student);
             id = bundle.getString("id");
@@ -134,6 +149,7 @@ public class DetailFragment extends Fragment implements FragmentActionListener {
         tv_sum_avg_10 = view.findViewById(R.id.tv_sum_avg_10);
         tv_sum_avg_4 = view.findViewById(R.id.tv_sum_avg_4);
         tv_classification = view.findViewById(R.id.tv_classification);
+        tv_de_program = view.findViewById(R.id.tv_de_program);
         editButtonStudent = view.findViewById(R.id.editButtonStudent);
         deleteButtonStudent = view.findViewById(R.id.deleteButtonStudent);
         image_de_student = view.findViewById(R.id.image_de_student);
@@ -213,6 +229,7 @@ public class DetailFragment extends Fragment implements FragmentActionListener {
                 String email = tv_de_email_student.getText().toString().trim();
                 String ngayNhapHoc = tv_de_admissiondate_student.getText().toString().trim();
                 String trinhDo = tv_de_name_level.getText().toString().trim();
+                String heDaoTao = tv_de_program.getText().toString().trim();
 
                 bundle.putString("ten_sinh_vien", tenSV);
                 bundle.putString("ma_sinh_vien", maSV);
@@ -225,6 +242,7 @@ public class DetailFragment extends Fragment implements FragmentActionListener {
                 bundle.putString("ngay_nhap_hoc", ngayNhapHoc);
                 bundle.putString("trinh_do", trinhDo);
                 bundle.putString("hinh_anh", hinh_anh);
+                bundle.putString("he_dao_tao", heDaoTao);
                 bundle.putString("id", id);
 
                 UpdateFragment updateFragment = new UpdateFragment();
@@ -335,6 +353,47 @@ public class DetailFragment extends Fragment implements FragmentActionListener {
         else if (tbhp >= 7.0 && totalSoTC >= 60) return "Khá";
         else if (tbhp >= 5.0 && totalSoTC >= 50) return "Trung bình";
         return "Yếu";
+    }
+    private File createExcelFile() throws IOException {
+        // Tạo workbook và sheet
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Danh Sách Sinh Viên");
+
+        // Tạo dòng và các ô
+        Row headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("STT");
+        headerRow.createCell(1).setCellValue("Họ Tên");
+        headerRow.createCell(2).setCellValue("Lớp");
+
+        // Thêm dữ liệu mẫu
+        Row dataRow = sheet.createRow(1);
+        dataRow.createCell(0).setCellValue("1");
+        dataRow.createCell(1).setCellValue("Nguyen Van A");
+        dataRow.createCell(2).setCellValue("10A1");
+
+        // Lưu file vào bộ nhớ
+        File fileDirectory = requireContext().getExternalFilesDir(null);
+        if (fileDirectory == null) {
+            throw new IOException("Không thể truy cập thư mục bộ nhớ.");
+        }
+        File file = new File(fileDirectory, "DanhSachSinhVien.xlsx");
+        FileOutputStream outputStream = new FileOutputStream(file);
+        workbook.write(outputStream);
+        outputStream.close();
+        workbook.close();
+
+        return file;
+    }
+
+    private void downloadFile(File file) {
+        DownloadManager downloadManager = (DownloadManager) requireContext().getSystemService(Context.DOWNLOAD_SERVICE);
+        if (downloadManager != null) {
+            Uri fileUri = Uri.fromFile(file);
+            DownloadManager.Request request = new DownloadManager.Request(fileUri);
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, file.getName());
+            downloadManager.enqueue(request);
+        }
     }
     private void switchFragment(Fragment fragment) {
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();

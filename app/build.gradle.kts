@@ -74,7 +74,12 @@ dependencies {
     implementation ("com.afollestad.material-dialogs:core:3.3.0")
     implementation("com.afollestad.material-dialogs:input:3.3.0")
 
+    //Biểu đồ
     implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+    //File Exel
+    implementation ("org.apache.poi:poi-ooxml:5.2.3")
+
 
 
 
