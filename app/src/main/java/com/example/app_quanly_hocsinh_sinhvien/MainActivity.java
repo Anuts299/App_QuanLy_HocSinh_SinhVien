@@ -83,25 +83,34 @@ public class MainActivity extends AppCompatActivity
 
     final private ActivityResultLauncher<Intent> mActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-        @Override
-        public void onActivityResult(ActivityResult o) {
-            if(o.getResultCode() == RESULT_OK){
-                Intent intent = o.getData();
-                if(intent == null){
-                    return;
-                }
-                Uri uri = intent.getData();
-                mUserFragment.setUri(uri);
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),uri);
-                    mUserFragment.setBitmapImageView(bitmap);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == RESULT_OK) {
+                        Intent intent = result.getData();
+                        if (intent == null) {
+                            return;
+                        }
+                        Uri uri = intent.getData();
+                        // Gán trực tiếp URI cho biến mUri của UserFragment
+                        mUserFragment.mUri = uri;
 
-            }
-        }
-    });
+                        try {
+                            // Load ảnh vào img_avatar trong UserFragment
+                            Glide.with(mUserFragment)
+                                    .load(uri)
+                                    .into(mUserFragment.img_avatar); // Truy cập trực tiếp img_avatar
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            new SweetAlertDialog(MainActivity.this, SweetAlertDialog.ERROR_TYPE)
+                                    .setTitleText("Lỗi")
+                                    .setContentText("Không thể tải ảnh")
+                                    .setConfirmText("OK")
+                                    .show();
+                        }
+                    }
+                }
+            });
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -253,37 +262,15 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == MY_REQUEST_CODES){
-            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                openGallery();
+        if (requestCode == MY_REQUEST_CODES) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Quyền đã được cấp!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Quyền bị từ chối.", Toast.LENGTH_SHORT).show();
             }
-//            else if (!ActivityCompat.shouldShowRequestPermissionRationale(this, permissions[0]))
-//            {
-//                // Quyền đã bị từ chối vĩnh viễn (người dùng chọn "Don't ask again")
-//                new AlertDialog.Builder(this)
-//                        .setMessage("Bạn cần cấp quyền trong phần cài đặt")
-//                        .setPositiveButton("Đi đến cài đặt", (dialog, which) -> {
-//                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-//                                    Uri.fromParts("package", getPackageName(), null));
-//                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                            startActivity(intent);
-//                        })
-//                        .setNegativeButton("Cancel", null)
-//                        .show();
-//            }else {
-//                Log.d("PermissionResult", "grantResults: " + Arrays.toString(grantResults));
-//                new SweetAlertDialog(this, SweetAlertDialog.NORMAL_TYPE)
-//                        .setTitleText("Truy cập thất bại")
-//                        .setContentText("Vui lòng cho phép truy cập")
-//                        .setConfirmText("OK")
-//                        .setConfirmClickListener(sDialog -> {
-//                            sDialog.dismissWithAnimation();
-//
-//                        })
-//                        .show();
-//            }
         }
     }
+
 
     public void openGallery(){
         Intent intent = new Intent();
