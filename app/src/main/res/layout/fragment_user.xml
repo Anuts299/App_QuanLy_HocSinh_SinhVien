@@ -26,10 +26,10 @@
                 android:layout_height="100dp"
                 android:src="@drawable/ic_account_def"
                 android:layout_marginRight="17dp"
-                android:layout_marginTop="20dp"/>
+                android:layout_marginTop="0dp"/>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
                 <EditText
                     android:id="@+id/edt_full_name"
@@ -41,13 +41,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Email"/>
+
                 <EditText
                     android:id="@+id/edt_name_role"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:hint="Role"/>
+                    android:hint="Role"
+                    android:visibility="gone" />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
