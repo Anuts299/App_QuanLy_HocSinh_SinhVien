@@ -27,7 +27,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:layout_width="60dp"
+                android:layout_width="55dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:scaleType="fitCenter"
@@ -41,7 +41,8 @@
                 android:fontFamily="@font/roboto_bold"
                 android:text="Lớp học"
                 android:textColor="@color/Cornflower_blue"
-                android:textSize="18sp"
+                android:textSize="16sp"
+                android:layout_marginTop="-5dp"
                 android:translationY="65dp" />
         </FrameLayout>
 
@@ -65,7 +66,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:layout_width="60dp"
+                android:layout_width="55dp"
                 android:layout_height="wrap_content"
                 android:src="@drawable/students_2995459"
                 android:scaleType="fitCenter"
@@ -79,7 +80,8 @@
                 android:text="Sinh viên"
                 android:translationY="65dp"
                 android:textColor="@color/Cornflower_blue"
-                android:textSize="18sp"
+                android:textSize="16sp"
+                android:layout_marginTop="-5dp"
                 android:fontFamily="@font/roboto_bold"/>
         </FrameLayout>
 
@@ -103,7 +105,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:layout_width="60dp"
+                android:layout_width="55dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:scaleType="fitCenter"
@@ -117,7 +119,8 @@
                 android:fontFamily="@font/roboto_bold"
                 android:text="Môn học"
                 android:textColor="@color/Cornflower_blue"
-                android:textSize="18sp"
+                android:textSize="16sp"
+                android:layout_marginTop="-5dp"
                 android:translationY="65dp" />
         </FrameLayout>
 
@@ -132,14 +135,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:0.8"
         app:layout_constraintEnd_toEndOf="@+id/class_card"
-        app:layout_constraintStart_toStartOf="@+id/class_card">
+        app:layout_constraintStart_toStartOf="@+id/class_card"
+        android:layout_marginBottom="20dp">
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <ImageView
-                android:layout_width="60dp"
+                android:layout_width="55dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:scaleType="fitCenter"
@@ -153,8 +157,8 @@
                 android:fontFamily="@font/roboto_bold"
                 android:text="Khoa"
                 android:textColor="@color/Cornflower_blue"
-                android:textSize="18sp"
-
+                android:textSize="16sp"
+                android:layout_marginTop="-5dp"
                 android:translationY="65dp" />
         </FrameLayout>
 
@@ -169,14 +173,15 @@
         app:layout_constraintDimensionRatio="1:0.8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@id/student_card"
-        app:layout_constraintEnd_toEndOf="@id/student_card">
+        app:layout_constraintEnd_toEndOf="@id/student_card"
+        android:layout_marginBottom="20dp">
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <ImageView
-                android:layout_width="60dp"
+                android:layout_width="55dp"
                 android:layout_height="wrap_content"
                 android:src="@drawable/report_card_2893763"
                 android:scaleType="fitCenter"
@@ -190,8 +195,8 @@
                 android:text="Chấm điểm"
                 android:translationY="65dp"
                 android:textColor="@color/Cornflower_blue"
-                android:textSize="18dp"
-                android:layout_marginTop="5dp"
+                android:textSize="16dp"
+                android:layout_marginTop="-5dp"
                 android:fontFamily="@font/roboto_bold"/>
         </FrameLayout>
 
@@ -206,14 +211,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:0.8"
         app:layout_constraintEnd_toEndOf="@+id/subject_card"
-        app:layout_constraintStart_toStartOf="@id/subject_card">
+        app:layout_constraintStart_toStartOf="@id/subject_card"
+        android:layout_marginBottom="20dp">
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <ImageView
-                android:layout_width="60dp"
+                android:layout_width="55dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:scaleType="fitCenter"
@@ -227,7 +233,8 @@
                 android:fontFamily="@font/roboto_bold"
                 android:text="Giảng viên"
                 android:textColor="@color/Cornflower_blue"
-                android:textSize="18dp"
+                android:textSize="16sp"
+                android:layout_marginTop="-5dp"
                 android:translationY="65dp" />
         </FrameLayout>
 
