@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     tools:context=".student_manage.DetailFragment">
     <LinearLayout
         android:orientation="horizontal"
@@ -52,12 +53,13 @@
     </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp">
+        android:layout_height="wrap_content">
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:spacing="8dp"
+            android:paddingTop="10dp">
 
             <TableLayout
                 android:layout_width="match_parent"
@@ -82,7 +84,7 @@
                         android:layout_height="130dp"
                         android:src="@drawable/students_2995459"
                         android:id="@+id/image_de_student"
-                        android:layout_marginStart="140dp"/>
+                        android:layout_marginStart="120dp"/>
 
                 </TableRow>
 
@@ -536,4 +538,4 @@
         </com.github.clans.fab.FloatingActionMenu>
 
     </RelativeLayout>
-</FrameLayout>
+</LinearLayout>

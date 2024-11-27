@@ -325,52 +325,58 @@ public class GradestypeFragment extends Fragment {
     }
 
     private void onClickDeleteData(Gradestype gradestype){
-        // Hiển thị SweetAlertDialog xác nhận xóa
-        new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE)
-                .setTitleText("Xác nhận xóa")
-                .setContentText("Bạn có chắc chắn muốn xóa loại điểm này không?")
-                .setConfirmText("Xóa")
-                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sDialog) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-                        builder.setCancelable(false);
-                        builder.setView(R.layout.progress_layout);
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
-                        // Xác nhận xóa - thực hiện xóa trong Firebase
-                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("GRADESTYPE");
-                        reference.child(gradestype.getId()) // Thay "id_classroom" bằng ID lớp học bạn muốn xóa
-                                .removeValue()
-                                .addOnCompleteListener(task -> {
-                                    dialog.dismiss();
-                                    if (task.isSuccessful()) {
-                                        sDialog
-                                                .setTitleText("Đã xóa!")
-                                                .setContentText("Loại điểm đã được xóa.")
-                                                .setConfirmText("OK")
-                                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                                    @Override
-                                                    public void onClick(SweetAlertDialog sDialog) {
-                                                        sDialog.dismiss();
-                                                    }
-                                                })
-                                                .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
-
-
-                                    } else {
-                                        sDialog
-                                                .setTitleText("Lỗi!")
-                                                .setContentText("Không thể xóa loại điểm.")
-                                                .setConfirmText("OK")
-                                                .setConfirmClickListener(SweetAlertDialog::dismissWithAnimation)
-                                                .changeAlertType(SweetAlertDialog.ERROR_TYPE);
-                                    }
-                                });
-                    }
-                })
-                .setCancelButton("Hủy", SweetAlertDialog::dismiss)
+        new SweetAlertDialog(requireActivity(), SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("Không thể xóa điểm")
+                .setContentText("Loại điểm này không thể xóa")
+                .setConfirmText("OK")
+                .setConfirmClickListener(SweetAlertDialog::dismissWithAnimation)
                 .show();
+//        // Hiển thị SweetAlertDialog xác nhận xóa
+//        new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE)
+//                .setTitleText("Xác nhận xóa")
+//                .setContentText("Bạn có chắc chắn muốn xóa loại điểm này không?")
+//                .setConfirmText("Xóa")
+//                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+//                    @Override
+//                    public void onClick(SweetAlertDialog sDialog) {
+//                        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+//                        builder.setCancelable(false);
+//                        builder.setView(R.layout.progress_layout);
+//                        AlertDialog dialog = builder.create();
+//                        dialog.show();
+//                        // Xác nhận xóa - thực hiện xóa trong Firebase
+//                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("GRADESTYPE");
+//                        reference.child(gradestype.getId()) // Thay "id_classroom" bằng ID lớp học bạn muốn xóa
+//                                .removeValue()
+//                                .addOnCompleteListener(task -> {
+//                                    dialog.dismiss();
+//                                    if (task.isSuccessful()) {
+//                                        sDialog
+//                                                .setTitleText("Đã xóa!")
+//                                                .setContentText("Loại điểm đã được xóa.")
+//                                                .setConfirmText("OK")
+//                                                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+//                                                    @Override
+//                                                    public void onClick(SweetAlertDialog sDialog) {
+//                                                        sDialog.dismiss();
+//                                                    }
+//                                                })
+//                                                .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+//
+//
+//                                    } else {
+//                                        sDialog
+//                                                .setTitleText("Lỗi!")
+//                                                .setContentText("Không thể xóa loại điểm.")
+//                                                .setConfirmText("OK")
+//                                                .setConfirmClickListener(SweetAlertDialog::dismissWithAnimation)
+//                                                .changeAlertType(SweetAlertDialog.ERROR_TYPE);
+//                                    }
+//                                });
+//                    }
+//                })
+//                .setCancelButton("Hủy", SweetAlertDialog::dismiss)
+//                .show();
     }
     private void initUi(View view){
         fab_gradestype = view.findViewById(R.id.fab_gradestype);

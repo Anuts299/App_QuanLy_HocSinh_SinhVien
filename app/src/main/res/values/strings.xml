@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Quản lý Học sinh - Sinh viên</string>
+    <string name="app_name">Studify</string>
     <string name="open_nav">Open Quản lý sinh viên</string>
     <string name="close_nav">Close Quản lý sinh viên</string>
     <!-- TODO: Remove or change this placeholder text -->
