@@ -273,7 +273,7 @@ public class MainActivity extends AppCompatActivity
                             tv_name.setVisibility(View.GONE);
                         }else{
                             tv_name.setVisibility(View.VISIBLE);
-                            tv_name.setText(name_user);
+                            tv_name.setText(name_user+"");
                         }
                     }
                 });
