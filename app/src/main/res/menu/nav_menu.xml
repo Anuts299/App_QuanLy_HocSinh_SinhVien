@@ -27,6 +27,10 @@
             android:id="@+id/nav_level"
             android:icon="@drawable/baseline_settings_24"
             android:title="Cài đặt trình độ"/>
+        <item
+            android:id="@+id/nav_user_role"
+            android:icon="@drawable/baseline_supervisor_account_24"
+            android:title="Quản trị tài khoản"/>
 
         <!-- Tiêu đề chú thích cho nhóm Tài khoản -->
         <item

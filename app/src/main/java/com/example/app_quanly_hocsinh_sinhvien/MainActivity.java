@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -47,9 +48,11 @@ import com.example.app_quanly_hocsinh_sinhvien.ui.InfoFragment;
 import com.example.app_quanly_hocsinh_sinhvien.ui.LevelFragment;
 import com.example.app_quanly_hocsinh_sinhvien.ui.MajorFragment;
 import com.example.app_quanly_hocsinh_sinhvien.ui.UserFragment;
+import com.example.app_quanly_hocsinh_sinhvien.ui.UserRoleFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -59,9 +62,9 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, FragmentActionListener {
     public static final int MY_REQUEST_CODES =10;
-    public static String role_admin = "Quản trị viên hệ thống",
+    public static String role_admin = "Quản trị viên",
             role_lecturer = "Giảng viên bộ môn",
-            role_student = "Sinh viên",
+            role_student = "Giảng viên",
             role_departmentManager = "Quản lý khoa";
     private static final int FRAGMENT_HOME = 0;
     private static final int FRAGMENT_CHART = 1;
@@ -71,6 +74,7 @@ public class MainActivity extends AppCompatActivity
     private static final int FRAGMENT_INFO = 5;
     private static final int FRAGMENT_CHANGE_PASSWORD = 6;
     private static final int FRAGMENT_MAJOR = 7;
+    private static final int FRAGMENT_USER_ROLE = 8;
 
     public int mCurrentFragment = FRAGMENT_HOME;
 
@@ -122,6 +126,7 @@ public class MainActivity extends AppCompatActivity
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        String userRole = getSharedPreferences("USER_PREFS", MODE_PRIVATE).getString("userRole", "");
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         initUi();
@@ -133,6 +138,14 @@ public class MainActivity extends AppCompatActivity
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout,toolbar,R.string.open_nav,R.string.close_nav);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+
+        // Ẩn các mục menu nếu vai trò là role_student
+        if (userRole.equals(role_student)) {
+            Menu menu = mNavigationView.getMenu();
+            menu.findItem(R.id.nav_level).setVisible(false);
+            menu.findItem(R.id.nav_user_role).setVisible(false);
+            menu.findItem(R.id.nav_gradestype).setVisible(false);
+        }
 
         replaceFragment(new HomeFragment());
         mNavigationView.getMenu().findItem(R.id.nav_home).setChecked(true);
@@ -195,6 +208,11 @@ public class MainActivity extends AppCompatActivity
                 replaceFragment(new LevelFragment());
                 mCurrentFragment = FRAGMENT_LEVEL;
             }
+        }else if(id == R.id.nav_user_role){
+            if(mCurrentFragment != FRAGMENT_USER_ROLE){
+                replaceFragment(new UserRoleFragment());
+                mCurrentFragment = FRAGMENT_USER_ROLE;
+            }
         } else if (id == R.id.nav_logout) {
             new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                     .setTitleText("Đăng xuất tài khoản")
@@ -238,20 +256,27 @@ public class MainActivity extends AppCompatActivity
     }
     public void showUserInformation(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         if(user == null){
             return;
         }
-        String name = user.getDisplayName();
         String email = user.getEmail();
         Uri photoUrl = user.getPhotoUrl();
-        if(name == null){
-            tv_name.setVisibility(View.GONE);
-        }else{
-            tv_name.setVisibility(View.VISIBLE);
-            tv_name.setText(name);
-        }
         tv_email.setText(email);
         Glide.with(this).load(photoUrl).error(R.drawable.ic_account_def).into(img_avatar);
+        db.collection("users").document(user.getUid())
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String name_user = documentSnapshot.getString("name");
+                        if(name_user == null){
+                            tv_name.setVisibility(View.GONE);
+                        }else{
+                            tv_name.setVisibility(View.VISIBLE);
+                            tv_name.setText(name_user);
+                        }
+                    }
+                });
     }
     private void replaceFragment(Fragment fragment){
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

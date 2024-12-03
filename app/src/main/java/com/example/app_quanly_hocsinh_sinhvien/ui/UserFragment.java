@@ -32,6 +32,7 @@ import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -71,9 +72,27 @@ public class UserFragment extends Fragment {
         if (user == null) {
             return;
         }
-        edt_full_name.setText(user.getDisplayName());
         edt_email.setText(user.getEmail());
+
         Glide.with(getActivity()).load(user.getPhotoUrl()).error(R.drawable.ic_account_def).into(img_avatar);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users").document(user.getUid())
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String role = documentSnapshot.getString("role");
+                        String name_user = documentSnapshot.getString("name");
+                        edt_name_role.setText(role != null ? role : "Unknown");
+                        edt_full_name.setText(name_user != null ? name_user : "Unknown");
+                    } else {
+                        edt_name_role.setText("Unknown");
+                        edt_full_name.setText("Unknown");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    edt_name_role.setText("Error loading role");
+                    Log.e("setUserInformation", "Error fetching user role", e);
+                });
     }
 
     private void registerGalleryLauncher() {
@@ -173,6 +192,18 @@ public class UserFragment extends Fragment {
                         mMainActivity.showUserInformation();
                     }
                 });
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = user.getUid();
+
+        db.collection("users").document(userId)
+                .update("name", str_full_name)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("FirestoreUpdate", "Tên người dùng đã được cập nhật trong Firestore.");
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("FirestoreError", "Không thể cập nhật tên trong Firestore: ", e);
+                });
+
     }
 
     private void onClickUpdateEmail() {

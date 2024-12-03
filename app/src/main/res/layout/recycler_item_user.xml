@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/recCardUser"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginVertical="10dp"
+    android:layout_marginBottom="5dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="8dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/recImageUser"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginStart="25dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/user_9073143" />
+        <TextView
+            android:id="@+id/tv_user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tên người dùng"
+            android:textColor="@color/Cornflower_blue"
+            android:textStyle="bold"
+            android:textSize="20dp"
+            android:layout_toEndOf="@+id/recImageUser"
+            android:layout_marginTop="10dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:singleLine="true"
+            />
+        <TextView
+            android:id="@+id/tv_user_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Email"
+            android:textColor="@color/Cornflower_blue"
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="20dp"
+            android:layout_toEndOf="@+id/recImageUser"
+            android:layout_marginTop="40dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:singleLine="true"
+            />
+        <TextView
+            android:id="@+id/tv_user_role"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Vai trò"
+            android:textColor="@color/Cornflower_blue"
+            android:fontFamily="@font/roboto_regular"
+            android:textSize="20dp"
+            android:layout_toEndOf="@+id/recImageUser"
+            android:layout_marginTop="70dp"
+            android:layout_marginBottom="10dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:singleLine="true"
+            />
+    </RelativeLayout>
+
+
+</androidx.cardview.widget.CardView>

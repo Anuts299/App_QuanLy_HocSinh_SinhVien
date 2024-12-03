@@ -65,7 +65,6 @@ public class DetailFragment extends Fragment implements FragmentActionListener {
     FloatingActionButton editButtonStudent, deleteButtonStudent;
     String id = "",ma_lop, hinh_anh;
     private RecyclerView recyView_transcript;
-    private Map<String, Gradestype> gradestypeMap = new HashMap<>();
     private TranscrpitAdapter mtranscrpitAdapter;
     private List<InputScore> mTranscriptList;
 

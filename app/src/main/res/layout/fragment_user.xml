@@ -26,7 +26,7 @@
                 android:layout_height="100dp"
                 android:src="@drawable/ic_account_def"
                 android:layout_marginRight="17dp"
-                android:layout_marginTop="0dp"/>
+                android:layout_marginTop="20dp"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -48,8 +48,7 @@
                     android:layout_height="wrap_content"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:hint="Role"
-                    android:visibility="gone" />
+                    android:hint="Role" />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

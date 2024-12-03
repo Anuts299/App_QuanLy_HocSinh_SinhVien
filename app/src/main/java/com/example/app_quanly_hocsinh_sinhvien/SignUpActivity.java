@@ -153,6 +153,7 @@ public class SignUpActivity extends AppCompatActivity {
                             Map<String, Object> user = new HashMap<>();
                             user.put("email", str_email);
                             user.put("role", role_student);
+                            user.put("name","");
 
                             db.collection("users").document(userId)
                                     .set(user)
@@ -160,7 +161,7 @@ public class SignUpActivity extends AppCompatActivity {
                                         if(task1.isSuccessful()){
                                             new SweetAlertDialog(SignUpActivity.this, SweetAlertDialog.SUCCESS_TYPE)
                                                     .setTitleText("Đăng kí thành công")
-                                                    .setContentText("Tài khoản sinh viên đã được tạo.")
+                                                    .setContentText("Tài khoản giảng viên đã được tạo.")
                                                     .setConfirmText("OK")
                                                     .setConfirmClickListener(sDialog -> {
                                                         sDialog.dismissWithAnimation();
