@@ -1,5 +1,7 @@
 package com.example.app_quanly_hocsinh_sinhvien.ui;
 
+import static com.example.app_quanly_hocsinh_sinhvien.MainActivity.userRole;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -42,6 +44,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 
 public class SubjectFragment extends Fragment {
@@ -95,7 +99,18 @@ public class SubjectFragment extends Fragment {
         fab_subject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switchFragment(new UploadFragment());
+                if(userRole.equals("Quản trị viên")) {
+                    switchFragment(new UploadFragment());
+                } else{
+                    new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE)
+                            .setTitleText("Bạn không đủ quyền để sử dụng chức năng này")
+                            .setConfirmText("OK")
+                            .setConfirmClickListener(Dialog -> {
+                                Dialog.dismissWithAnimation();
+                            })
+                            .show();
+                }
+
             }
         });
         breadcrumb_home.setOnClickListener(new View.OnClickListener() {

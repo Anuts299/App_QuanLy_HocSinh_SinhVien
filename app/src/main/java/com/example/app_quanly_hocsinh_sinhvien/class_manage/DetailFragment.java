@@ -2,6 +2,8 @@ package com.example.app_quanly_hocsinh_sinhvien.class_manage;
 
 import static android.content.Intent.getIntent;
 
+import static com.example.app_quanly_hocsinh_sinhvien.MainActivity.userRole;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -101,85 +103,92 @@ public class DetailFragment extends Fragment {
         deleteButtonClass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Hiển thị SweetAlertDialog xác nhận xóa
-                new SweetAlertDialog(v.getContext(), SweetAlertDialog.WARNING_TYPE)
-                        .setTitleText("Xác nhận xóa")
-                        .setContentText("Bạn có chắc chắn muốn xóa lớp học này không?")
-                        .setConfirmText("Xóa")
-                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sDialog) {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-                                builder.setCancelable(false);
-                                builder.setView(R.layout.progress_layout);
-                                AlertDialog dialog = builder.create();
-                                dialog.show();
-                                // Xác nhận xóa - thực hiện xóa trong Firebase
-                                DatabaseReference reference = FirebaseDatabase.getInstance().getReference("CLASSROOM");
-                                reference.child(id) // Thay "id_classroom" bằng ID lớp học bạn muốn xóa
-                                        .removeValue()
-                                        .addOnCompleteListener(task -> {
-                                            dialog.dismiss();
-                                            if (task.isSuccessful()) {
-                                                sDialog
-                                                        .setTitleText("Đã xóa!")
-                                                        .setContentText("Lớp học đã được xóa.")
-                                                        .setConfirmText("OK")
-                                                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                                            @Override
-                                                            public void onClick(SweetAlertDialog sDialog) {
-                                                                sDialog.dismiss();
+                if(userRole.equals("Quản trị viên")){
+                    // Hiển thị SweetAlertDialog xác nhận xóa
+                    new SweetAlertDialog(v.getContext(), SweetAlertDialog.WARNING_TYPE)
+                            .setTitleText("Xác nhận xóa")
+                            .setContentText("Bạn có chắc chắn muốn xóa lớp học này không?")
+                            .setConfirmText("Xóa")
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sDialog) {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+                                    builder.setCancelable(false);
+                                    builder.setView(R.layout.progress_layout);
+                                    AlertDialog dialog = builder.create();
+                                    dialog.show();
+                                    // Xác nhận xóa - thực hiện xóa trong Firebase
+                                    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("CLASSROOM");
+                                    reference.child(id) // Thay "id_classroom" bằng ID lớp học bạn muốn xóa
+                                            .removeValue()
+                                            .addOnCompleteListener(task -> {
+                                                dialog.dismiss();
+                                                if (task.isSuccessful()) {
+                                                    sDialog
+                                                            .setTitleText("Đã xóa!")
+                                                            .setContentText("Lớp học đã được xóa.")
+                                                            .setConfirmText("OK")
+                                                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                                                @Override
+                                                                public void onClick(SweetAlertDialog sDialog) {
+                                                                    sDialog.dismiss();
 
-                                                                switchFragment(new ClassFragment());
-                                                            }
-                                                        })
-                                                        .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
+                                                                    switchFragment(new ClassFragment());
+                                                                }
+                                                            })
+                                                            .changeAlertType(SweetAlertDialog.SUCCESS_TYPE);
 
 
-                                            } else {
-                                                sDialog
-                                                        .setTitleText("Lỗi!")
-                                                        .setContentText("Không thể xóa lớp học.")
-                                                        .setConfirmText("OK")
-                                                        .setConfirmClickListener(SweetAlertDialog::dismissWithAnimation)
-                                                        .changeAlertType(SweetAlertDialog.ERROR_TYPE);
-                                            }
-                                        });
-                            }
-                        })
-                        .setCancelButton("Hủy", SweetAlertDialog::dismiss)
-                        .show();
+                                                } else {
+                                                    sDialog
+                                                            .setTitleText("Lỗi!")
+                                                            .setContentText("Không thể xóa lớp học.")
+                                                            .setConfirmText("OK")
+                                                            .setConfirmClickListener(SweetAlertDialog::dismissWithAnimation)
+                                                            .changeAlertType(SweetAlertDialog.ERROR_TYPE);
+                                                }
+                                            });
+                                }
+                            })
+                            .setCancelButton("Hủy", SweetAlertDialog::dismiss)
+                            .show();
+                }else{
+                    showAccessDeniedAlert();
+                }
             }
         });
         editButtonClass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(userRole.equals("Quản trị viên")){
+                    Bundle bundle = new Bundle();
+                    String maLop = tv_de_name_class.getText().toString().trim();
+                    String tenLop = tv_de_name_class2.getText().toString().trim();
+                    String tenKhoa = tv_de_name_faculties.getText().toString().trim();
+                    String tenCoVan = tv_de_name_lecturer.getText().toString().trim();
+                    String namHoc = tv_de_academic_year.getText().toString().trim();
 
-                Bundle bundle = new Bundle();
-                String maLop = tv_de_name_class.getText().toString().trim();
-                String tenLop = tv_de_name_class2.getText().toString().trim();
-                String tenKhoa = tv_de_name_faculties.getText().toString().trim();
-                String tenCoVan = tv_de_name_lecturer.getText().toString().trim();
-                String namHoc = tv_de_academic_year.getText().toString().trim();
+                    bundle.putString("ma_lop", maLop);
+                    bundle.putString("ten_lop", tenLop);
+                    bundle.putString("ten_khoa", tenKhoa);
+                    bundle.putString("ten_co_van", tenCoVan);
+                    bundle.putString("nam_hoc", namHoc);
+                    bundle.putString("id", id);
 
-                bundle.putString("ma_lop", maLop);
-                bundle.putString("ten_lop", tenLop);
-                bundle.putString("ten_khoa", tenKhoa);
-                bundle.putString("ten_co_van", tenCoVan);
-                bundle.putString("nam_hoc", namHoc);
-                bundle.putString("id", id);
+                    UpdateFragment updateFragment = new UpdateFragment();
+                    updateFragment.setArguments(bundle);
 
-                UpdateFragment updateFragment = new UpdateFragment();
-                updateFragment.setArguments(bundle);
-
-                try {
-                    requireActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, updateFragment)
-                            .addToBackStack(null)
-                            .commit();
-                    Log.d("EditButton", "Fragment replaced successfully");
-                } catch (Exception e) {
-                    Log.e("EditButton", "Error replacing fragment", e);
+                    try {
+                        requireActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fragment_container, updateFragment)
+                                .addToBackStack(null)
+                                .commit();
+                        Log.d("EditButton", "Fragment replaced successfully");
+                    } catch (Exception e) {
+                        Log.e("EditButton", "Error replacing fragment", e);
+                    }
+                } else {
+                    showAccessDeniedAlert();
                 }
             }
         });
@@ -235,7 +244,15 @@ public class DetailFragment extends Fragment {
             }
         });
     }
-
+    private void showAccessDeniedAlert(){
+        new SweetAlertDialog(getContext(), SweetAlertDialog.WARNING_TYPE)
+                .setTitleText("Bạn không đủ quyền để sử dụng chức năng này")
+                .setConfirmText("OK")
+                .setConfirmClickListener(Dialog -> {
+                    Dialog.dismissWithAnimation();
+                })
+                .show();
+    }
     // Callback interface
     private interface FacultyCallback {
         void onCallback(String ten_khoa);
