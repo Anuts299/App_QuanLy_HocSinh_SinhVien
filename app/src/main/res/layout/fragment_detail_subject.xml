@@ -119,7 +119,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Số giờ LH"
+                android:text="SốG LH"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="@color/Cornflower_blue"
@@ -147,7 +147,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Số giờ TH"
+                android:text="SốG TH"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="@color/Cornflower_blue"
@@ -226,7 +226,8 @@
     </TableLayout>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:elevation="20dp">
 
         <com.github.clans.fab.FloatingActionMenu
             android:layout_width="wrap_content"
@@ -240,7 +241,6 @@
             app:menu_colorNormal="@color/Cornflower_blue"
             app:menu_icon="@drawable/baseline_format_list_bulleted_24"
             app:menu_openDirection="up"
-            android:elevation="20dp"
             app:menu_showShadow="true">
 
             <com.github.clans.fab.FloatingActionButton

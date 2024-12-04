@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity
     private static final int FRAGMENT_CHANGE_PASSWORD = 6;
     private static final int FRAGMENT_MAJOR = 7;
     private static final int FRAGMENT_USER_ROLE = 8;
+    public static String userRole = "";
 
     public int mCurrentFragment = FRAGMENT_HOME;
 
@@ -126,7 +127,7 @@ public class MainActivity extends AppCompatActivity
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        String userRole = getSharedPreferences("USER_PREFS", MODE_PRIVATE).getString("userRole", "");
+        userRole = getSharedPreferences("USER_PREFS", MODE_PRIVATE).getString("userRole", "");
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         initUi();

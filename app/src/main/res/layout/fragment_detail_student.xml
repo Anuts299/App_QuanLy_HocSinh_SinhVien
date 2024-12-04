@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     tools:context=".student_manage.DetailFragment">
     <LinearLayout
         android:orientation="horizontal"
@@ -51,15 +50,19 @@
             android:textSize="16dp"
             android:textColor="@color/Cornflower_blue" />
     </LinearLayout>
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:layout_marginTop="40dp"
+        >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:spacing="8dp"
-            android:paddingTop="10dp">
+            android:spacing="8dp">
+
 
             <TableLayout
                 android:layout_width="match_parent"
@@ -80,11 +83,11 @@
                     android:layout_marginTop="20dp">
 
                     <ImageView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="130dp"
                         android:src="@drawable/students_2995459"
                         android:id="@+id/image_de_student"
-                        android:layout_marginStart="120dp"/>
+                        android:layout_weight="1"/>
 
                 </TableRow>
 
@@ -496,8 +499,6 @@
         </LinearLayout>
 
     </ScrollView>
-
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -507,7 +508,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginBottom="25dp"
+            android:layout_marginBottom="35dp"
             android:layout_marginRight="25dp"
             app:menu_fab_size="normal"
             app:menu_colorPressed="@color/Cornflower_blue"
@@ -538,4 +539,7 @@
         </com.github.clans.fab.FloatingActionMenu>
 
     </RelativeLayout>
-</LinearLayout>
+
+
+
+</FrameLayout>

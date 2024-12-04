@@ -37,7 +37,6 @@ public class HomeFragment extends Fragment {
         // Khởi tạo Firebase Firestore và FirebaseAuth
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
-
         initUi(view);
         getUserRole();//Lấy vai trò của người dùng
         return view;
@@ -69,11 +68,8 @@ public class HomeFragment extends Fragment {
     }
     private void initListener() {
         class_card.setOnClickListener(v -> {
-            // Chuyển sang ClassFragment
-            Log.d("HomeFragment", "class_card clicked");
             ClassFragment classFragment = new ClassFragment();
             switchFragment(classFragment);
-            Log.d("HomeFragment", "class_card đã vào");
         });
         student_card.setOnClickListener(v -> {
             //Chuyển sang StudentFragment
@@ -86,19 +82,8 @@ public class HomeFragment extends Fragment {
             switchFragment(subjectFragment);
         });
         faculties_card.setOnClickListener(v -> {
-//            //Kiểm tra vai trò cua nguoi dung
-//            if(role_student.equals(userRole)){
-//                new SweetAlertDialog(requireActivity(), SweetAlertDialog.ERROR_TYPE)
-//                        .setTitleText("Không thể truy cập")
-//                        .setContentText("Bạn không được cấp quyền truy cập.")
-//                        .setConfirmText("OK")
-//                        .setConfirmClickListener(SweetAlertDialog::dismissWithAnimation)
-//                        .show();
-//            }else{
-                //Chuyển sang FacultiesFragment
-                FacultiesFragment facultiesFragment = new FacultiesFragment();
-                switchFragment(facultiesFragment);
-//            }
+            FacultiesFragment facultiesFragment = new FacultiesFragment();
+            switchFragment(facultiesFragment);
         });
         input_score_card.setOnClickListener(v -> {
             //Chuyển sang FacultiesFragment
